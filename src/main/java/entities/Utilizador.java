@@ -14,14 +14,22 @@ public class Utilizador implements Serializable {
     @Email
     private String email;
 
-    public Utilizador(String id, String name, String password, @Email String email) {
-        this.id = id;
+
+    public Utilizador( String name, String password, @Email String email) {
+        this.id = System.currentTimeMillis()+"";
         this.name = name;
         this.password = password;
         this.email = email;
     }
 
     public Utilizador() {
+    }
+
+    public Utilizador(int id, String name, String password, String email) {
+        this.id = id+"";
+        this.name = name;
+        this.password = password;
+        this.email = email;
     }
 
     public String getId() {

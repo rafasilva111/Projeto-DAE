@@ -8,7 +8,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Entity
-public class Prescricoes implements Serializable {
+public class Prescricao implements Serializable {
     @Id
     private String id;
     private Date dataInicio;
@@ -19,7 +19,7 @@ public class Prescricoes implements Serializable {
     private UtilizadorNormal utilizadorNormal;
 
 
-    public Prescricoes(String id, Date dataFim, typePrescricoes tipo, String descricao, UtilizadorNormal utilizadorNormal) {
+    public Prescricao(String id, Date dataFim, typePrescricoes tipo, String descricao, UtilizadorNormal utilizadorNormal) {
         this.id = id;
         this.dataFim = dataFim;
         this.tipo = tipo;
@@ -27,7 +27,7 @@ public class Prescricoes implements Serializable {
         this.utilizadorNormal = utilizadorNormal;
     }
 
-    public Prescricoes() {
+    public Prescricao() {
     }
 
     public UtilizadorNormal getUtilizadorNormal() {

@@ -7,15 +7,15 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Entity
-public class BPM extends SinaisBiomedicos implements Serializable {
+public class BPM extends SinalBiomedico implements Serializable {
     @Id
     private String id;
     private int numeroBatimentos;
     @ManyToOne
     private UtilizadorNormal utilizadorNormal;
 
-    public BPM(Date date, String id, int numeroBatimentos,UtilizadorNormal utilizadorNormal) {
-        super(date);
+    public BPM( String id, int numeroBatimentos,UtilizadorNormal utilizadorNormal) {
+        super();
         this.id = id;
         this.numeroBatimentos = numeroBatimentos;
         this.utilizadorNormal = utilizadorNormal;

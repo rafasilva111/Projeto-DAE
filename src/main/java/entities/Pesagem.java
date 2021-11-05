@@ -1,31 +1,41 @@
 package entities;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.validation.constraints.Email;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
+@NamedQueries({
+        @NamedQuery(
+                name = "getAllPesagemRegisters",
+                query = "SELECT s FROM Pesagem s ORDER BY s.id" // JPQL
+        ),
+})
 @Entity
-public class Pesagens extends SinaisBiomedicos implements Serializable {
-    @Id
-    private String id;
+public class Pesagem extends SinalBiomedico implements Serializable {
+
     private Float peso;
     private Float altura;
     @ManyToOne
     private UtilizadorNormal utilizadorNormal;
 
-    public Pesagens(Date date, String id, Float peso, Float altura, UtilizadorNormal utilizadorNormal) {
-        super(date);
-        this.id = id;
+    public Pesagem(Float peso, Float altura, UtilizadorNormal utilizadorNormal) {
+        super();
+
         this.peso = peso;
         this.altura = altura;
         this.utilizadorNormal = utilizadorNormal;
     }
 
-    public Pesagens() {
+    public Pesagem() {
         super();
+    }
+
+    public Pesagem(int id, float peso, float altura, UtilizadorNormal utilizadorNormal) {
+        super(id);
+
+        this.peso = peso;
+        this.altura = altura;
+        this.utilizadorNormal = utilizadorNormal;
     }
 
     public UtilizadorNormal getUtilizadorNormal() {
@@ -36,13 +46,7 @@ public class Pesagens extends SinaisBiomedicos implements Serializable {
         this.utilizadorNormal = utilizadorNormal;
     }
 
-    public String getId() {
-        return id;
-    }
 
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public Float getPeso() {
         return peso;

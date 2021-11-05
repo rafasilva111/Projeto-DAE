@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Entity
-public class Outros extends SinaisBiomedicos implements Serializable {
+public class Outros extends SinalBiomedico implements Serializable {
 
     @Id
     private String id;
@@ -18,8 +18,8 @@ public class Outros extends SinaisBiomedicos implements Serializable {
     @ManyToOne
     private UtilizadorNormal utilizadorNormal;
 
-    public Outros(Date date, String name, Float value, float minValue, float maxValue) {
-        super(date);
+    public Outros( String name, Float value, float minValue, float maxValue) {
+        super();
         this.name = name;
         this.value = value;
         this.minValue = minValue;

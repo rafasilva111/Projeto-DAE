@@ -1,22 +1,30 @@
 package entities;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
+@NamedQueries({
+        @NamedQuery(
+                name = "getAllColestrolRegisters",
+                query = "SELECT s FROM Colestrol s ORDER BY s.id" // JPQL
+        ),
+})
 @Entity
-public class Colestrol extends SinaisBiomedicos implements Serializable {
-    @Id
-    private String id;
+public class Colestrol extends SinalBiomedico implements Serializable {
+
     private float nivelColestrol;
     @ManyToOne
     private UtilizadorNormal utilizadorNormal;
 
-    public Colestrol(Date date, String id, float nivelColestrol, UtilizadorNormal utilizadorNormal) {
-        super(date);
-        this.id = id;
+    public Colestrol( float nivelColestrol, UtilizadorNormal utilizadorNormal) {
+        super();
+        this.nivelColestrol = nivelColestrol;
+        this.utilizadorNormal = utilizadorNormal;
+    }
+
+    public Colestrol(long id, float nivelColestrol, UtilizadorNormal utilizadorNormal) {
+        super(id);
         this.nivelColestrol = nivelColestrol;
         this.utilizadorNormal = utilizadorNormal;
     }
@@ -33,13 +41,6 @@ public class Colestrol extends SinaisBiomedicos implements Serializable {
         this.utilizadorNormal = utilizadorNormal;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public float getNivelColestrol() {
         return nivelColestrol;
@@ -48,4 +49,6 @@ public class Colestrol extends SinaisBiomedicos implements Serializable {
     public void setNivelColestrol(float nivelColestrol) {
         this.nivelColestrol = nivelColestrol;
     }
+
+
 }

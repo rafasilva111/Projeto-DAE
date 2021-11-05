@@ -4,6 +4,6 @@ import java.io.Serializable;
 
 
 @ApplicationPath("/api")
-public class HealthApplication extends Application implements Serializable {
+public class HealthApplication extends Application{
 
 }

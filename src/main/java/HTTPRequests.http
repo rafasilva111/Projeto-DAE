@@ -1,13 +1,26 @@
-##### Students
-GET http://localhost:8080/academics/api/students/pussDest_123/subjects
-Accept: application/json
-###
-POST http://localhost:8080/academics/api/students
+###Sinais biomedicos
+#Colestrol
+
+# busca todos os registos
+http://localhost:8080/academics/api/biosinais/colestrol/
+
+### busca um registo por id
+http://localhost:8080/academics/api/biosinais/colestrol/10
+
+### busca um registo por id de utilizador
+http://localhost:8080/academics/api/biosinais/colestrol/0
+
+### cria um registo
+
+### atualiza um registo
+PUT http://localhost:8080/academics/api/biosinais/colestrol/10
 Content-Type: application/json
-{ "email": "johndoe@mail.com",
- "name": "John Doe",
- "username": "john",
- "password": "jd",
- "courseCode":"1",
- "courseName": "EI"
+
+{ "id": "10",
+  "value": "100",
+  "utilizadorNormalID": "1"
 }
+
+### apaga um registo
+
+DELETE
