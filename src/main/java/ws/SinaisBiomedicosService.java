@@ -6,6 +6,7 @@ import ejbs.PesagemBean;
 import ejbs.UtilizadorNormalBean;
 import entities.Colestrol;
 import entities.Pesagem;
+import entities.SinalBiomedico;
 import entities.UtilizadorNormal;
 import exceptions.MyEntityNotFoundException;
 
@@ -39,6 +40,7 @@ public class SinaisBiomedicosService {
         helper.add(colestrol.getNivelColestrol());
         return new SinalBiomedicoDTO(
                 colestrol.getId(),
+                colestrol.getDate()+"",
                 "Colestrol",
                 helper,
                 0,
@@ -81,13 +83,21 @@ public class SinaisBiomedicosService {
                 .build();
     }
 
+
+    @POST
+    @Path("/colest/create")
+    public Response createColestrol () throws MyEntityNotFoundException{
+        //colestrolBean.create(sinalBiomedicoDTO.getValue().get(0),sinalBiomedicoDTO.getUtilizadorNormalID());
+        return Response.status(Response.Status.CREATED).build();
+    }
+
     @PUT
     @Path("/colestrol/{idColestrol}")
     public Response updateColestrol (@PathParam("idColestrol") String idColestrol, SinalBiomedicoDTO sinalBiomedicoDTO) throws MyEntityNotFoundException {
 
         colestrolBean.update(idColestrol, sinalBiomedicoDTO );
 
-        return Response.status(Response.Status.CREATED)
+        return Response.status(Response.Status.ACCEPTED)
                 .build();
     }
 
@@ -108,12 +118,14 @@ public class SinaisBiomedicosService {
         helper.add(pesagem.getPeso());
         return new SinalBiomedicoDTO(
                 pesagem.getId(),
+                pesagem.getDate()+"",
                 "Pesagem",
                 helper,
                 0,
                 300,
                 pesagem.getUtilizadorNormal().getId()
         );
+
     }
 
     // converts an entire list of entities into a list of DTOs

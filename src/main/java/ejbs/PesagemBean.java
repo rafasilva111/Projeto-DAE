@@ -52,15 +52,29 @@ public class PesagemBean {
     public void update(String id, SinalBiomedicoDTO sinalBiomedicoDTO) {
         Pesagem pesagem = em.find(Pesagem.class, id);
         if(pesagem!=null){
-            UtilizadorNormal utilizadorNormal = em.find(UtilizadorNormal.class, sinalBiomedicoDTO.getUtilizadorNormalID());
-            if(utilizadorNormal!=null) {
-                em.lock(pesagem, LockModeType.PESSIMISTIC_WRITE);
+            em.lock(pesagem, LockModeType.PESSIMISTIC_WRITE);
+
+            if (sinalBiomedicoDTO.getUtilizadorNormalID()!= null){
+                UtilizadorNormal utilizadorNormal = em.find(UtilizadorNormal.class, sinalBiomedicoDTO.getUtilizadorNormalID());
+                if (utilizadorNormal == null){
+
+                    throw new MyEntityNotFoundException("Utilizador nao foi encontrado id:"+sinalBiomedicoDTO.getUtilizadorNormalID());
+
+                }
+                pesagem.setUtilizadorNormal(utilizadorNormal);
+
+            }
+
+            if (sinalBiomedicoDTO.getDate() !=null){
                 pesagem.setDate(new Date(Long.parseLong(sinalBiomedicoDTO.getDate())));
+            }
+
+            if (sinalBiomedicoDTO.getValue() !=null){
                 pesagem.setAltura(sinalBiomedicoDTO.getValue().get(0));
                 pesagem.setPeso(sinalBiomedicoDTO.getValue().get(1));
-                pesagem.setUtilizadorNormal(utilizadorNormal);
-            }else
-                throw new MyEntityNotFoundException("Utilizador nao foi encontrado id:"+sinalBiomedicoDTO.getUtilizadorNormalID());
+            }
+
+
         }else
             throw new MyEntityNotFoundException("Registo de Pesagem nao foi encontrado id:"+id);
     }

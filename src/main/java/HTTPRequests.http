@@ -12,15 +12,22 @@ http://localhost:8080/academics/api/biosinais/colestrol/0
 
 ### cria um registo
 
-### atualiza um registo
-PUT http://localhost:8080/academics/api/biosinais/colestrol/10
+POST http://localhost:8080/academics/api/biosinais/colest/create
 Content-Type: application/json
-
 { "id": "10",
   "value": "100",
-  "utilizadorNormalID": "1"
+  "utilizadorNormalID": "0"
+}
+
+### atualiza um registo (não precisa de todos os parametros)
+PUT http://localhost:8080/academics/api/biosinais/pesagem/101
+Content-Type: application/json
+
+{ "id": "101",
+  "value": "100",
+  "utilizadorNormalID": "0"
 }
 
 ### apaga um registo
 
-DELETE
+DELETE http://localhost:8080/biosinais/colestrol/10
