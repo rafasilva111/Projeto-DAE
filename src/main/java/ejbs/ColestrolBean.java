@@ -52,23 +52,31 @@ public class ColestrolBean {
 
     public void update(String idColestrol, SinalBiomedicoDTO sinalBiomedicoDTO) {
         Colestrol colestrol = em.find(Colestrol.class, idColestrol);
-        try{
 
 
         if(colestrol!=null){
-            UtilizadorNormal utilizadorNormal = em.find(UtilizadorNormal.class, sinalBiomedicoDTO.getUtilizadorNormalID());
-            if(utilizadorNormal!=null) {
-                em.lock(colestrol, LockModeType.PESSIMISTIC_WRITE);
-                colestrol.setDate(new Date(Long.parseLong(sinalBiomedicoDTO.getDate())));
-                colestrol.setNivelColestrol((float) sinalBiomedicoDTO.getValue().get(0));
+
+            em.lock(colestrol, LockModeType.PESSIMISTIC_WRITE);
+            if (sinalBiomedicoDTO.getUtilizadorNormalID() != null){
+                UtilizadorNormal utilizadorNormal = em.find(UtilizadorNormal.class, sinalBiomedicoDTO.getUtilizadorNormalID());
+                if (utilizadorNormal== null){
+                    throw new MyEntityNotFoundException("Utilizador nao foi encontrado id:"+sinalBiomedicoDTO.getUtilizadorNormalID());
+                }
                 colestrol.setUtilizadorNormal(utilizadorNormal);
-            }else
-                throw new MyEntityNotFoundException("Utilizador nao foi encontrado id:"+sinalBiomedicoDTO.getUtilizadorNormalID());
+            }
+
+            if (sinalBiomedicoDTO.getDate() !=null){
+                colestrol.setDate(new Date(Long.parseLong(sinalBiomedicoDTO.getDate())));
+            }
+
+            if (sinalBiomedicoDTO.getValue()!=null){
+                colestrol.setNivelColestrol(sinalBiomedicoDTO.getValue().get(0));
+            }
+
+
         }else
             throw new MyEntityNotFoundException("Registo de colestrol nao foi encontrado id:"+idColestrol);
-        }catch (NumberFormatException e){
-            throw new NumberFormatException(new StringBuilder().append(sinalBiomedicoDTO.getValue().get(0)).append("/").append(sinalBiomedicoDTO.getValue().size()).toString());
-        }
+
     }
 
     public void delete(String idColestrol) {

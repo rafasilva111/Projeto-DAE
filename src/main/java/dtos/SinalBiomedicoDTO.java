@@ -15,10 +15,10 @@ public class SinalBiomedicoDTO implements Serializable {
     private float maxValue;
     private String utilizadorNormalID;
 
-    public SinalBiomedicoDTO(String id, String name, List<Float> value, float minValue, float maxValue, String utilizadorNormalID) {
+    public SinalBiomedicoDTO(String id,String date, String name, List<Float> value, float minValue, float maxValue, String utilizadorNormalID) {
         this.id = id;
         this.name = name;
-        this.date = System.currentTimeMillis()+"";
+        this.date = date;
         this.value = value;
         this.minValue = minValue;
         this.maxValue = maxValue;

@@ -14,8 +14,6 @@ public class SinalBiomedico implements Serializable {
     private Date date;
 
     public SinalBiomedico() {
-        this.date = new Date(System.currentTimeMillis());
-        this.id = date.getTime()+"";
     }
 
     public SinalBiomedico(long id) {
