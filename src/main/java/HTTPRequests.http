@@ -12,22 +12,55 @@ http://localhost:8080/academics/api/biosinais/colestrol/0
 
 ### cria um registo
 
-POST http://localhost:8080/academics/api/biosinais/colest/create
+POST http://localhost:8080/academics/api/biosinais/colestrol/0/create
 Content-Type: application/json
+
 { "id": "10",
   "value": "100",
   "utilizadorNormalID": "0"
 }
 
 ### atualiza um registo (não precisa de todos os parametros)
-PUT http://localhost:8080/academics/api/biosinais/pesagem/101
+PUT http://localhost:8080/academics/api/biosinais/colestrol/11
 Content-Type: application/json
 
-{ "id": "101",
+{ "id": "11",
   "value": "100",
   "utilizadorNormalID": "0"
 }
 
 ### apaga um registo
 
-DELETE http://localhost:8080/biosinais/colestrol/10
+DELETE http://localhost:8080/academics/api/biosinais/colestrol/10
+
+###    Pesagem
+
+
+### busca um registo por id
+http://localhost:8080/academics/api/biosinais/pesagem/100
+
+### busca um registo por id de utilizador
+http://localhost:8080/academics/api/biosinais/pesagem/0
+
+### cria um registo
+
+POST http://localhost:8080/academics/api/biosinais/pesagem/0/create
+Content-Type: application/json
+
+{ "id": "105",
+  "value": ["1.75","80"],
+  "utilizadorNormalID": "0"
+}
+
+### atualiza um registo (não precisa de todos os parametros)
+PUT http://localhost:8080/academics/api/biosinais/colestrol/11
+Content-Type: application/json
+
+{ "id": "11",
+  "value": "100",
+  "utilizadorNormalID": "0"
+}
+
+### apaga um registo
+
+DELETE http://localhost:8080/academics/api/biosinais/colestrol/10

@@ -6,7 +6,6 @@ import ejbs.PesagemBean;
 import ejbs.UtilizadorNormalBean;
 import entities.Colestrol;
 import entities.Pesagem;
-import entities.SinalBiomedico;
 import entities.UtilizadorNormal;
 import exceptions.MyEntityNotFoundException;
 
@@ -85,9 +84,9 @@ public class SinaisBiomedicosService {
 
 
     @POST
-    @Path("/colest/create")
-    public Response createColestrol () throws MyEntityNotFoundException{
-        //colestrolBean.create(sinalBiomedicoDTO.getValue().get(0),sinalBiomedicoDTO.getUtilizadorNormalID());
+    @Path("/colestrol/{idUtilizador}/create")
+    public Response createColestrol (@PathParam("idUtilizador") String idUtilizador,  SinalBiomedicoDTO sinalBiomedicoDTO) throws MyEntityNotFoundException{
+        colestrolBean.create(sinalBiomedicoDTO.getValue().get(0),idUtilizador);
         return Response.status(Response.Status.CREATED).build();
     }
 
@@ -160,6 +159,16 @@ public class SinaisBiomedicosService {
         return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                 .entity("ERROR_FINDING_COLESTROL_RECORD")
                 .build();
+    }
+
+    @POST
+    @Path("/pesagem/{idUtilizador}/create")
+    public Response createPesagem (@PathParam("idUtilizador") String idUtilizador,  SinalBiomedicoDTO sinalBiomedicoDTO) throws MyEntityNotFoundException{
+        if (sinalBiomedicoDTO.getValue().size()!=2){
+            throw new IndexOutOfBoundsException("Não foi enviado array com dois elementos "+sinalBiomedicoDTO.getValue().size()+sinalBiomedicoDTO.getValue().get(0));
+        }
+        pesagemBean.create(sinalBiomedicoDTO.getValue().get(0),sinalBiomedicoDTO.getValue().get(1),idUtilizador);
+        return Response.status(Response.Status.CREATED).build();
     }
 
     @PUT
