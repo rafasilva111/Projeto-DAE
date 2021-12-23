@@ -23,22 +23,22 @@ import java.util.stream.Collectors;
 public class SinaisBiomedicosService {
 
     @Context
-    private SecurityContext securityContext;
+    protected SecurityContext securityContext;
     @EJB
-    private ColestrolBean colestrolBean;
+    protected ColestrolBean colestrolBean;
     @EJB
-    private UtilizadorNormalBean utilizadorBean;
+    protected UtilizadorNormalBean utilizadorBean;
     @EJB
-    private PesagemBean pesagemBean;
+    protected PesagemBean pesagemBean;
     @EJB
-    private BPMBean bpmBean;
+    protected BPMBean bpmBean;
     @EJB
-    private OutroBean outroBean;
+    protected OutroBean outroBean;
 
 
     /// Colestrol
 
-    private SinalBiomedicoDTO toDTO(Colestrol colestrol) {
+    protected SinalBiomedicoDTO toDTO(Colestrol colestrol) {
 
         List<Float> helper = new LinkedList<>();
         helper.add(colestrol.getNivelColestrol());
@@ -54,7 +54,7 @@ public class SinaisBiomedicosService {
     }
 
     // converts an entire list of entities into a list of DTOs
-    private List<SinalBiomedicoDTO> toDTOsColestrol(List<Colestrol> students) {
+    protected List<SinalBiomedicoDTO> toDTOsColestrol(List<Colestrol> students) {
         return students.stream().map(this::toDTO).collect(Collectors.toList());
     }
 
@@ -119,7 +119,7 @@ public class SinaisBiomedicosService {
 
     /// Pesagem
 
-    private SinalBiomedicoDTO toDTO(Pesagem pesagem) {
+    protected SinalBiomedicoDTO toDTO(Pesagem pesagem) {
 
         List<Float> helper = new LinkedList<>();
         helper.add(pesagem.getAltura());
@@ -137,7 +137,7 @@ public class SinaisBiomedicosService {
     }
 
     // converts an entire list of entities into a list of DTOs
-    private List<SinalBiomedicoDTO> toDTOsPesagem(List<Pesagem> pesagems) {
+    protected List<SinalBiomedicoDTO> toDTOsPesagem(List<Pesagem> pesagems) {
         return pesagems.stream().map(this::toDTO).collect(Collectors.toList());
     }
 
@@ -200,7 +200,7 @@ public class SinaisBiomedicosService {
 
     //BPM
 
-    private SinalBiomedicoDTO toDTO(BPM bpm) {
+    protected SinalBiomedicoDTO toDTO(BPM bpm) {
 
         List<Float> helper = new LinkedList<>();
         helper.add((float) bpm.getNumeroBatimentos());
@@ -218,7 +218,7 @@ public class SinaisBiomedicosService {
     }
 
     // converts an entire list of entities into a list of DTOs
-    private List<SinalBiomedicoDTO> toDTOsBPM(List<BPM> bpms) {
+    protected List<SinalBiomedicoDTO> toDTOsBPM(List<BPM> bpms) {
         return bpms.stream().map(this::toDTO).collect(Collectors.toList());
     }
 
@@ -279,7 +279,7 @@ public class SinaisBiomedicosService {
 
     //BPM
 
-    private SinalBiomedicoDTO toDTO(Outro outro) {
+    protected SinalBiomedicoDTO toDTO(Outro outro) {
 
         List<Float> helper = new LinkedList<>();
         helper.add((float) outro.getValue());
@@ -298,7 +298,7 @@ public class SinaisBiomedicosService {
     }
 
     // converts an entire list of entities into a list of DTOs
-    private List<SinalBiomedicoDTO> toDTOsOutro(List<Outro> outros) {
+    protected List<SinalBiomedicoDTO> toDTOsOutro(List<Outro> outros) {
         return outros.stream().map(this::toDTO).collect(Collectors.toList());
     }
 

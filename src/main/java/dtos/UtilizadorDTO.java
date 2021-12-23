@@ -3,6 +3,7 @@ package dtos;
 import entities.UserType;
 
 import java.util.Date;
+import java.util.List;
 
 public class UtilizadorDTO {
 
@@ -13,6 +14,7 @@ public class UtilizadorDTO {
     private String email;
     private String data;
     private String tipo;
+    private List<SinalBiomedicoDTO> mysignals;
 
 
     public UtilizadorDTO(String id, String password, String name, String email, Date data, String userName, UserType tipo) {
@@ -27,6 +29,20 @@ public class UtilizadorDTO {
     }else{
         this.tipo = "Administrador";
     }
+    }
+    public UtilizadorDTO(String id, String password, String name, String email, Date data, String userName, UserType tipo,List<SinalBiomedicoDTO> signals) {
+        this.id = id;
+        this.name = name;
+        this.username = userName;
+        this.password = password;
+        this.email = email;
+        this.data = data.toString();
+        if (tipo == UserType.UtilizadorNormal){
+            this.tipo = "UtilizadorNormal";
+        }else{
+            this.tipo = "Administrador";
+        }
+        this.mysignals = signals;
     }
 
     public UtilizadorDTO() {
