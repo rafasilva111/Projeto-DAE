@@ -14,31 +14,21 @@ import java.util.Date;
 public class Colestrol extends SinalBiomedico implements Serializable {
 
     private float nivelColestrol;
-    @ManyToOne
-    private UtilizadorNormal utilizadorNormal;
 
-    public Colestrol( float nivelColestrol, UtilizadorNormal utilizadorNormal) {
+
+    public Colestrol( float nivelColestrol) {
         super();
         this.nivelColestrol = nivelColestrol;
-        this.utilizadorNormal = utilizadorNormal;
     }
 
     public Colestrol(long id, float nivelColestrol, UtilizadorNormal utilizadorNormal) {
-        super(id);
+        super(id,utilizadorNormal);
         this.nivelColestrol = nivelColestrol;
-        this.utilizadorNormal = utilizadorNormal;
+
     }
 
     public Colestrol() {
         super();
-    }
-
-    public UtilizadorNormal getUtilizadorNormal() {
-        return utilizadorNormal;
-    }
-
-    public void setUtilizadorNormal(UtilizadorNormal utilizadorNormal) {
-        this.utilizadorNormal = utilizadorNormal;
     }
 
 
@@ -50,5 +40,11 @@ public class Colestrol extends SinalBiomedico implements Serializable {
         this.nivelColestrol = nivelColestrol;
     }
 
-
+    @Override
+    public String toString() {
+        return "Colestrol{" +
+                "nivelColestrol=" + nivelColestrol + ","+
+                super.toString()+
+                '}';
+    }
 }

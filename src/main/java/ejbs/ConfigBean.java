@@ -20,23 +20,30 @@ public class ConfigBean {
     private ColestrolBean colestrolBean;
     @EJB
     private PesagemBean pesagemBean;
+    @EJB
+    private BPMBean bpmBean;
 
 
     @PostConstruct
     public void populateDB() {
 
-        UtilizadorNormal utilzador1 = utilizadorNormalBean.create("rafa","rafa","rafa@gmail.com");
-        UtilizadorNormal utilzador2 = utilizadorNormalBean.create("rafa2","rafa","rafa2@gmail.com");
+        UtilizadorNormal utilzador1 = utilizadorNormalBean.create("rafael silva","rafa","rafa@gmail.com","rafa");
+        UtilizadorNormal utilzador2 = utilizadorNormalBean.create("rafael francisco","rafa","rafa2@gmail.com","rafa2");
 
         colestrolBean.create(130 ,utilzador1.getId());
         colestrolBean.create(120 ,utilzador1.getId());
         colestrolBean.create(100 ,utilzador1.getId());
 
         pesagemBean.create( (float) 60, (float) 1.78,utilzador1.getId());
-        pesagemBean.create((float) 60, (float) 1.78,utilzador1.getId());
-        pesagemBean.create( (float) 60, (float) 1.78,utilzador1.getId());
+        pesagemBean.create((float) 97, (float) 1.88,utilzador1.getId());
 
-        System.out.println("Hello Java EE");
+        bpmBean.create(123,utilzador1.getId());
+        bpmBean.create(250,utilzador1.getId());
+
+
+
+
+        System.out.println();
     }
 }
 

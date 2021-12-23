@@ -2,6 +2,7 @@ package entities;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -12,15 +13,25 @@ public class SinalBiomedico implements Serializable {
     @Id
     private String id;
     private Date date;
+    @ManyToOne
+    private UtilizadorNormal utilizadorNormal;
 
     public SinalBiomedico() {
     }
 
-    public SinalBiomedico(long id) {
+    public SinalBiomedico(long id,UtilizadorNormal utilizadorNormal) {
         this.date= new Date(System.currentTimeMillis());
         this.id = id+"";
+        this.utilizadorNormal = utilizadorNormal;
     }
 
+    public UtilizadorNormal getUtilizadorNormal() {
+        return utilizadorNormal;
+    }
+
+    public void setUtilizadorNormal(UtilizadorNormal utilizadorNormal) {
+        this.utilizadorNormal = utilizadorNormal;
+    }
 
     public String getId() {
         return id;
@@ -36,5 +47,14 @@ public class SinalBiomedico implements Serializable {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    @Override
+    public String toString() {
+        return "SinalBiomedico{" +
+                "id='" + id + '\'' +
+                ", date=" + date +
+                ", utilizadorNormal=" + utilizadorNormal +
+                '}';
     }
 }

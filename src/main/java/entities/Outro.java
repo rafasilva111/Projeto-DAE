@@ -1,24 +1,24 @@
 package entities;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
-
+import java.util.List;
+@NamedQueries({
+        @NamedQuery(
+                name = "getAllOutroRegisters",
+                query = "SELECT s FROM Outro s ORDER BY s.id" // JPQL
+        ),
+})
 @Entity
-public class Outros extends SinalBiomedico implements Serializable {
+public class Outro extends SinalBiomedico implements Serializable {
 
-    @Id
-    private String id;
     private String name;
     private Float value;
     private float minValue;
     private float maxValue;
-    @ManyToOne
-    private UtilizadorNormal utilizadorNormal;
 
-    public Outros( String name, Float value, float minValue, float maxValue) {
+    public Outro(String name, Float value, float minValue, float maxValue) {
         super();
         this.name = name;
         this.value = value;
@@ -26,7 +26,15 @@ public class Outros extends SinalBiomedico implements Serializable {
         this.maxValue = maxValue;
     }
 
-    public Outros() {
+    public Outro(long id, String name, float value, float minValue, float maxValue,UtilizadorNormal utilizadorNormal) {
+        super(id,utilizadorNormal);
+        this.name = name;
+        this.value = value;
+        this.minValue = minValue;
+        this.maxValue = maxValue;
+    }
+
+    public Outro() {
     }
 
     public String getName() {

@@ -1,16 +1,15 @@
 package ws;
 
+import com.nimbusds.jose.proc.SecurityContext;
 import dtos.SinalBiomedicoDTO;
-import ejbs.ColestrolBean;
-import ejbs.PesagemBean;
-import ejbs.UtilizadorNormalBean;
-import entities.Colestrol;
-import entities.Pesagem;
-import entities.UtilizadorNormal;
+import ejbs.*;
+import entities.*;
 import exceptions.MyEntityNotFoundException;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.LinkedList;
@@ -19,16 +18,22 @@ import java.util.stream.Collectors;
 
 
 @Path("/biosinais")
-@Produces({MediaType.APPLICATION_JSON}) // injects header “Content-Type: application/json”
-@Consumes({MediaType.APPLICATION_JSON}) // injects header “Accept: application/json”
+@Produces({MediaType.APPLICATION_JSON})
+@Consumes({MediaType.APPLICATION_JSON})
 public class SinaisBiomedicosService {
 
+    @Context
+    private SecurityContext securityContext;
     @EJB
     private ColestrolBean colestrolBean;
     @EJB
     private UtilizadorNormalBean utilizadorBean;
     @EJB
     private PesagemBean pesagemBean;
+    @EJB
+    private BPMBean bpmBean;
+    @EJB
+    private OutroBean outroBean;
 
 
     /// Colestrol
@@ -54,7 +59,8 @@ public class SinaisBiomedicosService {
     }
 
     @GET // means: to call this endpoint, we need to use the HTTP GET method
-    @Path("/colestrol/") // means: the relative url path is “/api/students/”
+    @Path("/colestrol/")
+    @RolesAllowed({"UtilizadorNormal"})
     public List<SinalBiomedicoDTO> getAllColestrolRegisters() {
 
         return toDTOsColestrol(colestrolBean.getAllColestrol());
@@ -62,6 +68,7 @@ public class SinaisBiomedicosService {
 
     @GET
     @Path("/colestrol/{id}")
+    @RolesAllowed({"Administrador"})
     public Response getColestrolByUser(@PathParam("id") String idUtilizador){
         UtilizadorNormal utilizadorNormal = utilizadorBean.find(idUtilizador);
 
@@ -72,7 +79,9 @@ public class SinaisBiomedicosService {
 
         }
         Colestrol colestrol = colestrolBean.find(idUtilizador);
+        System.out.println(colestrol.toString());
         if (colestrol != null){
+
             return Response.status(Response.Status.OK)
                     .entity(toDTO(colestrol))
                     .build();
@@ -128,15 +137,15 @@ public class SinaisBiomedicosService {
     }
 
     // converts an entire list of entities into a list of DTOs
-    private List<SinalBiomedicoDTO> toDTOsPesagens(List<Pesagem> pesagems) {
+    private List<SinalBiomedicoDTO> toDTOsPesagem(List<Pesagem> pesagems) {
         return pesagems.stream().map(this::toDTO).collect(Collectors.toList());
     }
 
     @GET // means: to call this endpoint, we need to use the HTTP GET method
-    @Path("/pesagem/") // means: the relative url path is “/api/students/”
+    @Path("/pesagem/")
     public List<SinalBiomedicoDTO> getAllPesagensRegisters() {
 
-        return toDTOsPesagens(pesagemBean.getAllPesagens());
+        return toDTOsPesagem(pesagemBean.getAllPesagens());
     }
 
     @GET
@@ -146,7 +155,7 @@ public class SinaisBiomedicosService {
 
         if (utilizadorNormal != null) {
             return Response.status(Response.Status.OK)
-                    .entity(toDTOsPesagens(utilizadorNormal.getPesagemList()))
+                    .entity(toDTOsPesagem(utilizadorNormal.getPesagemList()))
                     .build();
 
         }
@@ -189,4 +198,161 @@ public class SinaisBiomedicosService {
         return Response.status(Response.Status.GONE).build();
     }
 
+    //BPM
+
+    private SinalBiomedicoDTO toDTO(BPM bpm) {
+
+        List<Float> helper = new LinkedList<>();
+        helper.add((float) bpm.getNumeroBatimentos());
+
+        return new SinalBiomedicoDTO(
+                bpm.getId(),
+                bpm.getDate()+"",
+                "Bpm",
+                helper,
+                0,
+                300,
+                bpm.getUtilizadorNormal().getId()
+        );
+
+    }
+
+    // converts an entire list of entities into a list of DTOs
+    private List<SinalBiomedicoDTO> toDTOsBPM(List<BPM> bpms) {
+        return bpms.stream().map(this::toDTO).collect(Collectors.toList());
+    }
+
+    @GET // means: to call this endpoint, we need to use the HTTP GET method
+    @Path("/bpm/")
+    public List<SinalBiomedicoDTO> getAllBPMSRegisters() {
+
+        return toDTOsBPM(bpmBean.getAllBPM());
+    }
+
+    @GET
+    @Path("/bpm/{id}")
+    public Response getBpmByUser(@PathParam("id") String id){
+        UtilizadorNormal utilizadorNormal = utilizadorBean.find(id);
+
+        if (utilizadorNormal != null) {
+            return Response.status(Response.Status.OK)
+                    .entity(toDTOsBPM(utilizadorNormal.getBpmList()))
+                    .build();
+
+        }
+        BPM bpm = bpmBean.find(id);
+        if (bpm != null){
+            return Response.status(Response.Status.OK)
+                    .entity(toDTO(bpm))
+                    .build();
+        }
+        return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                .entity("ERROR_FINDING_COLESTROL_RECORD")
+                .build();
+    }
+
+    @POST
+    @Path("/bpm/{idUtilizador}/create")
+    public Response createBpm (@PathParam("idUtilizador") String idUtilizador,  SinalBiomedicoDTO sinalBiomedicoDTO) throws MyEntityNotFoundException{
+        bpmBean.create(sinalBiomedicoDTO.getValue().get(0),idUtilizador);
+        return Response.status(Response.Status.CREATED).build();
+    }
+
+    @PUT
+    @Path("/bpm/{idBpm}")
+    public Response updateBpm (@PathParam("idBpm") String idBpm, SinalBiomedicoDTO sinalBiomedicoDTO) throws MyEntityNotFoundException {
+
+        bpmBean.update(idBpm, sinalBiomedicoDTO );
+
+        return Response.status(Response.Status.OK)
+                .build();
+    }
+
+    @DELETE
+    @Path("/bpm/{idBpm}")
+    public Response deleteBpm (@PathParam("idBpm") String idPesagem) throws MyEntityNotFoundException {
+        bpmBean.delete(idPesagem);
+
+        return Response.status(Response.Status.GONE).build();
+    }
+
+
+    //BPM
+
+    private SinalBiomedicoDTO toDTO(Outro outro) {
+
+        List<Float> helper = new LinkedList<>();
+        helper.add((float) outro.getValue());
+
+        return new SinalBiomedicoDTO(
+                outro.getId(),
+                outro.getDate()+"",
+                outro.getName()
+                ,
+                helper,
+                outro.getMinValue(),
+                outro.getMaxValue(),
+                outro.getUtilizadorNormal().getId()
+        );
+
+    }
+
+    // converts an entire list of entities into a list of DTOs
+    private List<SinalBiomedicoDTO> toDTOsOutro(List<Outro> outros) {
+        return outros.stream().map(this::toDTO).collect(Collectors.toList());
+    }
+
+    @GET // means: to call this endpoint, we need to use the HTTP GET method
+    @Path("/outro/")
+    public List<SinalBiomedicoDTO> getAllOutroRegisters() {
+
+        return toDTOsOutro(outroBean.getAllOutros());
+    }
+
+    @GET
+    @Path("/outro/{id}")
+    public Response getOutroByUser(@PathParam("id") String id){
+        UtilizadorNormal utilizadorNormal = utilizadorBean.find(id);
+
+        if (utilizadorNormal != null) {
+            return Response.status(Response.Status.OK)
+                    .entity(toDTOsOutro(utilizadorNormal.getOutrosList()))
+                    .build();
+
+        }
+        Outro outro = outroBean.find(id);
+        if (outro != null){
+            return Response.status(Response.Status.OK)
+                    .entity(toDTO(outro))
+                    .build();
+        }
+        return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                .entity("ERROR_FINDING_COLESTROL_RECORD")
+                .build();
+    }
+
+    @POST
+    @Path("/bpm/{idOutro}/create")
+    public Response createOutro (@PathParam("idOutro") String idUtilizador,  SinalBiomedicoDTO sinalBiomedicoDTO) throws MyEntityNotFoundException{
+        outroBean.create(sinalBiomedicoDTO,idUtilizador);
+        return Response.status(Response.Status.CREATED).build();
+    }
+
+    @PUT
+    @Path("/bpm/{idOutro}")
+    public Response updateOutro (@PathParam("idOutro") String idBpm, SinalBiomedicoDTO sinalBiomedicoDTO) throws MyEntityNotFoundException {
+
+        outroBean.update(idBpm, sinalBiomedicoDTO );
+
+        return Response.status(Response.Status.OK)
+                .build();
+    }
+
+    @DELETE
+    @Path("/bpm/{idOutro}")
+    public Response deleteOutro (@PathParam("idOutro") String idPesagem) throws MyEntityNotFoundException {
+        bpmBean.delete(idPesagem);
+
+        return Response.status(Response.Status.GONE).build();
+    }
 }
