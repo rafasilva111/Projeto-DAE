@@ -3,31 +3,124 @@
 
 # busca todos os registos
 http://localhost:8080/academics/api/biosinais/colestrol/
+Authorization: Bearer eyJ0eXAiOiJqd3QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJyYWZhIiwiaXNzIjoicXVpY2tzdGFydC1qd3QtaXNzdWVyIiwiYXVkIjoiand0LWF1ZGllbmNlIiwiZ3JvdXBzIjpbIlV0aWxpemFkb3JOb3JtYWwiXSwiZXhwIjoxNjQwNTU0MTc2fQ.EE7FenMRd13-5lamiyCrXdMTy4XmzcOPfaGSLWIqcmA9e4snnKfD7e9ZUSZpXyxW0UtiuWLLsEpRMYbK1agPkTTX8emJSKoe_xsDctVfUtic-XWh5WGJX9oa3j0qtRCf9-Hmev4HJT--9zjQES22TEls9fVitzUEvpGSHcc432sUQR_osPUIza_smj6f2uruEATHdDvNu8zwzdiDAaIkRkl06CQ_vp9ZrWKKUmT73IOUPGAey8b6pvc9WhCWiscoT3_3YlpE0ema3A0kGTsXhGpvWdCX_ENORDF_jlULxc3quLeqJiIkNYPNzIkYEwFF5JSc8kd0hXko0q3aGPhpNA
+
 
 ### busca um registo por id
 http://localhost:8080/academics/api/biosinais/colestrol/10
+Authorization: Bearer eyJ0eXAiOiJqd3QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJyYWZhIiwiaXNzIjoicXVpY2tzdGFydC1qd3QtaXNzdWVyIiwiYXVkIjoiand0LWF1ZGllbmNlIiwiZ3JvdXBzIjpbIlV0aWxpemFkb3JOb3JtYWwiXSwiZXhwIjoxNjQwMjIwODE3fQ.CPhxxLLxIyA-Fx3lHEn-1Ew2iBhlaw36IF8jKKC9Qjg8Lw6tcjy1Z4FGC1z65WDg9rHtzT0I7Xr-8hZKjUQBOD0eg_lzllX5gYZl4efz8J3Y6BYUu_LyjUKySGilo0zsJ5Ixmg7yHt7izoHM-jsOsgQThx0nsFpEWxFvybmOlkRVl-45nDvC54dfAjFSDGGYkDYfUD72A6y5hnizbTe3g0bBqKGx18uqUqOlvoJfhwWyGo4jh74FkQAQHzY_ASyzkHFfSrRU_mVoxoBSWvjZ0vnEIuEkojUJgM5u_UF6Lxa9wiJS26qkzMf5-_uTKqOHZIK5ljWbQyvYYmWOaIdVdA
+
 
 ### busca um registo por id de utilizador
 http://localhost:8080/academics/api/biosinais/colestrol/0
 
 ### cria um registo
 
-POST http://localhost:8080/academics/api/biosinais/colest/create
+POST http://localhost:8080/academics/api/biosinais/colestrol/0/create
 Content-Type: application/json
+
 { "id": "10",
   "value": "100",
   "utilizadorNormalID": "0"
 }
 
 ### atualiza um registo (não precisa de todos os parametros)
-PUT http://localhost:8080/academics/api/biosinais/pesagem/101
+PUT http://localhost:8080/academics/api/biosinais/colestrol/11
 Content-Type: application/json
 
-{ "id": "101",
+{ "id": "11",
   "value": "100",
   "utilizadorNormalID": "0"
 }
 
 ### apaga um registo
 
-DELETE http://localhost:8080/biosinais/colestrol/10
+DELETE http://localhost:8080/academics/api/biosinais/colestrol/10
+
+###    Pesagem
+
+
+### busca um registo por id
+http://localhost:8080/academics/api/biosinais/pesagem/100
+
+### busca um registo por id de utilizador
+http://localhost:8080/academics/api/biosinais/pesagem/0
+
+### cria um registo
+
+POST http://localhost:8080/academics/api/biosinais/pesagem/0/create
+Content-Type: application/json
+
+{ "id": "105",
+  "value": ["1.75","80"],
+  "utilizadorNormalID": "0"
+}
+
+### atualiza um registo (não precisa de todos os parametros)
+PUT http://localhost:8080/academics/api/biosinais/colestrol/11
+Content-Type: application/json
+
+{ "id": "11",
+  "value": "100",
+  "utilizadorNormalID": "0"
+}
+
+### apaga um registo
+
+DELETE http://localhost:8080/academics/api/biosinais/colestrol/10
+
+
+###    Bpm
+
+
+### busca um registo por id
+http://localhost:8080/academics/api/biosinais/bpm/1000
+
+### busca um registo por id de utilizador
+http://localhost:8080/academics/api/biosinais/outro/
+
+### cria um registo
+
+POST http://localhost:8080/academics/api/biosinais/bpm/0/create
+Content-Type: application/json
+
+{
+  "value": "80",
+  "utilizadorNormalID": "0"
+}
+
+### atualiza um registo (não precisa de todos os parametros)
+PUT http://localhost:8080/academics/api/biosinais/bpm/1000
+Content-Type: application/json
+
+{
+  "value": "100",
+  "utilizadorNormalID": "0"
+}
+
+### apaga um registo
+
+DELETE http://localhost:8080/academics/api/biosinais/colestrol/10
+
+
+### Get JWT token
+POST http://localhost:8080/academics/api/auth/login
+Content-Type: application/json
+
+{
+  "password": "rafa",
+  "username": "rafa"
+}
+###
+GET http://localhost:8080/academics/api/user/rafa
+Authorization: Bearer eyJ0eXAiOiJqd3QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJyYWZhIiwiaXNzIjoicXVpY2tzdGFydC1qd3QtaXNzdWVyIiwiYXVkIjoiand0LWF1ZGllbmNlIiwiZ3JvdXBzIjpbIlV0aWxpemFkb3JOb3JtYWwiXSwiZXhwIjoxNjQwNTQ3MDcyfQ.MVGM3gUHVVKPtjlllmiIldlDOzmz0ocdmH-Io42qNdC0dg8DAidTwLq4jf371NASowkkcFQ0BG_8OHGRAs7O5RRrA13zP4A2ZHT5poxM3rAt5sfSZ5ijeXhCw68Cw-TYRpTGPi4MeJR-fG86y_nTLZsZWUfKRRLTBrp8YoKg4ydtDopFHgO_gpDdJ0-2C0VjJuiOs7uHZQgzTLtaP3d0PMxK7XYgProjU72g3h2c06Uwxuwe76dUEYJUUhSC7E3KrOGVQiaSaGIjaBWwIHMhXAmObMIX70D2VWwdTbvicEFKYOnMfrElMZbLywZD6JY3vIrl2zpN9W0cHYCQj-wm8w
+
+### Who am I?
+GET http://localhost:8080/academics/api/auth/user
+Accept: application/json
+Authorization: Bearer eyJ0eXAiOiJqd3QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJyYWZhIiwiaXNzIjoicXVpY2tzdGFydC1qd3QtaXNzdWVyIiwiYXVkIjoiand0LWF1ZGllbmNlIiwiZ3JvdXBzIjpbIlV0aWxpemFkb3JOb3JtYWwiXSwiZXhwIjoxNjQwNTQ3MDcyfQ.MVGM3gUHVVKPtjlllmiIldlDOzmz0ocdmH-Io42qNdC0dg8DAidTwLq4jf371NASowkkcFQ0BG_8OHGRAs7O5RRrA13zP4A2ZHT5poxM3rAt5sfSZ5ijeXhCw68Cw-TYRpTGPi4MeJR-fG86y_nTLZsZWUfKRRLTBrp8YoKg4ydtDopFHgO_gpDdJ0-2C0VjJuiOs7uHZQgzTLtaP3d0PMxK7XYgProjU72g3h2c06Uwxuwe76dUEYJUUhSC7E3KrOGVQiaSaGIjaBWwIHMhXAmObMIX70D2VWwdTbvicEFKYOnMfrElMZbLywZD6JY3vIrl2zpN9W0cHYCQj-wm8w
+
+###
+GET http://localhost:8080/academics/api/auth/user
+Authorization: Bearer e
+

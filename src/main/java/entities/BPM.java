@@ -1,24 +1,31 @@
 package entities;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
+
+@NamedQueries({
+        @NamedQuery(
+                name = "getAllBPMRegisters",
+                query = "SELECT s FROM BPM s ORDER BY s.id" // JPQL
+        ),
+})
 @Entity
 public class BPM extends SinalBiomedico implements Serializable {
-    @Id
-    private String id;
-    private int numeroBatimentos;
-    @ManyToOne
-    private UtilizadorNormal utilizadorNormal;
 
-    public BPM( String id, int numeroBatimentos,UtilizadorNormal utilizadorNormal) {
+    private int numeroBatimentos;
+
+
+    public BPM(  int numeroBatimentos,UtilizadorNormal utilizadorNormal) {
         super();
-        this.id = id;
         this.numeroBatimentos = numeroBatimentos;
-        this.utilizadorNormal = utilizadorNormal;
+       }
+
+    public BPM(long id, int numeroBatimentos, UtilizadorNormal utilizadorNormal) {
+        super(id,utilizadorNormal);
+        this.numeroBatimentos = numeroBatimentos;
+
     }
 
 
@@ -26,21 +33,6 @@ public class BPM extends SinalBiomedico implements Serializable {
 
     }
 
-    public UtilizadorNormal getUtilizadorNormal() {
-        return utilizadorNormal;
-    }
-
-    public void setUtilizadorNormal(UtilizadorNormal utilizadorNormal) {
-        this.utilizadorNormal = utilizadorNormal;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public int getNumeroBatimentos() {
         return numeroBatimentos;

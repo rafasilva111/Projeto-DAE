@@ -36,9 +36,11 @@ public class ColestrolBean {
             System.err.print(e.getMessage());
         }
         int count = getAllColestrol().size();
-        Colestrol utilizadorN = new Colestrol(count+10,nivelColestrol,utilizadorNormal);
-        utilizadorNormal.addColestrolRegister(utilizadorN);
-        em.persist(utilizadorN);
+        Colestrol colestrol = new Colestrol(count+10,nivelColestrol,utilizadorNormal);
+        utilizadorNormal.addColestrolRegister(colestrol);
+        em.persist(colestrol);
+        System.out.println(colestrol.toString());
+        em.persist(utilizadorNormal);
     };
 
 

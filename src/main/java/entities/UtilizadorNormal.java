@@ -7,6 +7,8 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import static javax.persistence.CascadeType.ALL;
+
 
 @Table(uniqueConstraints={@UniqueConstraint(columnNames={"NAME","ID"})})
 @NamedQueries({
@@ -18,25 +20,24 @@ import java.util.List;
 @Entity
 public class UtilizadorNormal extends Utilizador implements Serializable {
 
-    private Date dataInicio;
-    @OneToMany(mappedBy = "utilizadorNormal")
+
+    @OneToMany(cascade=ALL,mappedBy = "UtilizadorNormal")
     private List<BPM> bpmList;
-    @OneToMany(mappedBy = "utilizadorNormal")
+    @OneToMany(cascade=ALL,mappedBy = "UtilizadorNormal")
     private List<Pesagem> pesagemList;
-    @OneToMany(mappedBy = "utilizadorNormal")
+    @OneToMany(cascade=ALL,mappedBy = "UtilizadorNormal")
     private List<Colestrol> colestrolList;
-    @OneToMany(mappedBy = "utilizadorNormal")
-    private List<Outros> outrosList;
-    @OneToMany(mappedBy = "utilizadorNormal")
+    @OneToMany(cascade=ALL,mappedBy = "UtilizadorNormal")
+    private List<Outro> outrosList;
+    @OneToMany(cascade=ALL,mappedBy = "UtilizadorNormal")
     private List<Prescricao> prescricoesList;
 
-    public UtilizadorNormal( String name, String password, @Email String email) {
-        super( name, password, email);
+    public UtilizadorNormal( String name, String password, @Email String email,String username) {
+        super( name, password, email,username);
         this.bpmList = new LinkedList<>();
         this.pesagemList = new LinkedList<>();
         this.colestrolList = new LinkedList<>();
         this.outrosList = new LinkedList<>();
-        this.dataInicio = new Date(System.currentTimeMillis());
     }
 
 
@@ -44,22 +45,15 @@ public class UtilizadorNormal extends Utilizador implements Serializable {
 
     }
 
-    public UtilizadorNormal(int id, String name, String password, String email) {
-        super( id,name, password, email);
+    public UtilizadorNormal(int id, String name, String password, String email,String username) {
+        super( name, password, email,username);
         this.bpmList = new LinkedList<>();
         this.pesagemList = new LinkedList<>();
         this.colestrolList = new LinkedList<>();
         this.outrosList = new LinkedList<>();
-        this.dataInicio = new Date(System.currentTimeMillis());
+
     }
 
-    public Date getDataInicio() {
-        return dataInicio;
-    }
-
-    public void setDataInicio(Date dataInicio) {
-        this.dataInicio = dataInicio;
-    }
 
     public List<BPM> getBpmList() {
         return bpmList;
@@ -89,7 +83,7 @@ public class UtilizadorNormal extends Utilizador implements Serializable {
     public void addPrescicaoRegister(Prescricao colestrol){
         this.prescricoesList.add(colestrol);
     }
-    public void addOutrosRegister(Outros colestrol){
+    public void addOutrosRegister(Outro colestrol){
         this.outrosList.add(colestrol);
     }
 
@@ -102,11 +96,11 @@ public class UtilizadorNormal extends Utilizador implements Serializable {
         this.colestrolList = colestrolList;
     }
 
-    public List<Outros> getOutrosList() {
+    public List<Outro> getOutrosList() {
         return outrosList;
     }
 
-    public void setOutrosList(List<Outros> outrosList) {
+    public void setOutrosList(List<Outro> outrosList) {
         this.outrosList = outrosList;
     }
 
