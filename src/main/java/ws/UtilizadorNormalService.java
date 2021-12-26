@@ -2,6 +2,8 @@ package ws;
 
 import javax.ejb.EJB;
 import javax.persistence.Entity;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.SecurityContext;
 
 import dtos.SinalBiomedicoDTO;
@@ -15,9 +17,6 @@ import entities.UserType;
 import entities.UtilizadorNormal;
 import exceptions.MyEntityNotFoundException;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import java.security.Principal;
@@ -25,6 +24,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 @Path("/user")
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
 public class UtilizadorNormalService {
     @Context
     private SecurityContext securityContext;
