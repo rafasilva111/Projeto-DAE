@@ -1,6 +1,8 @@
 package dtos;
 
-public class AuthDTO {
+import java.io.Serializable;
+
+public class AuthDTO implements Serializable {
     private String password;
     private String username;
 

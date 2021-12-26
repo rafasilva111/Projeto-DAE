@@ -63,22 +63,35 @@ public class UtilizadorNormalService {
 
     private List<SinalBiomedicoDTO> preencher(UtilizadorNormal utilizadorNormal) {
         List<SinalBiomedicoDTO> list = new LinkedList<>();
-        for (var coletrol:utilizadorNormal.getColestrolList()
-             ) {
-            list.add(helper.toDTO(coletrol));
+        helper = new SinaisBiomedicosService();
+        if (!utilizadorNormal.getColestrolList().isEmpty()) {
+
+            for (Colestrol coletrol : utilizadorNormal.getColestrolList()
+            ) {
+                SinalBiomedicoDTO colestrolDTO = helper.toDTO(coletrol);
+                list.add(colestrolDTO);
+            }
         }
-        for (var coletrol:utilizadorNormal.getBpmList()
-        ) {
-            list.add(helper.toDTO(coletrol));
+        if (!utilizadorNormal.getBpmList().isEmpty()) {
+            for (var coletrol : utilizadorNormal.getBpmList()
+            ) {
+                list.add(helper.toDTO(coletrol));
+            }
+
         }
-        for (var coletrol:utilizadorNormal.getPesagemList()
-        ) {
-            list.add(helper.toDTO(coletrol));
+        if (!utilizadorNormal.getPesagemList().isEmpty()) {
+            for (var coletrol : utilizadorNormal.getPesagemList()
+            ) {
+                list.add(helper.toDTO(coletrol));
+            }
         }
-        for (var coletrol:utilizadorNormal.getOutrosList()
-        ) {
-            list.add(helper.toDTO(coletrol));
+        if (!utilizadorNormal.getOutrosList().isEmpty()){
+            for (var coletrol:utilizadorNormal.getOutrosList()
+            ) {
+                list.add(helper.toDTO(coletrol));
+            }
         }
+
         return list;
     }
 
@@ -90,10 +103,6 @@ public class UtilizadorNormalService {
 
         //check 
         Principal principal = securityContext.getUserPrincipal();
-        if (principal== null){
-            System.out.println("problemas");
-        }
-
 
         if(!(securityContext.isUserInRole("Administrator") ||
                 securityContext.isUserInRole("UtilizadorNormal")  &&
@@ -131,6 +140,7 @@ public class UtilizadorNormalService {
             throw new MyEntityNotFoundException("Student with username " +
                     username + " not found.");
         }
+        System.out.println(toDTOcomRegistos(student).toString());
         return Response.status(Response.Status.OK)
                 .entity(toDTOcomRegistos(student))
                 .build();

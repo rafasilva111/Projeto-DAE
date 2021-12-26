@@ -18,20 +18,18 @@ export default {
       bpm: [],
       pesagem: [],
       outro: [],
+      user: null,
 
     }
   },
 
   created () {
     console.log(this.$auth.user)
-    this.$axios.$get('/api/user/'+this.$auth.user.sub+'/registers', {
-      headers: {
-        'Authorization': `Bearer `
-      }
-    })
-      .then((students) => {
-        this.students = students
+    this.$axios.$get('/api/user/'+this.$auth.user.sub+'/registers')
+      .then((user) => {
+        this.user = user
       })
+    console.log(this.user)
   }
 }
 </script>
