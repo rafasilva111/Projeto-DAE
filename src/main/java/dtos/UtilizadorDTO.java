@@ -1,6 +1,6 @@
 package dtos;
 
-import entities.UserType;
+import entities.enums.UserType;
 
 import java.util.Date;
 import java.util.List;

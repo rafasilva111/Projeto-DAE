@@ -1,7 +1,6 @@
 package ws;
 
 import javax.ejb.EJB;
-import javax.persistence.Entity;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.SecurityContext;
@@ -12,8 +11,7 @@ import ejbs.BioSinaisBean;
 import ejbs.UserBean;
 import ejbs.UtilizadorNormalBean;
 import entities.Colestrol;
-import entities.SinalBiomedico;
-import entities.UserType;
+import entities.enums.UserType;
 import entities.UtilizadorNormal;
 import exceptions.MyEntityNotFoundException;
 

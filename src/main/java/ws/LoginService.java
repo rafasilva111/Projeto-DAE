@@ -45,10 +45,10 @@ public class LoginService {
     @GET
     @Path("/user")
     public Response demonstrateClaims(@HeaderParam("Authorization") String auth) {
-        log.info("here" +auth.toString()+"here");
+
         if (auth != null && auth.startsWith("Bearer ")) {
             try {
-                log.info("here2" +auth.toString());
+
                 JWT j = JWTParser.parse(auth.substring(7));
                 return Response.ok(j.getJWTClaimsSet().getClaims()).build();
 //Note: nimbusds converts token expiration time to milliseconds

@@ -44,12 +44,14 @@ public class SinaisBiomedicosService {
         helper.add(colestrol.getNivelColestrol());
         return new SinalBiomedicoDTO(
                 colestrol.getId(),
-                colestrol.getDate()+"",
+                colestrol.getDate(),
                 "Colestrol",
                 helper,
                 0,
                 300,
-                colestrol.getUtilizadorNormal().getId()
+                colestrol.getUtilizadorNormal().getId(),
+                colestrol.getDescricao(),
+                colestrol.getClassification()
         );
     }
 
@@ -60,7 +62,7 @@ public class SinaisBiomedicosService {
 
     @GET // means: to call this endpoint, we need to use the HTTP GET method
     @Path("/colestrol/")
-    @RolesAllowed({"UtilizadorNormal"})
+    @RolesAllowed({"Administrador"})
     public List<SinalBiomedicoDTO> getAllColestrolRegisters() {
 
         return toDTOsColestrol(colestrolBean.getAllColestrol());
@@ -68,7 +70,7 @@ public class SinaisBiomedicosService {
 
     @GET
     @Path("/colestrol/{id}")
-    @RolesAllowed({"Administrador"})
+    @RolesAllowed({"UtilizadorNormal","Administrador"})
     public Response getColestrolByUser(@PathParam("id") String idUtilizador){
         UtilizadorNormal utilizadorNormal = utilizadorBean.find(idUtilizador);
 
@@ -79,7 +81,7 @@ public class SinaisBiomedicosService {
 
         }
         Colestrol colestrol = colestrolBean.find(idUtilizador);
-        System.out.println(colestrol.toString());
+
         if (colestrol != null){
 
             return Response.status(Response.Status.OK)
@@ -95,7 +97,10 @@ public class SinaisBiomedicosService {
     @POST
     @Path("/colestrol/{idUtilizador}/create")
     public Response createColestrol (@PathParam("idUtilizador") String idUtilizador,  SinalBiomedicoDTO sinalBiomedicoDTO) throws MyEntityNotFoundException{
-        colestrolBean.create(sinalBiomedicoDTO.getValue().get(0),idUtilizador);
+
+
+        System.out.println("aqui aqui"+sinalBiomedicoDTO.toString());
+        colestrolBean.create(sinalBiomedicoDTO.getValue().get(0),idUtilizador,sinalBiomedicoDTO.getDescricao());
         return Response.status(Response.Status.CREATED).build();
     }
 
@@ -114,7 +119,7 @@ public class SinaisBiomedicosService {
     public Response deleteColestrol (@PathParam("idColestrol") String idColestrol) throws MyEntityNotFoundException {
         colestrolBean.delete(idColestrol);
 
-        return Response.status(Response.Status.GONE).build();
+        return Response.status(Response.Status.ACCEPTED).build();
     }
 
     /// Pesagem

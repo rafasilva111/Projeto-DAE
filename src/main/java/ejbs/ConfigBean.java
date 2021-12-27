@@ -30,9 +30,9 @@ public class ConfigBean {
         UtilizadorNormal utilzador1 = utilizadorNormalBean.create("rafael silva","rafa","rafa@gmail.com","rafa");
         UtilizadorNormal utilzador2 = utilizadorNormalBean.create("rafael francisco","rafa","rafa2@gmail.com","rafa2");
 
-        colestrolBean.create(130 ,utilzador1.getId());
-        colestrolBean.create(120 ,utilzador1.getId());
-        colestrolBean.create(100 ,utilzador1.getId());
+        colestrolBean.create(130 ,utilzador1.getId(),"foi interessante");
+        colestrolBean.create(120 ,utilzador1.getId(),"");
+        colestrolBean.create(100 ,utilzador1.getId(),"não foi interessante");
 
         pesagemBean.create( (float) 60, (float) 1.78,utilzador1.getId());
         pesagemBean.create((float) 97, (float) 1.88,utilzador1.getId());
