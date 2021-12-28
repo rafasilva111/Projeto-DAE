@@ -93,9 +93,9 @@ export default {
 
 
       this.$axios.$post('/api/biosinais/colestrol/'+this.user.id+'/create', {
-        value: [this.colestrol,0],
+        "value" : [this.colestrol,this.colestrol],
 
-        descricao: this.descricao
+        "descricao" : this.descricao
       })
         .then(() => {
 

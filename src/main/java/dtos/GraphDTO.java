@@ -3,7 +3,7 @@ package dtos;
 import java.io.Serializable;
 import java.util.List;
 
-public class GraphDTO implements Serializable {
+public class GraphDTO  {
 
     private List<Float> data;
     private List<String> labels;
@@ -12,6 +12,7 @@ public class GraphDTO implements Serializable {
         this.data = data;
         this.labels = labels;
     }
+
 
     public List<Float> getData() {
         return data;

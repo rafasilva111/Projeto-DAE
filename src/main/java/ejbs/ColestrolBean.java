@@ -2,21 +2,15 @@ package ejbs;
 
 import dtos.SinalBiomedicoDTO;
 import entities.Colestrol;
-import entities.SinalBiomedico;
 import entities.UtilizadorNormal;
 import entities.enums.Classification;
 import exceptions.MyEntityNotFoundException;
-import jdk.jshell.execution.Util;
 
-import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.LockModeType;
 import javax.persistence.OptimisticLockException;
 import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.ParameterExpression;
 import java.util.Date;
 import java.util.List;
 
@@ -68,30 +62,30 @@ public class ColestrolBean {
         return em.find(Colestrol.class,id);
     }
 
-    public void update(String idColestrol, SinalBiomedicoDTO sinalBiomedicoDTO) {
+    public void update(String idColestrol, SinalBiomedicoDTO sinalBiomedicoDTOmv) {
         Colestrol colestrol = em.find(Colestrol.class, idColestrol);
 
 
         if(colestrol!=null){
 
             em.lock(colestrol, LockModeType.PESSIMISTIC_WRITE);
-            if (sinalBiomedicoDTO.getUtilizadorNormalID() != null){
-                UtilizadorNormal utilizadorNormal = em.find(UtilizadorNormal.class, sinalBiomedicoDTO.getUtilizadorNormalID());
+            if (sinalBiomedicoDTOmv.getUtilizadorNormalID() != null){
+                UtilizadorNormal utilizadorNormal = em.find(UtilizadorNormal.class, sinalBiomedicoDTOmv.getUtilizadorNormalID());
                 if (utilizadorNormal== null){
-                    throw new MyEntityNotFoundException("Utilizador nao foi encontrado id:"+sinalBiomedicoDTO.getUtilizadorNormalID());
+                    throw new MyEntityNotFoundException("Utilizador nao foi encontrado id:"+ sinalBiomedicoDTOmv.getUtilizadorNormalID());
                 }
                 colestrol.setUtilizadorNormal(utilizadorNormal);
             }
 
-            if (sinalBiomedicoDTO.getDate() !=null){
-                colestrol.setDate(new Date(Long.parseLong(sinalBiomedicoDTO.getDate())));
+            if (sinalBiomedicoDTOmv.getDate() !=null){
+                colestrol.setDate(new Date(Long.parseLong(sinalBiomedicoDTOmv.getDate())));
             }
 
-            if (sinalBiomedicoDTO.getValue()!=null){
-                colestrol.setNivelColestrol(sinalBiomedicoDTO.getValue().get(0));
+            if (sinalBiomedicoDTOmv.getValue().get(0)!=null){
+                colestrol.setNivelColestrol(sinalBiomedicoDTOmv.getValue().get(0));
             }
-            if (sinalBiomedicoDTO.getDescricao()!=null){
-                colestrol.setDescricao(sinalBiomedicoDTO.getDescricao());
+            if (sinalBiomedicoDTOmv.getDescricao()!=null){
+                colestrol.setDescricao(sinalBiomedicoDTOmv.getDescricao());
             }
 
 

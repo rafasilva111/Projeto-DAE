@@ -1,12 +1,15 @@
 package entities;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
+@NamedQueries({
+        @NamedQuery(
+                name = "getAllPrescricoesRegisters",
+                query = "SELECT s FROM Prescricao s ORDER BY s.id" // JPQL
+        ),
+})
 @Entity
 public class Prescricao implements Serializable {
     @Id
@@ -19,6 +22,8 @@ public class Prescricao implements Serializable {
     private UtilizadorNormal utilizadorNormal;
     @ManyToOne
     private Doutor doutor;
+    private boolean enabled;
+
 
 
     public Prescricao(Date dataFim, TypePrescricoes tipo, String descricao, UtilizadorNormal utilizadorNormal,Doutor doutor) {
@@ -29,9 +34,18 @@ public class Prescricao implements Serializable {
         this.descricao = descricao;
         this.utilizadorNormal = utilizadorNormal;
         this.doutor = doutor;
+        this.enabled = true;
     }
 
     public Prescricao() {
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
     public Doutor getDoutor() {
@@ -91,8 +105,8 @@ public class Prescricao implements Serializable {
     }
 
     public enum  TypePrescricoes {
-        exercicio,
-        medica,
-        nutricional
+        Exercicio,
+        Medica,
+        Nutricional
     }
 }

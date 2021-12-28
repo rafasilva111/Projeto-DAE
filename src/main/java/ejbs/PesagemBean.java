@@ -1,9 +1,7 @@
 package ejbs;
 
 import dtos.SinalBiomedicoDTO;
-import entities.Colestrol;
 import entities.Pesagem;
-import entities.SinalBiomedico;
 import entities.UtilizadorNormal;
 import exceptions.MyEntityNotFoundException;
 
@@ -11,8 +9,6 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.LockModeType;
 import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
 import java.util.Date;
 import java.util.List;
 
@@ -58,7 +54,7 @@ public class PesagemBean {
                 UtilizadorNormal utilizadorNormal = em.find(UtilizadorNormal.class, sinalBiomedicoDTO.getUtilizadorNormalID());
                 if (utilizadorNormal == null){
 
-                    throw new MyEntityNotFoundException("Utilizador nao foi encontrado id:"+sinalBiomedicoDTO.getUtilizadorNormalID());
+                    throw new MyEntityNotFoundException("Utilizador nao foi encontrado id:"+ sinalBiomedicoDTO.getUtilizadorNormalID());
 
                 }
                 pesagem.setUtilizadorNormal(utilizadorNormal);

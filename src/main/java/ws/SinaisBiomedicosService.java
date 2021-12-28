@@ -40,10 +40,12 @@ public class SinaisBiomedicosService {
 
     /// Colestrol
 
-    protected SinalBiomedicoDTO toDTO(Colestrol colestrol) {
 
+
+    protected SinalBiomedicoDTO toDTO(Colestrol colestrol) {
         List<Float> helper = new LinkedList<>();
         helper.add(colestrol.getNivelColestrol());
+
         return new SinalBiomedicoDTO(
                 colestrol.getId(),
                 colestrol.getDate(),
@@ -127,16 +129,16 @@ public class SinaisBiomedicosService {
     public Response createColestrol (@PathParam("idUtilizador") String idUtilizador,  SinalBiomedicoDTO sinalBiomedicoDTO) throws MyEntityNotFoundException{
 
 
-        System.out.println("aqui aqui"+sinalBiomedicoDTO.toString());
-        colestrolBean.create(sinalBiomedicoDTO.getValue().get(0),idUtilizador,sinalBiomedicoDTO.getDescricao());
+        System.out.println("aqui aqui"+ sinalBiomedicoDTO.getValue());
+        colestrolBean.create(sinalBiomedicoDTO.getValue().get(1),idUtilizador, sinalBiomedicoDTO.getDescricao());
         return Response.status(Response.Status.CREATED).build();
     }
 
     @PUT
     @Path("/colestrol/{idColestrol}")
-    public Response updateColestrol (@PathParam("idColestrol") String idColestrol, SinalBiomedicoDTO sinalBiomedicoDTO) throws MyEntityNotFoundException {
+    public Response updateColestrol (@PathParam("idColestrol") String idColestrol, SinalBiomedicoDTO sinalBiomedicoDTOmv) throws MyEntityNotFoundException {
 
-        colestrolBean.update(idColestrol, sinalBiomedicoDTO );
+        colestrolBean.update(idColestrol, sinalBiomedicoDTOmv);
 
         return Response.status(Response.Status.ACCEPTED)
                 .build();
@@ -207,9 +209,9 @@ public class SinaisBiomedicosService {
     @Path("/pesagem/{idUtilizador}/create")
     public Response createPesagem (@PathParam("idUtilizador") String idUtilizador,  SinalBiomedicoDTO sinalBiomedicoDTO) throws MyEntityNotFoundException{
         if (sinalBiomedicoDTO.getValue().size()!=2){
-            throw new IndexOutOfBoundsException("Não foi enviado array com dois elementos "+sinalBiomedicoDTO.getValue().size()+sinalBiomedicoDTO.getValue().get(0));
+            throw new IndexOutOfBoundsException("Não foi enviado array com dois elementos "+ sinalBiomedicoDTO.getValue().size()+ sinalBiomedicoDTO.getValue().get(0));
         }
-        pesagemBean.create(sinalBiomedicoDTO.getValue().get(0),sinalBiomedicoDTO.getValue().get(1),idUtilizador);
+        pesagemBean.create(sinalBiomedicoDTO.getValue().get(0), sinalBiomedicoDTO.getValue().get(1),idUtilizador);
         return Response.status(Response.Status.CREATED).build();
     }
 
@@ -217,7 +219,7 @@ public class SinaisBiomedicosService {
     @Path("/pesagem/{idPesagem}")
     public Response updatePesagem (@PathParam("idPesagem") String idPesagem, SinalBiomedicoDTO sinalBiomedicoDTO) throws MyEntityNotFoundException {
 
-        pesagemBean.update(idPesagem, sinalBiomedicoDTO );
+        pesagemBean.update(idPesagem, sinalBiomedicoDTO);
 
         return Response.status(Response.Status.CREATED)
                 .build();
@@ -295,7 +297,7 @@ public class SinaisBiomedicosService {
     @Path("/bpm/{idBpm}")
     public Response updateBpm (@PathParam("idBpm") String idBpm, SinalBiomedicoDTO sinalBiomedicoDTO) throws MyEntityNotFoundException {
 
-        bpmBean.update(idBpm, sinalBiomedicoDTO );
+        bpmBean.update(idBpm, sinalBiomedicoDTO);
 
         return Response.status(Response.Status.OK)
                 .build();
@@ -375,7 +377,7 @@ public class SinaisBiomedicosService {
     @Path("/bpm/{idOutro}")
     public Response updateOutro (@PathParam("idOutro") String idBpm, SinalBiomedicoDTO sinalBiomedicoDTO) throws MyEntityNotFoundException {
 
-        outroBean.update(idBpm, sinalBiomedicoDTO );
+        outroBean.update(idBpm, sinalBiomedicoDTO);
 
         return Response.status(Response.Status.OK)
                 .build();
@@ -388,4 +390,6 @@ public class SinaisBiomedicosService {
 
         return Response.status(Response.Status.GONE).build();
     }
+
+
 }

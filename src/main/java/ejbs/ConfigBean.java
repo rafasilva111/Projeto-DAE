@@ -49,7 +49,7 @@ public class ConfigBean {
         bpmBean.create(123,utilzador1.getId());
         bpmBean.create(250,utilzador1.getId());
 
-        prescricaoBean.create(new Date(2022,1,1,0,0,0), Prescricao.TypePrescricoes.medica,"Tens de comar x comprimidos",utilzador1.getId(),doutor.getId());
+        prescricaoBean.create(new Date(2022,1,1,0,0,0), Prescricao.TypePrescricoes.Medica,"Tens de comar x comprimidos",utilzador1.getId(),doutor.getId());
 
 
 

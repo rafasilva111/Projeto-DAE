@@ -2,10 +2,11 @@ package dtos;
 
 import entities.enums.UserType;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-public class UtilizadorDTO {
+public class UtilizadorDTO implements Serializable {
 
     private String id;
     private String username;

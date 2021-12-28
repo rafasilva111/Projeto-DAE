@@ -20,7 +20,7 @@ public class SinalBiomedicoDTO implements Serializable {
     private String descricao;
     private String classification;
 
-    public SinalBiomedicoDTO(String id,String date, String name, List<Float> value, float minValue, float maxValue, String utilizadorNormalID) {
+    public SinalBiomedicoDTO(String id, String date, String name, List<Float> value, float minValue, float maxValue, String utilizadorNormalID) {
         this.id = id;
         this.name = name;
         this.date = date;
@@ -33,7 +33,7 @@ public class SinalBiomedicoDTO implements Serializable {
     public SinalBiomedicoDTO(String id, Date date, String name, List<Float> value, float minValue, float maxValue, String utilizadorNormalID, String descricao, Classification classification) {
         this.id = id;
         this.name = name;
-        this.date = new SimpleDateFormat("kk:mm dd/MM/yyyy").format(date);
+        this.date = new SimpleDateFormat("dd/MM/yyyy kk:mm").format(date);
         this.value = value;
         this.minValue = minValue;
         this.maxValue = maxValue;

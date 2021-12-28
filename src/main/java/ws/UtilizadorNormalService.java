@@ -66,6 +66,7 @@ public class UtilizadorNormalService {
             ) {
                 SinalBiomedicoDTO colestrolDTO = helper.toDTO(coletrol);
                 list.add(colestrolDTO);
+
             }
         }
         if (!utilizadorNormal.getBpmList().isEmpty()) {

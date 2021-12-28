@@ -2,7 +2,6 @@ package ejbs;
 
 import dtos.SinalBiomedicoDTO;
 import entities.BPM;
-import entities.Colestrol;
 import entities.UtilizadorNormal;
 import exceptions.MyEntityNotFoundException;
 
@@ -55,7 +54,7 @@ public class BPMBean {
             if (sinalBiomedicoDTO.getUtilizadorNormalID() != null){
                 UtilizadorNormal utilizadorNormal = em.find(UtilizadorNormal.class, sinalBiomedicoDTO.getUtilizadorNormalID());
                 if (utilizadorNormal== null){
-                    throw new MyEntityNotFoundException("Utilizador nao foi encontrado id:"+sinalBiomedicoDTO.getUtilizadorNormalID());
+                    throw new MyEntityNotFoundException("Utilizador nao foi encontrado id:"+ sinalBiomedicoDTO.getUtilizadorNormalID());
                 }
                 bpm.setUtilizadorNormal(utilizadorNormal);
             }

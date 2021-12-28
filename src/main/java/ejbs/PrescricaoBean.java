@@ -1,11 +1,11 @@
 package ejbs;
 
+import dtos.PrescricaoDTO;
 import dtos.SinalBiomedicoDTO;
 import entities.Colestrol;
 import entities.Doutor;
 import entities.Prescricao;
 import entities.UtilizadorNormal;
-import entities.enums.Classification;
 import exceptions.MyEntityNotFoundException;
 
 import javax.ejb.Stateless;
@@ -57,38 +57,39 @@ public class PrescricaoBean {
     };
 
 
-    public List<Colestrol> getAllColestrol(){
-        return (List<Colestrol>) em.createNamedQuery("getAllColestrolRegisters").getResultList();
+    public List<Prescricao> getAllPrescricoes(){
+        return (List<Prescricao>) em.createNamedQuery("getAllPrescricoesRegisters").getResultList();
     }
-    public Colestrol find(String id){
+    public Prescricao find(String id){
 
-        return em.find(Colestrol.class,id);
+        return em.find(Prescricao.class,id);
     }
 
-    public void update(String idColestrol, SinalBiomedicoDTO sinalBiomedicoDTO) {
+    public void update(String idColestrol, PrescricaoDTO prescricao) {
         Colestrol colestrol = em.find(Colestrol.class, idColestrol);
 
 
         if(colestrol!=null){
 
             em.lock(colestrol, LockModeType.PESSIMISTIC_WRITE);
-            if (sinalBiomedicoDTO.getUtilizadorNormalID() != null){
-                UtilizadorNormal utilizadorNormal = em.find(UtilizadorNormal.class, sinalBiomedicoDTO.getUtilizadorNormalID());
+            if (prescricao.getUtilizadorNormalId() != null){
+                UtilizadorNormal utilizadorNormal = em.find(UtilizadorNormal.class, prescricao.getUtilizadorNormalId());
                 if (utilizadorNormal== null){
-                    throw new MyEntityNotFoundException("Utilizador nao foi encontrado id:"+sinalBiomedicoDTO.getUtilizadorNormalID());
+                    throw new MyEntityNotFoundException("Utilizador nao foi encontrado id:"+ prescricao.getUtilizadorNormalId());
+                }
+                colestrol.setUtilizadorNormal(utilizadorNormal);
+            }
+            if (prescricao.getDoutorId() != null){
+                UtilizadorNormal utilizadorNormal = em.find(UtilizadorNormal.class, prescricao.getDoutorId());
+                if (utilizadorNormal== null){
+                    throw new MyEntityNotFoundException("Utilizador nao foi encontrado id:"+ prescricao.getDoutorId());
                 }
                 colestrol.setUtilizadorNormal(utilizadorNormal);
             }
 
-            if (sinalBiomedicoDTO.getDate() !=null){
-                colestrol.setDate(new Date(Long.parseLong(sinalBiomedicoDTO.getDate())));
-            }
-
-            if (sinalBiomedicoDTO.getValue()!=null){
-                colestrol.setNivelColestrol(sinalBiomedicoDTO.getValue().get(0));
-            }
-            if (sinalBiomedicoDTO.getDescricao()!=null){
-                colestrol.setDescricao(sinalBiomedicoDTO.getDescricao());
+            //TODO validações
+            if (prescricao.getDescricao()!=null){
+                colestrol.setDescricao(prescricao.getDescricao());
             }
 
 
