@@ -1,6 +1,7 @@
 package ws;
 
 import com.nimbusds.jose.proc.SecurityContext;
+import dtos.GraphDTO;
 import dtos.SinalBiomedicoDTO;
 import ejbs.*;
 import entities.*;
@@ -12,6 +13,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.text.SimpleDateFormat;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -66,6 +68,32 @@ public class SinaisBiomedicosService {
     public List<SinalBiomedicoDTO> getAllColestrolRegisters() {
 
         return toDTOsColestrol(colestrolBean.getAllColestrol());
+    }
+    @GET // means: to call this endpoint, we need to use the HTTP GET method
+    @Path("/colestrol/{id}/graph")
+    @RolesAllowed({"Administrador","UtilizadorNormal"})
+    public Response getDataForGraph(@PathParam("id") String idUtilizador) {
+        UtilizadorNormal utilizadorNormal = utilizadorBean.find(idUtilizador);
+
+        if (utilizadorNormal != null) {
+            List<Float> data = new LinkedList<>();
+            List<String> label = new LinkedList<>();
+
+
+            for (Colestrol colestrol:utilizadorNormal.getColestrolList()
+            ) {
+                data.add(colestrol.getNivelColestrol());
+                label.add(new SimpleDateFormat("kk:mm dd/MM/yyyy").format(colestrol.getDate()));
+            }
+
+            return Response.status(Response.Status.OK)
+                    .entity(new GraphDTO(data,label))
+                    .build();
+
+        }
+        return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                .entity("ERROR_FINDING_UTILIZADOR_RECORD")
+                .build();
     }
 
     @GET

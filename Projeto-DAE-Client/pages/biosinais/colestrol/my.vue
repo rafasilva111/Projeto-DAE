@@ -24,7 +24,7 @@
     <div class="pt-4">
       <b-container class="modal-content rounded-6 shadow" >
         <caption style="text-align:center">Gráfico</caption>
-        <chartjs-line v-bind:labels = "labels" v-bind:data="data"></chartjs-line>
+        <chartjs-line v-if="ready" v-bind:labels = "labels" v-bind:data="data"></chartjs-line>
       </b-container>
     </div>
     <div class="pt-4 pb-4">
@@ -46,11 +46,14 @@
 export default {
   data () {
     return {
-      labels: [1,2,3,4],
-      data: [10,7,3,20],
+      graphData: [],
+      ready: false,
+      labels: [],
+      data: [],
       fields: [ 'date','value','classification','descricao','actions'],
       colestrol: [],
       user: null,
+
 
     }
   },
@@ -62,6 +65,14 @@ export default {
         this.$axios.$get('/api/biosinais/colestrol/'+this.user.id)
           .then((colestrol) => {
             this.colestrol = colestrol
+          })
+        this.$axios.$get('/api/biosinais/colestrol/'+this.user.id+'/graph')
+          .then((graph) => {
+            this.labels = graph.label
+            this.data = graph.data
+
+            this.ready = true
+            console.log( graph.data)
           })
       })
   },

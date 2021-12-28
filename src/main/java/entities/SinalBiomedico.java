@@ -80,6 +80,7 @@ public class SinalBiomedico implements Serializable {
         return date;
     }
 
+
     public void setDate(Date date) {
         this.date = date;
     }
