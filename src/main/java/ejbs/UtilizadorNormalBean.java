@@ -1,5 +1,6 @@
 package ejbs;
 
+import entities.Doutor;
 import entities.Utilizador;
 import entities.UtilizadorNormal;
 
@@ -14,9 +15,10 @@ public class UtilizadorNormalBean {
     @PersistenceContext
     private EntityManager em;
 
-    public UtilizadorNormal create( String name, String password, @Email String email,String username){
-        int id = getAllNormalUsers().size();
-        UtilizadorNormal utilizadorNormal = new UtilizadorNormal(id,name,password,email,username);
+    public UtilizadorNormal create(String password, @Email String email, String username, Doutor doutor){
+
+        UtilizadorNormal utilizadorNormal = new UtilizadorNormal(password,email,username,doutor);
+
         em.persist(utilizadorNormal);
         return  utilizadorNormal;
     };

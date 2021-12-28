@@ -40,7 +40,6 @@ public class UtilizadorNormalService {
         return new UtilizadorDTO(
                 utilizadorNormal.getId(),
                 utilizadorNormal.getPassword(),
-                utilizadorNormal.getName(),
                 utilizadorNormal.getEmail(),
                 utilizadorNormal.getData(),
                 utilizadorNormal.getUserName(),
@@ -50,7 +49,6 @@ public class UtilizadorNormalService {
         return new UtilizadorDTO(
                 utilizadorNormal.getId(),
                 utilizadorNormal.getPassword(),
-                utilizadorNormal.getName(),
                 utilizadorNormal.getEmail(),
                 utilizadorNormal.getData(),
                 utilizadorNormal.getUserName(),
@@ -139,6 +137,7 @@ public class UtilizadorNormalService {
                     username + " not found.");
         }
         System.out.println(toDTOcomRegistos(student).toString());
+
         return Response.status(Response.Status.OK)
                 .entity(toDTOcomRegistos(student))
                 .build();

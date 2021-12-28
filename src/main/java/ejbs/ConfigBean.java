@@ -1,7 +1,9 @@
 package ejbs;
 
 
+import entities.Doutor;
 import entities.Pesagem;
+import entities.Prescricao;
 import entities.UtilizadorNormal;
 
 import javax.annotation.PostConstruct;
@@ -22,17 +24,24 @@ public class ConfigBean {
     private PesagemBean pesagemBean;
     @EJB
     private BPMBean bpmBean;
+    @EJB
+    private DoutorBean doutorBean;
+    @EJB
+    private PrescricaoBean prescricaoBean;
 
 
     @PostConstruct
     public void populateDB() {
 
-        UtilizadorNormal utilzador1 = utilizadorNormalBean.create("rafael silva","rafa","rafa@gmail.com","rafa");
-        UtilizadorNormal utilzador2 = utilizadorNormalBean.create("rafael francisco","rafa","rafa2@gmail.com","rafa2");
+        UtilizadorNormal utilzador1 = utilizadorNormalBean.create("rafa","rafa@gmail.com","rafael",null);
+        UtilizadorNormal utilzador2 = utilizadorNormalBean.create("rafa","rafa2@gmail.com","rafael silva",null);
+        Doutor doutor = doutorBean.create("rafa","doctor@gmail.com","rafaelferreira");
+
 
         colestrolBean.create(130 ,utilzador1.getId(),"foi interessante");
         colestrolBean.create(120 ,utilzador1.getId(),"");
         colestrolBean.create(100 ,utilzador1.getId(),"não foi interessante");
+
 
         pesagemBean.create( (float) 60, (float) 1.78,utilzador1.getId());
         pesagemBean.create((float) 97, (float) 1.88,utilzador1.getId());
@@ -40,6 +49,7 @@ public class ConfigBean {
         bpmBean.create(123,utilzador1.getId());
         bpmBean.create(250,utilzador1.getId());
 
+        prescricaoBean.create(new Date(2022,1,1,0,0,0), Prescricao.TypePrescricoes.medica,"Tens de comar x comprimidos",utilzador1.getId(),doutor.getId());
 
 
 

@@ -16,8 +16,11 @@
             <b-dropdown-item @click.prevent="goColestrol">Outros Sinais</b-dropdown-item>
             <b-dropdown-item @click.prevent="goColestrol">Ficheiros Partilhados</b-dropdown-item>
           </b-nav-item-dropdown>
-          <li class="nav-item">
-            <nuxt-link class="nav-link" to="students">Prescrições</nuxt-link>
+          <li class="nav-item" v-if="this.$auth.user.groups==='UtilizadorNormal'">
+            <nuxt-link class="nav-link" to="/prescricoes/my">Prescrições</nuxt-link>
+          </li>
+          <li class="nav-item" v-else>
+            <nuxt-link class="nav-link" to="/prescricoes/all">Prescrições</nuxt-link>
           </li>
         </b-navbar-nav>
         <!-- Right aligned nav items -->

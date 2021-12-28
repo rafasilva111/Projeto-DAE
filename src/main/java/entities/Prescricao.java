@@ -13,21 +13,33 @@ public class Prescricao implements Serializable {
     private String id;
     private Date dataInicio;
     private Date dataFim;
-    private typePrescricoes tipo;
+    private TypePrescricoes tipo;
     private String descricao;
     @ManyToOne
     private UtilizadorNormal utilizadorNormal;
+    @ManyToOne
+    private Doutor doutor;
 
 
-    public Prescricao(String id, Date dataFim, typePrescricoes tipo, String descricao, UtilizadorNormal utilizadorNormal) {
-        this.id = id;
+    public Prescricao(Date dataFim, TypePrescricoes tipo, String descricao, UtilizadorNormal utilizadorNormal,Doutor doutor) {
+        this.id = System.currentTimeMillis()+"";
+        this.dataInicio = new Date(System.currentTimeMillis());
         this.dataFim = dataFim;
         this.tipo = tipo;
         this.descricao = descricao;
         this.utilizadorNormal = utilizadorNormal;
+        this.doutor = doutor;
     }
 
     public Prescricao() {
+    }
+
+    public Doutor getDoutor() {
+        return doutor;
+    }
+
+    public void setDoutor(Doutor doutor) {
+        this.doutor = doutor;
     }
 
     public UtilizadorNormal getUtilizadorNormal() {
@@ -70,15 +82,15 @@ public class Prescricao implements Serializable {
         this.dataFim = dataFim;
     }
 
-    public typePrescricoes getTipo() {
+    public TypePrescricoes getTipo() {
         return tipo;
     }
 
-    public void setTipo(typePrescricoes tipo) {
+    public void setTipo(TypePrescricoes tipo) {
         this.tipo = tipo;
     }
 
-    private enum  typePrescricoes {
+    public enum  TypePrescricoes {
         exercicio,
         medica,
         nutricional
