@@ -45,8 +45,9 @@ public class PrescricaoBean {
             System.err.print(e.getMessage());
         }
 
+        int id =getAllPrescricoes().size();
 
-        Prescricao prescricao = new Prescricao(dataFim, tipo,descricao,utilizadorNormal,doutor);
+        Prescricao prescricao = new Prescricao(id,dataFim, tipo,descricao,utilizadorNormal,doutor);
 
         utilizadorNormal.addPrescicaoRegister(prescricao);
         doutor.addPrescicaoRegister(prescricao);

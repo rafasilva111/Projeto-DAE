@@ -3,30 +3,17 @@
     <div>
       <b-container class="modal-content rounded-6 shadow" >
         <h1 CLASS=" p-3" style="text-align:center">Prescrições Ativas</h1>
-        <b-table striped  :items="colestrol" :fields="fields" style="float:left;">
+        <b-table striped  :items="colestrol" :fields="fields" :filter="criteria" :filter-function="ativas" style="float:left;">
         </b-table>
-        <b-row >
-          <b-col lg="6" class="pb-4"><nuxt-link   class="btn btn-dark btn-sm" to="/biosinais/colestrol/createColestrol"  >Inserir Registo</nuxt-link></b-col>
-        </b-row>
       </b-container>
     </div>
 
     <div class="pt-4">
       <b-container class="modal-content rounded-6 shadow" >
         <h1 CLASS=" p-3" style="text-align:center">Histórico</h1>
-        <b-table striped  :items="colestrol" :fields="fields" style="float:left;">
-          <template v-slot:cell(actions)="row">
-            <nuxt-link
-              class="btn btn-dark btn-sm"
-              :to="`/biosinais/colestrol/${row.item.id}/updateColestrol`">Atualizar</nuxt-link>
-            <button
-              class="btn btn-danger btn-sm" cli
-              @click="apagar(row.item.id)">Apagar</button>
-          </template>
+        <b-table striped  :items="colestrol" :filter="criteria" :filter-function="historico" :fields="fields" style="float:left;">
         </b-table>
-        <b-row >
-          <b-col lg="6" class="pb-4"><nuxt-link   class="btn btn-dark btn-sm" to="/biosinais/colestrol/createColestrol"  >Inserir Registo</nuxt-link></b-col>
-        </b-row>
+        
       </b-container>
     </div>
   </div>
@@ -42,16 +29,16 @@ export default {
       ready: false,
       labels: [],
       data: [],
-      fields: [ 'dataInicio','dataFim','doutorName','classification','descricao'],
+      fields: [ 'dataInicio','dataFim','doutorName','tipo','descricao'],
       colestrol: [],
       user: null,
+      criteria: "hey",
 
 
     }
   },
   created () {
-    console.log(this.$auth.user.groups=='UtilizadorNormal')
-    console.log("here"+this.$auth.user.groups)
+
     this.$axios.$get('/api/user/'+this.$auth.user.sub+'/registers')
       .then((user) => {
         this.user = user
@@ -65,12 +52,29 @@ export default {
   },
 
   methods: {
-    apagar: function (value){
 
-      this.$axios.$delete('/api/biosinais/colestrol/'+value)
-        .then(() => {
-          this.$router.push('/biosinais/colestrol/my')
-        })
+    historico: function (row){
+
+      var hoje = (row.dataFim).split("/",3)
+
+      var date = new Date();
+      if (new Date(hoje[2].split(" ")[0],hoje[1],hoje[0])<date) {
+        return true;
+      }
+
+      return false;
+    },
+
+    ativas: function (row){
+
+      var hoje = (row.dataFim).split("/",3)
+
+      var date = new Date();
+      if (new Date(hoje[2].split(" ")[0],hoje[1],hoje[0])<date) {
+        return false;
+      }
+
+      return true;
     },
 
   }

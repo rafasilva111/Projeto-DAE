@@ -28,7 +28,7 @@ public class SinalBiomedico implements Serializable {
 
     public SinalBiomedico(long id,UtilizadorNormal utilizadorNormal,Classification classification,String descricao) {
         this.date= new Date(System.currentTimeMillis());
-        this.id = id+"";
+        this.id = System.currentTimeMillis()+"";
         this.utilizadorNormal = utilizadorNormal;
         this.classification = classification;
         this.descricao = descricao;
@@ -36,7 +36,7 @@ public class SinalBiomedico implements Serializable {
 
     public SinalBiomedico(long id,UtilizadorNormal utilizadorNormal) {
         this.date= new Date(System.currentTimeMillis());
-        this.id = id+"";
+        this.id = System.currentTimeMillis()+"";
         this.utilizadorNormal = utilizadorNormal;
         this.classification = Classification.erro;
         this.descricao = "";

@@ -10,6 +10,8 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Startup
@@ -48,10 +50,23 @@ public class ConfigBean {
 
         bpmBean.create(123,utilzador1.getId());
         bpmBean.create(250,utilzador1.getId());
+        Date dateFim = null;
+        try {
+            dateFim =new SimpleDateFormat("dd/MM/yyyy").parse("29/12/2022");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        prescricaoBean.create(dateFim, Prescricao.TypePrescricoes.Medica,"Tens de comar x comprimidos",utilzador1.getId(),doutor.getId());
+        prescricaoBean.create(dateFim, Prescricao.TypePrescricoes.Medica,"Tens de comar x comprimidos",utilzador1.getId(),doutor.getId());
 
-        prescricaoBean.create(new Date(2022,1,1,0,0,0), Prescricao.TypePrescricoes.Medica,"Tens de comar x comprimidos",utilzador1.getId(),doutor.getId());
-
-
+        Date dateFim2 = null;
+        try {
+            dateFim2 =new SimpleDateFormat("dd/MM/yyyy").parse("29/12/2020");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+       prescricaoBean.create(dateFim, Prescricao.TypePrescricoes.Exercicio,"Tens de comar x comprimidos",utilzador1.getId(),doutor.getId());
+        prescricaoBean.create(dateFim2, Prescricao.TypePrescricoes.Medica,"Tens de comar x comprimidos",utilzador1.getId(),doutor.getId());
 
         System.out.println();
     }
