@@ -1,9 +1,7 @@
 package ejbs;
 
 import dtos.SinalBiomedicoDTO;
-import entities.Colestrol;
 import entities.Outro;
-import entities.SinalBiomedico;
 import entities.UtilizadorNormal;
 import exceptions.MyEntityNotFoundException;
 
@@ -32,7 +30,7 @@ public class OutroBean {
             System.err.print(e.getMessage());
         }
         int count = getAllOutros().size();
-        Outro outro = new Outro(count+1000,outroEntity.getName(),outroEntity.getValue().get(0),outroEntity.getMinValue(),outroEntity.getMaxValue(),utilizadorNormal);
+        Outro outro = new Outro(count+1000,outroEntity.getName(),Float.parseFloat(outroEntity.getValue().get(0)),outroEntity.getMinValue(),outroEntity.getMaxValue(),utilizadorNormal);
         utilizadorNormal.addOutrosRegister(outro);
         em.persist(outro);
     };
@@ -55,7 +53,7 @@ public class OutroBean {
             if (sinalBiomedicoDTO.getUtilizadorNormalID() != null){
                 UtilizadorNormal utilizadorNormal = em.find(UtilizadorNormal.class, sinalBiomedicoDTO.getUtilizadorNormalID());
                 if (utilizadorNormal== null){
-                    throw new MyEntityNotFoundException("Utilizador nao foi encontrado id:"+sinalBiomedicoDTO.getUtilizadorNormalID());
+                    throw new MyEntityNotFoundException("Utilizador nao foi encontrado id:"+ sinalBiomedicoDTO.getUtilizadorNormalID());
                 }
                 outro.setUtilizadorNormal(utilizadorNormal);
             }

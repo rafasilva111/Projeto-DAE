@@ -12,6 +12,10 @@ http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
         <description>UtilizadorNormal</description>
         <role-name>UtilizadorNormal</role-name>
     </security-role>
+    <security-role>
+        <description>Doutor</description>
+        <role-name>Doutor</role-name>
+    </security-role>
     <login-config>
         <auth-method>BEARER_TOKEN</auth-method>
         <realm-name>jwt-realm</realm-name>

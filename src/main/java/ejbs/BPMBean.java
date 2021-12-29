@@ -9,6 +9,7 @@ import exceptions.MyEntityNotFoundException;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.LockModeType;
+import javax.persistence.OptimisticLockException;
 import javax.persistence.PersistenceContext;
 import java.util.Date;
 import java.util.List;
@@ -55,7 +56,7 @@ public class BPMBean {
             if (sinalBiomedicoDTO.getUtilizadorNormalID() != null){
                 UtilizadorNormal utilizadorNormal = em.find(UtilizadorNormal.class, sinalBiomedicoDTO.getUtilizadorNormalID());
                 if (utilizadorNormal== null){
-                    throw new MyEntityNotFoundException("Utilizador nao foi encontrado id:"+sinalBiomedicoDTO.getUtilizadorNormalID());
+                    throw new MyEntityNotFoundException("Utilizador nao foi encontrado id:"+ sinalBiomedicoDTO.getUtilizadorNormalID());
                 }
                 bpm.setUtilizadorNormal(utilizadorNormal);
             }
@@ -65,7 +66,10 @@ public class BPMBean {
             }
 
             if (sinalBiomedicoDTO.getValue()!=null){
-                bpm.setNumeroBatimentos(Math.round(sinalBiomedicoDTO.getValue().get(0)));
+                bpm.setNumeroBatimentos(Integer.parseInt(sinalBiomedicoDTO.getValue().get(0)));
+            }
+            if (sinalBiomedicoDTO.getDescricao()!=null){
+                bpm.setDescricao(sinalBiomedicoDTO.getDescricao());
             }
 
 
@@ -75,10 +79,21 @@ public class BPMBean {
     }
 
     public void delete(String idBPM) {
-        BPM bpm = em.find(BPM.class, idBPM);
-        if(bpm!=null){
-            em.detach(bpm);
+        BPM colestrol = em.find(BPM.class, idBPM);
+        UtilizadorNormal utilizador = em.find(UtilizadorNormal.class,colestrol.getUtilizadorNormal().getId());
+        utilizador.remove(colestrol);
+
+        if(colestrol!=null){
+            em.detach(colestrol);
+
         }else
-            throw new MyEntityNotFoundException("Registo de BPM nao foi encontrado");
+            throw new MyEntityNotFoundException("Registo de colestrol nao foi encontrado");
+
+        int isSuccessful = em.createQuery("delete from SinalBiomedico p where p.id = :id ")
+                .setParameter("id", idBPM)
+                .executeUpdate();
+        if (isSuccessful == 0) {
+            throw new OptimisticLockException(" product modified concurrently");
+        }
     }
 }

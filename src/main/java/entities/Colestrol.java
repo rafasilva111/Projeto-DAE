@@ -1,5 +1,7 @@
 package entities;
 
+import entities.enums.Classification;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -21,8 +23,8 @@ public class Colestrol extends SinalBiomedico implements Serializable {
         this.nivelColestrol = nivelColestrol;
     }
 
-    public Colestrol(long id, float nivelColestrol, UtilizadorNormal utilizadorNormal) {
-        super(id,utilizadorNormal);
+    public Colestrol(long id, float nivelColestrol, UtilizadorNormal utilizadorNormal, Classification classification,String descricao) {
+        super(id,utilizadorNormal,classification,descricao);
         this.nivelColestrol = nivelColestrol;
 
     }

@@ -1,5 +1,7 @@
 package entities;
 
+import entities.enums.Classification;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -18,14 +20,44 @@ public class SinalBiomedico implements Serializable {
     private Date date;
     @ManyToOne
     private UtilizadorNormal utilizadorNormal;
+    private Classification classification;
+    private String descricao;
 
     public SinalBiomedico() {
     }
 
+    public SinalBiomedico(long id,UtilizadorNormal utilizadorNormal,Classification classification,String descricao) {
+        this.date= new Date(System.currentTimeMillis());
+        this.id = System.currentTimeMillis()+"";
+        this.utilizadorNormal = utilizadorNormal;
+        this.classification = classification;
+        this.descricao = descricao;
+    }
+
     public SinalBiomedico(long id,UtilizadorNormal utilizadorNormal) {
         this.date= new Date(System.currentTimeMillis());
-        this.id = id+"";
+        this.id = System.currentTimeMillis()+"";
         this.utilizadorNormal = utilizadorNormal;
+        this.classification = Classification.erro;
+        this.descricao = "";
+    }
+
+    public Classification getClassification() {
+
+
+        return classification;
+    }
+
+    public void setClassification(Classification classification) {
+        this.classification = classification;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
     }
 
     public UtilizadorNormal getUtilizadorNormal() {
@@ -47,6 +79,7 @@ public class SinalBiomedico implements Serializable {
     public Date getDate() {
         return date;
     }
+
 
     public void setDate(Date date) {
         this.date = date;

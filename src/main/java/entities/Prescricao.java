@@ -1,33 +1,70 @@
 package entities;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
+@NamedQueries({
+        @NamedQuery(
+                name = "getAllPrescricoesRegisters",
+                query = "SELECT s FROM Prescricao s ORDER BY s.id" // JPQL
+        ),
+})
 @Entity
 public class Prescricao implements Serializable {
     @Id
     private String id;
     private Date dataInicio;
     private Date dataFim;
-    private typePrescricoes tipo;
+    private TypePrescricoes tipo;
     private String descricao;
     @ManyToOne
     private UtilizadorNormal utilizadorNormal;
+    @ManyToOne
+    private Doutor doutor;
+    private boolean enabled;
 
 
-    public Prescricao(String id, Date dataFim, typePrescricoes tipo, String descricao, UtilizadorNormal utilizadorNormal) {
-        this.id = id;
+
+    public Prescricao(Date dataFim, TypePrescricoes tipo, String descricao, UtilizadorNormal utilizadorNormal,Doutor doutor) {
+        this.id = System.currentTimeMillis()+"";
+        this.dataInicio = new Date(System.currentTimeMillis());
         this.dataFim = dataFim;
         this.tipo = tipo;
         this.descricao = descricao;
         this.utilizadorNormal = utilizadorNormal;
+        this.doutor = doutor;
+        this.enabled = true;
+    }
+
+    public Prescricao(int id,Date dataFim, TypePrescricoes tipo, String descricao, UtilizadorNormal utilizadorNormal,Doutor doutor) {
+        this.id = id+"";
+        this.dataInicio = new Date(System.currentTimeMillis());
+        this.dataFim = dataFim;
+        this.tipo = tipo;
+        this.descricao = descricao;
+        this.utilizadorNormal = utilizadorNormal;
+        this.doutor = doutor;
+        this.enabled = true;
     }
 
     public Prescricao() {
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public Doutor getDoutor() {
+        return doutor;
+    }
+
+    public void setDoutor(Doutor doutor) {
+        this.doutor = doutor;
     }
 
     public UtilizadorNormal getUtilizadorNormal() {
@@ -70,17 +107,17 @@ public class Prescricao implements Serializable {
         this.dataFim = dataFim;
     }
 
-    public typePrescricoes getTipo() {
+    public TypePrescricoes getTipo() {
         return tipo;
     }
 
-    public void setTipo(typePrescricoes tipo) {
+    public void setTipo(TypePrescricoes tipo) {
         this.tipo = tipo;
     }
 
-    private enum  typePrescricoes {
-        exercicio,
-        medica,
-        nutricional
+    public enum  TypePrescricoes {
+        Exercicio,
+        Medica,
+        Nutricional
     }
 }

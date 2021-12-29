@@ -1,14 +1,14 @@
 package dtos;
 
-import entities.UserType;
+import entities.enums.UserType;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-public class UtilizadorDTO {
+public class UtilizadorDTO implements Serializable {
 
     private String id;
-    private String name;
     private String username;
     private String password;
     private String email;
@@ -17,9 +17,8 @@ public class UtilizadorDTO {
     private List<SinalBiomedicoDTO> mysignals;
 
 
-    public UtilizadorDTO(String id, String password, String name, String email, Date data, String userName, UserType tipo) {
+    public UtilizadorDTO(String id, String password, String email, Date data, String userName, UserType tipo) {
     this.id = id;
-    this.name = name;
     this.username = userName;
     this.password = password;
     this.email = email;
@@ -30,9 +29,8 @@ public class UtilizadorDTO {
         this.tipo = "Administrador";
     }
     }
-    public UtilizadorDTO(String id, String password, String name, String email, Date data, String userName, UserType tipo,List<SinalBiomedicoDTO> signals) {
+    public UtilizadorDTO(String id, String password,  String email, Date data, String userName, UserType tipo,List<SinalBiomedicoDTO> signals) {
         this.id = id;
-        this.name = name;
         this.username = userName;
         this.password = password;
         this.email = email;
@@ -54,14 +52,6 @@ public class UtilizadorDTO {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getUsername() {

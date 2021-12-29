@@ -52,6 +52,9 @@ public class Outro extends SinalBiomedico implements Serializable {
     public void setValue(Float value) {
         this.value = value;
     }
+    public void setValue(String value) {
+        this.value = Float.parseFloat(value);
+    }
 
     public float getMinValue() {
         return minValue;

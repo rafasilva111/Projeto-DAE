@@ -18,7 +18,7 @@ import java.util.logging.Logger;
 public class Utilizador implements Serializable {
     @Id
     private String id;
-    private String name;
+
     private String userName;
     private String password;
     @Email
@@ -26,9 +26,9 @@ public class Utilizador implements Serializable {
     private Date data;
 
 
-    public Utilizador( String name, String password, @Email String email,String userName) {
+    public Utilizador(String password, @Email String email,String userName) {
         this.id = System.currentTimeMillis()+"";
-        this.name = name;
+
         this.password = hashPassword(password);
         this.email = email;
         this.userName = userName;
@@ -38,13 +38,6 @@ public class Utilizador implements Serializable {
     public Utilizador() {
     }
 
-    public Utilizador(int id, String name, String password, String email) {
-        this.id = id+"";
-        this.name = name;
-        this.password = password;
-        this.email = email;
-        this.data = new Date(System.currentTimeMillis());
-    }
 
 
     public Date getData() {
@@ -63,13 +56,7 @@ public class Utilizador implements Serializable {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
-    }
 
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public String getPassword() {
         return password;

@@ -19,7 +19,7 @@ http://localhost:8080/academics/api/biosinais/colestrol/0
 POST http://localhost:8080/academics/api/biosinais/colestrol/0/create
 Content-Type: application/json
 
-{ "id": "10",
+{
   "value": "100",
   "utilizadorNormalID": "0"
 }

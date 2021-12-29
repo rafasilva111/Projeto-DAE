@@ -1,7 +1,6 @@
 package ws;
 
 import javax.ejb.EJB;
-import javax.persistence.Entity;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.SecurityContext;
@@ -12,8 +11,7 @@ import ejbs.BioSinaisBean;
 import ejbs.UserBean;
 import ejbs.UtilizadorNormalBean;
 import entities.Colestrol;
-import entities.SinalBiomedico;
-import entities.UserType;
+import entities.enums.UserType;
 import entities.UtilizadorNormal;
 import exceptions.MyEntityNotFoundException;
 
@@ -42,7 +40,6 @@ public class UtilizadorNormalService {
         return new UtilizadorDTO(
                 utilizadorNormal.getId(),
                 utilizadorNormal.getPassword(),
-                utilizadorNormal.getName(),
                 utilizadorNormal.getEmail(),
                 utilizadorNormal.getData(),
                 utilizadorNormal.getUserName(),
@@ -52,7 +49,6 @@ public class UtilizadorNormalService {
         return new UtilizadorDTO(
                 utilizadorNormal.getId(),
                 utilizadorNormal.getPassword(),
-                utilizadorNormal.getName(),
                 utilizadorNormal.getEmail(),
                 utilizadorNormal.getData(),
                 utilizadorNormal.getUserName(),
@@ -70,6 +66,7 @@ public class UtilizadorNormalService {
             ) {
                 SinalBiomedicoDTO colestrolDTO = helper.toDTO(coletrol);
                 list.add(colestrolDTO);
+
             }
         }
         if (!utilizadorNormal.getBpmList().isEmpty()) {
@@ -141,6 +138,7 @@ public class UtilizadorNormalService {
                     username + " not found.");
         }
         System.out.println(toDTOcomRegistos(student).toString());
+
         return Response.status(Response.Status.OK)
                 .entity(toDTOcomRegistos(student))
                 .build();

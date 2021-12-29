@@ -10,7 +10,7 @@ import java.util.List;
 import static javax.persistence.CascadeType.ALL;
 
 
-@Table(uniqueConstraints={@UniqueConstraint(columnNames={"NAME","ID"})})
+@Table(uniqueConstraints={@UniqueConstraint(columnNames={"ID"})})
 @NamedQueries({
         @NamedQuery(
                 name = "getAllNormUsers",
@@ -31,29 +31,38 @@ public class UtilizadorNormal extends Utilizador implements Serializable {
     private List<Outro> outrosList;
     @OneToMany(cascade=ALL,mappedBy = "UtilizadorNormal")
     private List<Prescricao> prescricoesList;
-
-    public UtilizadorNormal( String name, String password, @Email String email,String username) {
-        super( name, password, email,username);
-        this.bpmList = new LinkedList<>();
-        this.pesagemList = new LinkedList<>();
-        this.colestrolList = new LinkedList<>();
-        this.outrosList = new LinkedList<>();
-    }
-
+    @ManyToOne(cascade = ALL)
+    private Doutor doctor;
 
     public UtilizadorNormal() {
 
     }
 
-    public UtilizadorNormal(int id, String name, String password, String email,String username) {
-        super( name, password, email,username);
+    public UtilizadorNormal( String password,@Email String email,String username,Doutor doutor) {
+        super( password, email,username);
         this.bpmList = new LinkedList<>();
         this.pesagemList = new LinkedList<>();
         this.colestrolList = new LinkedList<>();
         this.outrosList = new LinkedList<>();
+        this.doctor = doutor;
 
     }
+    public UtilizadorNormal( String password,@Email String email,String username) {
+        super( password, email,username);
+        this.bpmList = new LinkedList<>();
+        this.pesagemList = new LinkedList<>();
+        this.colestrolList = new LinkedList<>();
+        this.outrosList = new LinkedList<>();
+        this.doctor = null;
+    }
 
+    public Doutor getDoctor() {
+        return doctor;
+    }
+
+    public void setDoctor(Doutor doctor) {
+        this.doctor = doctor;
+    }
 
     public List<BPM> getBpmList() {
         return bpmList;
@@ -110,5 +119,33 @@ public class UtilizadorNormal extends Utilizador implements Serializable {
 
     public void setPrescricoesList(List<Prescricao> prescricoesList) {
         this.prescricoesList = prescricoesList;
+    }
+
+    public void remove(Colestrol colestrol) {
+
+       if (this.colestrolList.contains(colestrol)){
+           List<Colestrol> colestrols = this.getColestrolList();
+           colestrols.remove(colestrol);
+           this.colestrolList = colestrols;
+       }
+
+    }
+    public void remove(BPM colestrol) {
+
+       if (this.getBpmList().contains(colestrol)){
+           List<BPM> colestrols = this.getBpmList();
+           colestrols.remove(colestrol);
+           this.bpmList = colestrols;
+       }
+
+    }
+    public void remove(Pesagem colestrol) {
+
+       if (this.pesagemList.contains(colestrol)){
+           List<Pesagem> colestrols = this.getPesagemList();
+           colestrols.remove(colestrol);
+           this.pesagemList = colestrols;
+       }
+
     }
 }

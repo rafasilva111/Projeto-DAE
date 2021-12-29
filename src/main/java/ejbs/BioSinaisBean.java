@@ -4,7 +4,6 @@ package ejbs;
 import dtos.SinalBiomedicoDTO;
 import entities.BPM;
 import entities.SinalBiomedico;
-import entities.Utilizador;
 import entities.UtilizadorNormal;
 import exceptions.MyEntityNotFoundException;
 
@@ -43,7 +42,7 @@ public class BioSinaisBean {
             if (sinalBiomedicoDTO.getUtilizadorNormalID() != null){
                 UtilizadorNormal utilizadorNormal = em.find(UtilizadorNormal.class, sinalBiomedicoDTO.getUtilizadorNormalID());
                 if (utilizadorNormal== null){
-                    throw new MyEntityNotFoundException("Utilizador nao foi encontrado id:"+sinalBiomedicoDTO.getUtilizadorNormalID());
+                    throw new MyEntityNotFoundException("Utilizador nao foi encontrado id:"+ sinalBiomedicoDTO.getUtilizadorNormalID());
                 }
                 bpm.setUtilizadorNormal(utilizadorNormal);
             }
@@ -53,7 +52,7 @@ public class BioSinaisBean {
             }
 
             if (sinalBiomedicoDTO.getValue()!=null){
-                bpm.setNumeroBatimentos(Math.round(sinalBiomedicoDTO.getValue().get(0)));
+                bpm.setNumeroBatimentos(Integer.parseInt(sinalBiomedicoDTO.getValue().get(0)));
             }
 
 

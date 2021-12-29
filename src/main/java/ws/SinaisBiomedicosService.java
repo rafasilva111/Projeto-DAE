@@ -1,6 +1,7 @@
 package ws;
 
 import com.nimbusds.jose.proc.SecurityContext;
+import dtos.GraphDTO;
 import dtos.SinalBiomedicoDTO;
 import ejbs.*;
 import entities.*;
@@ -12,6 +13,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.text.SimpleDateFormat;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,18 +40,22 @@ public class SinaisBiomedicosService {
 
     /// Colestrol
 
-    protected SinalBiomedicoDTO toDTO(Colestrol colestrol) {
 
-        List<Float> helper = new LinkedList<>();
-        helper.add(colestrol.getNivelColestrol());
+
+    protected SinalBiomedicoDTO toDTO(Colestrol colestrol) {
+        List<String> helper = new LinkedList<>();
+        helper.add(colestrol.getNivelColestrol()+"");
+
         return new SinalBiomedicoDTO(
                 colestrol.getId(),
-                colestrol.getDate()+"",
+                colestrol.getDate(),
                 "Colestrol",
                 helper,
                 0,
                 300,
-                colestrol.getUtilizadorNormal().getId()
+                colestrol.getUtilizadorNormal().getId(),
+                colestrol.getDescricao(),
+                colestrol.getClassification()
         );
     }
 
@@ -60,15 +66,41 @@ public class SinaisBiomedicosService {
 
     @GET // means: to call this endpoint, we need to use the HTTP GET method
     @Path("/colestrol/")
-    @RolesAllowed({"UtilizadorNormal"})
+    @RolesAllowed({"Administrador"})
     public List<SinalBiomedicoDTO> getAllColestrolRegisters() {
 
         return toDTOsColestrol(colestrolBean.getAllColestrol());
     }
+    @GET // means: to call this endpoint, we need to use the HTTP GET method
+    @Path("/colestrol/{id}/graph")
+    @RolesAllowed({"Administrador","UtilizadorNormal"})
+    public Response getDataForGraph(@PathParam("id") String idUtilizador) {
+        UtilizadorNormal utilizadorNormal = utilizadorBean.find(idUtilizador);
+
+        if (utilizadorNormal != null) {
+            List<Float> data = new LinkedList<>();
+            List<String> label = new LinkedList<>();
+
+
+            for (Colestrol colestrol:utilizadorNormal.getColestrolList()
+            ) {
+                data.add(colestrol.getNivelColestrol());
+                label.add(new SimpleDateFormat("kk:mm dd/MM/yyyy").format(colestrol.getDate()));
+            }
+
+            return Response.status(Response.Status.OK)
+                    .entity(new GraphDTO(data,label))
+                    .build();
+
+        }
+        return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                .entity("ERROR_FINDING_UTILIZADOR_RECORD")
+                .build();
+    }
 
     @GET
     @Path("/colestrol/{id}")
-    @RolesAllowed({"Administrador"})
+    @RolesAllowed({"UtilizadorNormal","Administrador"})
     public Response getColestrolByUser(@PathParam("id") String idUtilizador){
         UtilizadorNormal utilizadorNormal = utilizadorBean.find(idUtilizador);
 
@@ -79,7 +111,7 @@ public class SinaisBiomedicosService {
 
         }
         Colestrol colestrol = colestrolBean.find(idUtilizador);
-        System.out.println(colestrol.toString());
+
         if (colestrol != null){
 
             return Response.status(Response.Status.OK)
@@ -95,15 +127,18 @@ public class SinaisBiomedicosService {
     @POST
     @Path("/colestrol/{idUtilizador}/create")
     public Response createColestrol (@PathParam("idUtilizador") String idUtilizador,  SinalBiomedicoDTO sinalBiomedicoDTO) throws MyEntityNotFoundException{
-        colestrolBean.create(sinalBiomedicoDTO.getValue().get(0),idUtilizador);
+
+
+        System.out.println("aqui aqui"+ sinalBiomedicoDTO.getValue());
+        colestrolBean.create(Float.parseFloat(sinalBiomedicoDTO.getValue().get(1)),idUtilizador, sinalBiomedicoDTO.getDescricao());
         return Response.status(Response.Status.CREATED).build();
     }
 
     @PUT
     @Path("/colestrol/{idColestrol}")
-    public Response updateColestrol (@PathParam("idColestrol") String idColestrol, SinalBiomedicoDTO sinalBiomedicoDTO) throws MyEntityNotFoundException {
+    public Response updateColestrol (@PathParam("idColestrol") String idColestrol, SinalBiomedicoDTO sinalBiomedicoDTOmv) throws MyEntityNotFoundException {
 
-        colestrolBean.update(idColestrol, sinalBiomedicoDTO );
+        colestrolBean.update(idColestrol, sinalBiomedicoDTOmv);
 
         return Response.status(Response.Status.ACCEPTED)
                 .build();
@@ -114,26 +149,56 @@ public class SinaisBiomedicosService {
     public Response deleteColestrol (@PathParam("idColestrol") String idColestrol) throws MyEntityNotFoundException {
         colestrolBean.delete(idColestrol);
 
-        return Response.status(Response.Status.GONE).build();
+        return Response.status(Response.Status.ACCEPTED).build();
     }
 
     /// Pesagem
 
     protected SinalBiomedicoDTO toDTO(Pesagem pesagem) {
 
-        List<Float> helper = new LinkedList<>();
-        helper.add(pesagem.getAltura());
-        helper.add(pesagem.getPeso());
+        List<String> helper = new LinkedList<>();
+        helper.add(pesagem.getAltura().toString());
+        helper.add(pesagem.getPeso().toString());
+        helper.add(String. format("%.2f", pesagem.getIMC()));
         return new SinalBiomedicoDTO(
                 pesagem.getId(),
-                pesagem.getDate()+"",
+                pesagem.getDate(),
                 "Pesagem",
                 helper,
                 0,
                 300,
-                pesagem.getUtilizadorNormal().getId()
+                pesagem.getUtilizadorNormal().getId(),
+                pesagem.getDescricao(),
+                pesagem.getClassification()
         );
 
+    }
+
+    @GET // means: to call this endpoint, we need to use the HTTP GET method
+    @Path("/pesagem/{id}/graph")
+    @RolesAllowed({"Administrador","UtilizadorNormal"})
+    public Response getDataForGraphPesagem(@PathParam("id") String idUtilizador) {
+        UtilizadorNormal utilizadorNormal = utilizadorBean.find(idUtilizador);
+
+        if (utilizadorNormal != null) {
+            List<Float> data = new LinkedList<>();
+            List<String> label = new LinkedList<>();
+
+
+            for (Pesagem pesagem:utilizadorNormal.getPesagemList()
+            ) {
+                data.add(pesagem.getIMC());
+                label.add(new SimpleDateFormat("kk:mm dd/MM/yyyy").format(pesagem.getDate()));
+            }
+
+            return Response.status(Response.Status.OK)
+                    .entity(new GraphDTO(data,label))
+                    .build();
+
+        }
+        return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                .entity("ERROR_FINDING_UTILIZADOR_RECORD")
+                .build();
     }
 
     // converts an entire list of entities into a list of DTOs
@@ -174,9 +239,11 @@ public class SinaisBiomedicosService {
     @Path("/pesagem/{idUtilizador}/create")
     public Response createPesagem (@PathParam("idUtilizador") String idUtilizador,  SinalBiomedicoDTO sinalBiomedicoDTO) throws MyEntityNotFoundException{
         if (sinalBiomedicoDTO.getValue().size()!=2){
-            throw new IndexOutOfBoundsException("Não foi enviado array com dois elementos "+sinalBiomedicoDTO.getValue().size()+sinalBiomedicoDTO.getValue().get(0));
+            throw new IndexOutOfBoundsException("Não foi enviado array com dois elementos "+ sinalBiomedicoDTO.getValue().size()+ sinalBiomedicoDTO.getValue().get(0));
         }
-        pesagemBean.create(sinalBiomedicoDTO.getValue().get(0),sinalBiomedicoDTO.getValue().get(1),idUtilizador);
+
+
+        pesagemBean.create(Float.parseFloat(sinalBiomedicoDTO.getValue().get(0).replace(',','.')),Float.parseFloat(sinalBiomedicoDTO.getValue().get(1).replace(',','.')) ,idUtilizador,sinalBiomedicoDTO.getDescricao());
         return Response.status(Response.Status.CREATED).build();
     }
 
@@ -184,7 +251,7 @@ public class SinaisBiomedicosService {
     @Path("/pesagem/{idPesagem}")
     public Response updatePesagem (@PathParam("idPesagem") String idPesagem, SinalBiomedicoDTO sinalBiomedicoDTO) throws MyEntityNotFoundException {
 
-        pesagemBean.update(idPesagem, sinalBiomedicoDTO );
+        pesagemBean.update(idPesagem, sinalBiomedicoDTO);
 
         return Response.status(Response.Status.CREATED)
                 .build();
@@ -195,24 +262,26 @@ public class SinaisBiomedicosService {
     public Response deletePesagem (@PathParam("idPesagem") String idPesagem) throws MyEntityNotFoundException {
         pesagemBean.delete(idPesagem);
 
-        return Response.status(Response.Status.GONE).build();
+        return Response.status(Response.Status.ACCEPTED).build();
     }
 
     //BPM
 
     protected SinalBiomedicoDTO toDTO(BPM bpm) {
 
-        List<Float> helper = new LinkedList<>();
-        helper.add((float) bpm.getNumeroBatimentos());
+        List<String> helper = new LinkedList<>();
+        helper.add( bpm.getNumeroBatimentos() +"");
 
         return new SinalBiomedicoDTO(
                 bpm.getId(),
-                bpm.getDate()+"",
+                bpm.getDate(),
                 "Bpm",
                 helper,
                 0,
                 300,
-                bpm.getUtilizadorNormal().getId()
+                bpm.getUtilizadorNormal().getId(),
+                bpm.getDescricao(),
+                bpm.getClassification()
         );
 
     }
@@ -251,10 +320,37 @@ public class SinaisBiomedicosService {
                 .build();
     }
 
+    @GET // means: to call this endpoint, we need to use the HTTP GET method
+    @Path("/bpm/{id}/graph")
+    @RolesAllowed({"Administrador","UtilizadorNormal"})
+    public Response getDataForGraphBPM(@PathParam("id") String idUtilizador) {
+        UtilizadorNormal utilizadorNormal = utilizadorBean.find(idUtilizador);
+
+        if (utilizadorNormal != null) {
+            List<Float> data = new LinkedList<>();
+            List<String> label = new LinkedList<>();
+
+
+            for (BPM pesagem:utilizadorNormal.getBpmList()
+            ) {
+                data.add((float) pesagem.getNumeroBatimentos());
+                label.add(new SimpleDateFormat("kk:mm dd/MM/yyyy").format(pesagem.getDate()));
+            }
+
+            return Response.status(Response.Status.OK)
+                    .entity(new GraphDTO(data,label))
+                    .build();
+
+        }
+        return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                .entity("ERROR_FINDING_UTILIZADOR_RECORD")
+                .build();
+    }
+
     @POST
     @Path("/bpm/{idUtilizador}/create")
     public Response createBpm (@PathParam("idUtilizador") String idUtilizador,  SinalBiomedicoDTO sinalBiomedicoDTO) throws MyEntityNotFoundException{
-        bpmBean.create(sinalBiomedicoDTO.getValue().get(0),idUtilizador);
+        bpmBean.create(Float.parseFloat(sinalBiomedicoDTO.getValue().get(0)),idUtilizador);
         return Response.status(Response.Status.CREATED).build();
     }
 
@@ -262,7 +358,7 @@ public class SinaisBiomedicosService {
     @Path("/bpm/{idBpm}")
     public Response updateBpm (@PathParam("idBpm") String idBpm, SinalBiomedicoDTO sinalBiomedicoDTO) throws MyEntityNotFoundException {
 
-        bpmBean.update(idBpm, sinalBiomedicoDTO );
+        bpmBean.update(idBpm, sinalBiomedicoDTO);
 
         return Response.status(Response.Status.OK)
                 .build();
@@ -273,7 +369,7 @@ public class SinaisBiomedicosService {
     public Response deleteBpm (@PathParam("idBpm") String idPesagem) throws MyEntityNotFoundException {
         bpmBean.delete(idPesagem);
 
-        return Response.status(Response.Status.GONE).build();
+        return Response.status(Response.Status.ACCEPTED).build();
     }
 
 
@@ -281,18 +377,20 @@ public class SinaisBiomedicosService {
 
     protected SinalBiomedicoDTO toDTO(Outro outro) {
 
-        List<Float> helper = new LinkedList<>();
-        helper.add((float) outro.getValue());
+        List<String> helper = new LinkedList<>();
+        helper.add( outro.getValue()+"");
 
         return new SinalBiomedicoDTO(
                 outro.getId(),
-                outro.getDate()+"",
+                outro.getDate(),
                 outro.getName()
                 ,
                 helper,
                 outro.getMinValue(),
                 outro.getMaxValue(),
-                outro.getUtilizadorNormal().getId()
+                outro.getUtilizadorNormal().getId(),
+                outro.getDescricao(),
+                outro.getClassification()
         );
 
     }
@@ -342,7 +440,7 @@ public class SinaisBiomedicosService {
     @Path("/bpm/{idOutro}")
     public Response updateOutro (@PathParam("idOutro") String idBpm, SinalBiomedicoDTO sinalBiomedicoDTO) throws MyEntityNotFoundException {
 
-        outroBean.update(idBpm, sinalBiomedicoDTO );
+        outroBean.update(idBpm, sinalBiomedicoDTO);
 
         return Response.status(Response.Status.OK)
                 .build();
@@ -353,6 +451,8 @@ public class SinaisBiomedicosService {
     public Response deleteOutro (@PathParam("idOutro") String idPesagem) throws MyEntityNotFoundException {
         bpmBean.delete(idPesagem);
 
-        return Response.status(Response.Status.GONE).build();
+        return Response.status(Response.Status.ACCEPTED).build();
     }
+
+
 }
