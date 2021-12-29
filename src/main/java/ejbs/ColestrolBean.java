@@ -62,31 +62,32 @@ public class ColestrolBean {
         return em.find(Colestrol.class,id);
     }
 
-    public void update(String idColestrol, SinalBiomedicoDTO sinalBiomedicoDTOmv) {
+    public void update(String idColestrol, SinalBiomedicoDTO sinalBiomedicoDTO) {
         Colestrol colestrol = em.find(Colestrol.class, idColestrol);
 
 
         if(colestrol!=null){
 
             em.lock(colestrol, LockModeType.PESSIMISTIC_WRITE);
-            if (sinalBiomedicoDTOmv.getUtilizadorNormalID() != null){
-                UtilizadorNormal utilizadorNormal = em.find(UtilizadorNormal.class, sinalBiomedicoDTOmv.getUtilizadorNormalID());
+            if (sinalBiomedicoDTO.getUtilizadorNormalID() != null){
+                UtilizadorNormal utilizadorNormal = em.find(UtilizadorNormal.class, sinalBiomedicoDTO.getUtilizadorNormalID());
                 if (utilizadorNormal== null){
-                    throw new MyEntityNotFoundException("Utilizador nao foi encontrado id:"+ sinalBiomedicoDTOmv.getUtilizadorNormalID());
+                    throw new MyEntityNotFoundException("Utilizador nao foi encontrado id:"+ sinalBiomedicoDTO.getUtilizadorNormalID());
                 }
                 colestrol.setUtilizadorNormal(utilizadorNormal);
             }
 
-            if (sinalBiomedicoDTOmv.getDate() !=null){
-                colestrol.setDate(new Date(Long.parseLong(sinalBiomedicoDTOmv.getDate())));
+            if (sinalBiomedicoDTO.getDate() !=null){
+                colestrol.setDate(new Date(Long.parseLong(sinalBiomedicoDTO.getDate())));
             }
 
-            if (sinalBiomedicoDTOmv.getValue().get(0)!=null){
-                colestrol.setNivelColestrol(sinalBiomedicoDTOmv.getValue().get(0));
+            if (sinalBiomedicoDTO.getValue().get(0)!=null){
+                colestrol.setNivelColestrol(Float.parseFloat(sinalBiomedicoDTO.getValue().get(0)));
             }
-            if (sinalBiomedicoDTOmv.getDescricao()!=null){
-                colestrol.setDescricao(sinalBiomedicoDTOmv.getDescricao());
+            if (sinalBiomedicoDTO.getDescricao()!=null){
+                colestrol.setDescricao(sinalBiomedicoDTO.getDescricao());
             }
+
 
 
         }else

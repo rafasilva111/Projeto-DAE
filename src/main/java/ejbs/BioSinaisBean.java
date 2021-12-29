@@ -52,7 +52,7 @@ public class BioSinaisBean {
             }
 
             if (sinalBiomedicoDTO.getValue()!=null){
-                bpm.setNumeroBatimentos(Math.round(sinalBiomedicoDTO.getValue().get(0)));
+                bpm.setNumeroBatimentos(Integer.parseInt(sinalBiomedicoDTO.getValue().get(0)));
             }
 
 

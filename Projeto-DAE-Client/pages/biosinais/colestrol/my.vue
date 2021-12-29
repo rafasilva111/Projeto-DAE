@@ -3,7 +3,7 @@
     <div>
     <b-container class="modal-content rounded-6 shadow" >
       <h1 style="text-align:center">Colestrol</h1>
-      <b-table striped  :items="colestrol" :fields="fields" title="Colestrol" style="float:left;">
+      <b-table  :items="colestrol" :fields="fields" title="Colestrol" style="float:left;">
         <template v-slot:cell(actions)="row">
           <nuxt-link
             class="btn btn-dark btn-sm"
@@ -79,7 +79,30 @@ export default {
       ready: false,
       labels: [],
       data: [],
-      fields: [ 'date','value','classification','descricao','actions'],
+
+      fields: [
+        {
+          key: 'date',
+          label: 'Data',
+        },
+        {
+          key: 'value[0]',
+          label: 'Nivel de Colestrol',
+        },
+        {
+          key: 'classification',
+          label: 'Classificação',
+        },
+        {
+          key: 'descricao',
+          label: 'Descrição',
+        },
+        {
+          key: 'actions',
+          label: 'Actions',
+
+        }
+      ],
       colestrol: [],
       user: null,
 
@@ -108,10 +131,13 @@ export default {
 
   methods: {
   apagar: function (value){
-    console.log(value+ " aqui ahahahaha")
+
     this.$axios.$delete('/api/biosinais/colestrol/'+value)
       .then(() => {
-        this.$router.push('/biosinais/colestrol/my')
+        this.$axios.$get('/api/biosinais/colestrol/'+this.user.id)
+          .then((colestrol) => {
+            this.colestrol = colestrol
+          })
 
 
 

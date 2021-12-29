@@ -130,4 +130,22 @@ public class UtilizadorNormal extends Utilizador implements Serializable {
        }
 
     }
+    public void remove(BPM colestrol) {
+
+       if (this.getBpmList().contains(colestrol)){
+           List<BPM> colestrols = this.getBpmList();
+           colestrols.remove(colestrol);
+           this.bpmList = colestrols;
+       }
+
+    }
+    public void remove(Pesagem colestrol) {
+
+       if (this.pesagemList.contains(colestrol)){
+           List<Pesagem> colestrols = this.getPesagemList();
+           colestrols.remove(colestrol);
+           this.pesagemList = colestrols;
+       }
+
+    }
 }

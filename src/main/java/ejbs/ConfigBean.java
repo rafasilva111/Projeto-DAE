@@ -43,8 +43,8 @@ public class ConfigBean {
         colestrolBean.create(100 ,utilzador1.getId(),"não foi interessante");
 
 
-        pesagemBean.create( (float) 60, (float) 1.78,utilzador1.getId());
-        pesagemBean.create((float) 97, (float) 1.88,utilzador1.getId());
+        pesagemBean.create( (float) 60, (float) 1.78,utilzador1.getId(),"");
+        pesagemBean.create((float) 97, (float) 1.88,utilzador1.getId(),"");
 
         bpmBean.create(123,utilzador1.getId());
         bpmBean.create(250,utilzador1.getId());

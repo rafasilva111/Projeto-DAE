@@ -79,7 +79,29 @@ export default {
       ready: false,
       labels: [1,2,3],
       data: [4,3,2],
-      fields: [ 'date','bpm','classification','descricao','actions'],
+      fields: [
+        {
+          key: 'date',
+          label: 'Data',
+        },
+        {
+          key: 'value[0]',
+          label: 'Numero de Batimentos por minuto',
+        },
+        {
+          key: 'classification',
+          label: 'Classificação',
+        },
+        {
+          key: 'descricao',
+          label: 'Descrição',
+        },
+        {
+          key: 'actions',
+          label: 'Actions',
+
+        }
+      ],
       bpms: [{"date" : "12","bpm" : "25", "classification" : "123","descricao" : "653"}],
       user: null,
 
@@ -87,19 +109,36 @@ export default {
     }
   },
   created () {
-    
+
+    this.$axios.$get('/api/user/'+this.$auth.user.sub+'/registers')
+      .then((user) => {
+        this.user = user
+        this.$axios.$get('/api/biosinais/bpm/'+this.user.id)
+          .then((colestrol) => {
+            this.bpms = colestrol
+          })
+        this.$axios.$get('/api/biosinais/bpm/'+this.user.id+'/graph')
+          .then((graph) => {
+            this.labels = graph.label
+            this.data = graph.data
+
+            this.ready = true
+
+          })
+      })
   },
 
   methods: {
-  apagar: function (value){
-    console.log(value+ " aqui ahahahaha")
-    
-        this.$router.push('/biosinais/bpms/my')
+    apagar: function (value){
 
-
-
-    
-  },
+      this.$axios.$delete('/api/biosinais/bpm/'+value)
+        .then(() => {
+          this.$axios.$get('/api/biosinais/bpm/'+this.user.id)
+            .then((colestrol) => {
+              this.colestrol = colestrol
+            })
+        })
+    },
 
   }
 }

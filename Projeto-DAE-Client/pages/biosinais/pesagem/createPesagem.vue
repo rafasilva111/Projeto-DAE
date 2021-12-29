@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-container class="modal-content rounded-6 shadow" >
-      <caption style="text-align:center">Colestrol</caption>
+      <caption style="text-align:center">Pesagem</caption>
 
     <form  :disabled="!isFormValid">
       <b-form-group
@@ -9,10 +9,20 @@
         description="Este valor é obrigatório"
         label="Inserir valor medido:"
         label-for="colestrol"
-        :invalid-feedback="invalidColestrolFeedback"
-        :state="isColestrolValid"
+        :invalid-feedback="invalidAlturaFeedback"
+        :state="isAlturaValid"
       >
-      <b-input id="descricao" v-model.trim="colestrol" :state="isColestrolValid" trim></b-input>
+        <b-input id="altura" v-model.trim="altura" :state="isAlturaValid" trim></b-input>
+      </b-form-group>
+      <b-form-group
+        id="peso"
+        description="Este valor é obrigatório"
+        label="Inserir Peso medido:"
+        label-for="peso"
+        :invalid-feedback="invalidPesoFeedback"
+        :state="isPesoValid"
+      >
+        <b-input id="peso" v-model.trim="peso" :state="isPesoValid" trim></b-input>
       </b-form-group>
       <b-form-group
         id="descricao"
@@ -41,7 +51,8 @@
 export default {
   data() {
     return {
-      colestrol: null,
+      altura: null,
+      peso: null,
       descricao: null,
       valores: [],
       errorMsg: false,
@@ -55,28 +66,55 @@ export default {
       })
   },
   computed: {
-    invalidColestrolFeedback () {
-      if (!this.colestrol) {
+    invalidAlturaFeedback () {
+      if (!this.altura) {
         return null
       }
 
-      let value = parseFloat(this.colestrol);
-      if (isNaN(parseFloat(this.colestrol)) && isFinite(this.colestrol)){
+      let value = parseFloat(this.altura);
+      if (isNaN(parseFloat(this.altura)) && isFinite(this.altura)){
         return "Inserir um valor válido"
       }
-      if (!(value >=0 && value<=500)){
-        return "Inserir um valor entre [0,500]"
+      if (!(value >=0 && value<3)){
+        return "Inserir um valor entre [0,3] (m)"
       }
       return ''
     },
-    isColestrolValid () {
-      if (this.invalidColestrolFeedback === null) {
+    isAlturaValid () {
+      if (this.invalidAlturaFeedback === null) {
         return null
       }
-      return this.invalidColestrolFeedback === ''
+      return this.invalidAlturaFeedback === ''
+    },
+
+    invalidPesoFeedback () {
+      if (!this.peso) {
+        return null
+      }
+
+      let value = parseFloat(this.peso);
+      if (isNaN(parseFloat(this.peso)) && isFinite(this.peso)){
+        return "Inserir um valor válido"
+      }
+      if (value>=50000){
+        return "É texugo!!!!"
+      }
+      if (!(value >0 && value<=300)){
+        return "Inserir um valor entre [1,300]"
+      }
+
+      return ''
+    },
+    isPesoValid () {
+      if (this.invalidPesoFeedback === null) {
+        return null
+      }
+      return this.invalidPesoFeedback === ''
     },
     isFormValid () {
-      if (! this.isColestrolValid) {
+      if (! this.isPesoValid) {
+        return false
+      }if (! this.isAlturaValid) {
         return false
       }
       return true
@@ -92,14 +130,14 @@ export default {
     create() {
 
 
-      this.$axios.$post('/api/biosinais/colestrol/'+this.user.id+'/create', {
-        value: [this.colestrol,0],
+      this.$axios.$post('/api/biosinais/pesagem/'+this.user.id+'/create', {
+        value: [this.altura,this.peso],
 
         descricao: this.descricao
       })
         .then(() => {
 
-          this.$router.push('/biosinais/colestrol/my')
+          this.$router.push('/biosinais/pesagem/my')
         })
         .catch(error => {
           this.errorMsg = error.response.data
