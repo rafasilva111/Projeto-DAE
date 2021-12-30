@@ -1,5 +1,7 @@
 package entities;
 
+import org.eclipse.persistence.internal.oxm.schema.model.All;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import java.io.Serializable;
@@ -33,6 +35,8 @@ public class UtilizadorNormal extends Utilizador implements Serializable {
     private List<Prescricao> prescricoesList;
     @ManyToOne(cascade = ALL)
     private Doutor doctor;
+    @OneToMany(cascade =ALL,mappedBy = "UtilizadorNormal")
+    private List<Document> documents = new LinkedList<>();
 
     public UtilizadorNormal() {
 
@@ -54,6 +58,19 @@ public class UtilizadorNormal extends Utilizador implements Serializable {
         this.colestrolList = new LinkedList<>();
         this.outrosList = new LinkedList<>();
         this.doctor = null;
+    }
+
+    public List<Document> getDocuments() {
+        return documents;
+    }
+
+    public void addDocument(Document document){
+        this.documents.add(document);
+    }
+
+
+    public void setDocuments(List<Document> documents) {
+        this.documents = documents;
     }
 
     public Doutor getDoctor() {

@@ -13,7 +13,7 @@
         <h1 CLASS=" p-3" style="text-align:center">Histórico</h1>
         <b-table striped  :items="colestrol" :filter="criteria" :filter-function="historico" :fields="fields" style="float:left;">
         </b-table>
-        
+
       </b-container>
     </div>
   </div>

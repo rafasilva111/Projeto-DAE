@@ -15,6 +15,7 @@ public class UtilizadorDTO implements Serializable {
     private String data;
     private String tipo;
     private List<SinalBiomedicoDTO> mysignals;
+    private List<DocumentDTO> documents;
 
 
     public UtilizadorDTO(String id, String password, String email, Date data, String userName, UserType tipo) {
@@ -29,7 +30,7 @@ public class UtilizadorDTO implements Serializable {
         this.tipo = "Administrador";
     }
     }
-    public UtilizadorDTO(String id, String password,  String email, Date data, String userName, UserType tipo,List<SinalBiomedicoDTO> signals) {
+    public UtilizadorDTO(String id, String password, String email, Date data, String userName, UserType tipo, List<SinalBiomedicoDTO> signals, List<DocumentDTO> documents) {
         this.id = id;
         this.username = userName;
         this.password = password;
@@ -41,6 +42,22 @@ public class UtilizadorDTO implements Serializable {
             this.tipo = "Administrador";
         }
         this.mysignals = signals;
+    }
+
+    public List<SinalBiomedicoDTO> getMysignals() {
+        return mysignals;
+    }
+
+    public void setMysignals(List<SinalBiomedicoDTO> mysignals) {
+        this.mysignals = mysignals;
+    }
+
+    public List<DocumentDTO> getDocuments() {
+        return documents;
+    }
+
+    public void setDocuments(List<DocumentDTO> documents) {
+        this.documents = documents;
     }
 
     public UtilizadorDTO() {

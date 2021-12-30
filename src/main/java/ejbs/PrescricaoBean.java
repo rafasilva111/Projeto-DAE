@@ -25,8 +25,6 @@ public class PrescricaoBean {
     public void create(Date dataFim, Prescricao.TypePrescricoes tipo, String descricao, String utilizadorNormalId, String doutorId){
 
         UtilizadorNormal utilizadorNormal =em.find(UtilizadorNormal.class,utilizadorNormalId);
-
-
         try {
             if (utilizadorNormal == null){
                 throw new MyEntityNotFoundException("Utilizador inserido nao existe");

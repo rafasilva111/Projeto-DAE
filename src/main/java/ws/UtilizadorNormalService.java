@@ -8,9 +8,11 @@ import javax.ws.rs.core.SecurityContext;
 import dtos.SinalBiomedicoDTO;
 import dtos.UtilizadorDTO;
 import ejbs.BioSinaisBean;
+import ejbs.DocumentBean;
 import ejbs.UserBean;
 import ejbs.UtilizadorNormalBean;
 import entities.Colestrol;
+import entities.Document;
 import entities.enums.UserType;
 import entities.UtilizadorNormal;
 import exceptions.MyEntityNotFoundException;
@@ -30,11 +32,10 @@ public class UtilizadorNormalService {
     @EJB
     private UtilizadorNormalBean utilizadorNormalBean;
     @EJB
-    private BioSinaisBean bioSinaisBean;
-    @EJB
-    private UserBean userBean;
+    private DocumentBean documentBean;
 
     private SinaisBiomedicosService helper;
+    private DocumentsService documentsService;
 
     private UtilizadorDTO toDTOsemRegistos(UtilizadorNormal utilizadorNormal) {
         return new UtilizadorDTO(
@@ -46,13 +47,16 @@ public class UtilizadorNormalService {
                 UserType.UtilizadorNormal);
     }
     private UtilizadorDTO toDTOcomRegistos(UtilizadorNormal utilizadorNormal) {
+        documentsService = new DocumentsService();
+        System.out.println("aqui aqui+"+utilizadorNormal.getDocuments());
         return new UtilizadorDTO(
                 utilizadorNormal.getId(),
                 utilizadorNormal.getPassword(),
                 utilizadorNormal.getEmail(),
                 utilizadorNormal.getData(),
                 utilizadorNormal.getUserName(),
-                UserType.UtilizadorNormal,preencher(utilizadorNormal)
+                UserType.UtilizadorNormal,preencher(utilizadorNormal),
+                documentsService.documentsToDTOs(documentBean.getStudentDocuments(utilizadorNormal.getUserName()))
 
                 );
     }

@@ -14,15 +14,16 @@
             <b-dropdown-item @click.prevent="goPesagem">Peso/Altura</b-dropdown-item>
             <b-dropdown-item @click.prevent="goBPM">BPM's</b-dropdown-item>
             <b-dropdown-item @click.prevent="goColestrol">Outros Sinais</b-dropdown-item>
-            <b-dropdown-item @click.prevent="goColestrol">Ficheiros Partilhados</b-dropdown-item>
+            <b-dropdown-item @click.prevent="goMyFiles">Ficheiros Partilhados</b-dropdown-item>
           </b-nav-item-dropdown>
-          <div ></div>
-          <li class="nav-item" v-if="this.$auth.user.groups=='UtilizadorNormal'">
-            <nuxt-link class="nav-link" to="/prescricoes/my">Prescrições</nuxt-link>
+
+          <li class="nav-item" v-if="!superUser">
+            <nuxt-link class="nav-link" to="/prescricoes/my" >Prescrições todas</nuxt-link>
           </li>
-          <li class="nav-item" v-else>
-            <nuxt-link class="nav-link" to="/prescricoes/all">Prescrições</nuxt-link>
+          <li class="nav-item" v-else >
+            <nuxt-link class="nav-link" to="/prescricoes/all" >Prescrições </nuxt-link>
           </li>
+
         </b-navbar-nav>
         <!-- Right aligned nav items -->
         <b-navbar-nav class="ml-auto">
@@ -53,16 +54,62 @@ export default {
     },
     goColestrol() {
 
-      this.$router.push('/biosinais/colestrol/my')
+      if (this.$auth.user.groups =="UtilizadorNormal"){
+        this.$router.push('/biosinais/colestrol/my')
+      }
+      else {
+        this.$router.push('/biosinais/colestrol/all')
+      }
+
     },
     goPesagem() {
-
-      this.$router.push('/biosinais/pesagem/my')
+      if (this.$auth.user.groups =="UtilizadorNormal"){
+        this.$router.push('/biosinais/pesagem/my')
+      }
+      else {
+        this.$router.push('/biosinais/pesagem/all')
+      }
     },
     goBPM() {
-
+      if (this.$auth.user.groups =="UtilizadorNormal"){
+        this.$router.push('/biosinais/colestrol/my')
+      }
+      else {
+        this.$router.push('/biosinais/colestrol/all')
+      }
       this.$router.push('/biosinais/bpms/my')
+    },
+    goMyFiles() {
+      if (this.$auth.user.groups =="UtilizadorNormal"){
+        this.$router.push('/files/my')
+      }
+      else {
+        this.$router.push('/files/all')
+      }
+      this.$router.push('/files/my')
+    },
+    goPrescricoes() {
+      if (this.$auth.user.groups =="UtilizadorNormal"){
+        this.$router.push('/prescricoes/my')
+      }
+      else {
+        this.$router.push('/prescricoes/all')
+      }
+      this.$router.push('/presicoes/my')
     }
+  },
+  computed: {
+    superUser() {
+      if (this.$auth.user.groups =="UtilizadorNormal"){
+        return false;
+      }
+      else {
+        return true;
+      }
+    },
+    created() {
+
+    },
   }
 }
 </script>
