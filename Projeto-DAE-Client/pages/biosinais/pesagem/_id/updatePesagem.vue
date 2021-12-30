@@ -1,7 +1,7 @@
 <template>
   <div>
-    <b-container class="modal-content rounded-6 shadow" >
-      <caption style="text-align:center">Atualizar Registo: Pesagem</caption>
+    <b-container class="modal-content rounded-6 shadow p-4" >
+      <caption class = "pb-4" style="text-align:center">Atualizar Registo: Pesagem</caption>
 
       <form  :disabled="!isFormValid">
 
@@ -54,7 +54,13 @@ export default {
 
       })
         .then(() => {
-          this.$router.push('/biosinais/pesagem/my')
+        if (this.$auth.user.groups =="UtilizadorNormal"){
+                  this.$router.push('/biosinais/pesagem/my')
+                }
+                else {
+                  this.$router.push('/biosinais/pesagem/all')
+                }
+
         })
         .catch(error => {
           this.errorMsg = error.response.data
