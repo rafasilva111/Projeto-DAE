@@ -1,7 +1,7 @@
 <template>
   <div>
-    <b-container class="modal-content rounded-6 shadow" >
-      <caption style="text-align:center">Atualizar Registo: Colestrol</caption>
+    <b-container class="modal-content rounded-6 shadow p-4" >
+      <caption class = "pb-4" style="text-align:center">Atualizar Registo: Colestrol</caption>
 
       <form  :disabled="!isFormValid">
 

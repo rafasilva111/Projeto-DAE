@@ -80,8 +80,8 @@ export default {
     return {
       graphData: [],
       ready: false,
-      labels: [1,2,3],
-      data: [4,3,2],
+      labels: [],
+      data: [],
       fields: [
         {
           key: 'date',
@@ -113,7 +113,7 @@ export default {
 
         }
       ],
-      pesagem: [{"date" : "12","height" : "25"+" Cm","weight": "25" +" Kg", "classification" : "123","descricao" : "653"}],
+      pesagem: [],
       user: null,
 
 
