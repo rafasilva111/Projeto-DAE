@@ -30,7 +30,7 @@ public class OutroBean {
             System.err.print(e.getMessage());
         }
         int count = getAllOutros().size();
-        Outro outro = new Outro(count+1000,outroEntity.getName(),Float.parseFloat(outroEntity.getValue().get(0)),outroEntity.getMinValue(),outroEntity.getMaxValue(),utilizadorNormal);
+        Outro outro = new Outro(outroEntity.getName(),Float.parseFloat(outroEntity.getValue().get(0)),outroEntity.getMinValue(),outroEntity.getMaxValue(),utilizadorNormal);
         utilizadorNormal.addOutrosRegister(outro);
         em.persist(outro);
     };

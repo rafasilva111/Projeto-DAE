@@ -129,7 +129,6 @@ export default {
     },
     create() {
 
-
       this.$axios.$post('/api/biosinais/pesagem/'+this.user.id+'/create', {
         value: [this.altura,this.peso],
 

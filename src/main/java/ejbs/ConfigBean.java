@@ -1,10 +1,7 @@
 package ejbs;
 
 
-import entities.Doutor;
-import entities.Pesagem;
-import entities.Prescricao;
-import entities.UtilizadorNormal;
+import entities.*;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -30,14 +27,19 @@ public class ConfigBean {
     private DoutorBean doutorBean;
     @EJB
     private PrescricaoBean prescricaoBean;
+    @EJB
+    private AdminBean adminBean;
+    @EJB
+    private OutroCategoriesBean outroCategoriesBean;
 
 
     @PostConstruct
     public void populateDB() {
 
         UtilizadorNormal utilzador1 = utilizadorNormalBean.create("rafa","rafa@gmail.com","rafael",null);
-        UtilizadorNormal utilzador2 = utilizadorNormalBean.create("rafa","rafa2@gmail.com","rafael silva",null);
+        UtilizadorNormal utilzador2 = utilizadorNormalBean.create("rafa","rafa2@gmail.com","rafaelsilva",null);
         Doutor doutor = doutorBean.create("rafa","doctor@gmail.com","rafaelferreira");
+        Administrador administrador = adminBean.create("rafa","doctor@gmail.com","rafaelfrancisco");
 
 
         colestrolBean.create(130 ,utilzador1.getId(),"foi interessante");
@@ -65,8 +67,11 @@ public class ConfigBean {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-       prescricaoBean.create(dateFim, Prescricao.TypePrescricoes.Exercicio,"Tens de comar x comprimidos",utilzador1.getId(),doutor.getId());
+        prescricaoBean.create(dateFim, Prescricao.TypePrescricoes.Exercicio,"Tens de comar x comprimidos",utilzador1.getId(),doutor.getId());
         prescricaoBean.create(dateFim2, Prescricao.TypePrescricoes.Medica,"Tens de comar x comprimidos",utilzador1.getId(),doutor.getId());
+
+        outroCategoriesBean.create("Temperatura Corporal",(float) 14.1,(float) 12.1);
+
 
         System.out.println();
     }

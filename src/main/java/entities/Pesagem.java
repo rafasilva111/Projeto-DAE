@@ -24,8 +24,8 @@ public class Pesagem extends SinalBiomedico implements Serializable {
         super();
     }
 
-    public Pesagem(int id, float imc, float peso, Classification classification,String descricao, float altura, UtilizadorNormal utilizadorNormal) {
-        super(id,utilizadorNormal,classification,descricao);
+    public Pesagem( float imc, float peso, Classification classification,String descricao, float altura, UtilizadorNormal utilizadorNormal) {
+        super(utilizadorNormal,classification,descricao);
 
         this.peso = peso;
         this.altura = altura;

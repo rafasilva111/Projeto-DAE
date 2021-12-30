@@ -32,7 +32,7 @@ public class BPMBean {
             System.err.print(e.getMessage());
         }
         int count = getAllBPM().size();
-        BPM utilizadorN = new BPM(count+1000,Math.round(batimentos),utilizadorNormal);
+        BPM utilizadorN = new BPM(Math.round(batimentos),utilizadorNormal);
         utilizadorNormal.addBpmRegister(utilizadorN);
         em.persist(utilizadorN);
     };

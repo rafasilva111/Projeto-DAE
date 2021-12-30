@@ -16,6 +16,7 @@ public class SinalBiomedico implements Serializable {
 
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private String id;
     private Date date;
     @ManyToOne
@@ -26,17 +27,15 @@ public class SinalBiomedico implements Serializable {
     public SinalBiomedico() {
     }
 
-    public SinalBiomedico(long id,UtilizadorNormal utilizadorNormal,Classification classification,String descricao) {
+    public SinalBiomedico(UtilizadorNormal utilizadorNormal,Classification classification,String descricao) {
         this.date= new Date(System.currentTimeMillis());
-        this.id = System.currentTimeMillis()+"";
         this.utilizadorNormal = utilizadorNormal;
         this.classification = classification;
         this.descricao = descricao;
     }
 
-    public SinalBiomedico(long id,UtilizadorNormal utilizadorNormal) {
+    public SinalBiomedico(UtilizadorNormal utilizadorNormal) {
         this.date= new Date(System.currentTimeMillis());
-        this.id = System.currentTimeMillis()+"";
         this.utilizadorNormal = utilizadorNormal;
         this.classification = Classification.erro;
         this.descricao = "";

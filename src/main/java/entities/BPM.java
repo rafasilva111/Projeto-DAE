@@ -22,12 +22,6 @@ public class BPM extends SinalBiomedico implements Serializable {
         this.numeroBatimentos = numeroBatimentos;
        }
 
-    public BPM(long id, int numeroBatimentos, UtilizadorNormal utilizadorNormal) {
-        super(id,utilizadorNormal);
-        this.numeroBatimentos = numeroBatimentos;
-
-    }
-
 
     public BPM() {
 

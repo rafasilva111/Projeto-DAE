@@ -17,11 +17,20 @@
             <b-dropdown-item @click.prevent="goMyFiles">Ficheiros Partilhados</b-dropdown-item>
           </b-nav-item-dropdown>
 
-          <li class="nav-item" v-if="!superUser">
-            <nuxt-link class="nav-link" to="/prescricoes/my" >Prescrições todas</nuxt-link>
+          <li class="nav-item" v-if="superUser || doctor">
+            <nuxt-link class="nav-link" to="/prescricoes/all" >Todas as Prescrições</nuxt-link>
           </li>
           <li class="nav-item" v-else >
-            <nuxt-link class="nav-link" to="/prescricoes/all" >Prescrições </nuxt-link>
+            <nuxt-link class="nav-link" to="/prescricoes/my" >Prescrições </nuxt-link>
+          </li>
+          <li class="nav-item" v-if="superUser || doctor">
+            <nuxt-link class="nav-link" to="/" >Utilizadores</nuxt-link>
+          </li>
+          <li class="nav-item" v-if="superUser">
+            <nuxt-link class="nav-link" to="/" >Medicos</nuxt-link>
+          </li>
+          <li class="nav-item" v-if="superUser">
+            <nuxt-link class="nav-link" to="/admin/biosinais/all" >Biosinais</nuxt-link>
           </li>
 
         </b-navbar-nav>
@@ -100,11 +109,19 @@ export default {
   },
   computed: {
     superUser() {
-      if (this.$auth.user.groups =="UtilizadorNormal"){
-        return false;
+      if (this.$auth.user.groups =="Administrador"){
+        return true;
       }
       else {
+        return false;
+      }
+    },
+    doctor() {
+      if (this.$auth.user.groups =="Doutor"){
         return true;
+      }
+      else {
+        return false;
       }
     },
     created() {

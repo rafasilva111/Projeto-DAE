@@ -17,8 +17,9 @@ public class Outro extends SinalBiomedico implements Serializable {
     private Float value;
     private float minValue;
     private float maxValue;
-    @OneToOne(mappedBy = "outro")
+    @ManyToOne()
     private OutroCategories outroCategories;
+    private Date date;
 
     public Outro(String name, Float value, float minValue, float maxValue) {
         super();
@@ -27,10 +28,11 @@ public class Outro extends SinalBiomedico implements Serializable {
         this.minValue = minValue;
         this.maxValue = maxValue;
         this.outroCategories = new OutroCategories();
+
     }
 
-    public Outro(long id, String name, float value, float minValue, float maxValue,UtilizadorNormal utilizadorNormal) {
-        super(id,utilizadorNormal);
+    public Outro( String name, float value, float minValue, float maxValue,UtilizadorNormal utilizadorNormal) {
+        super(utilizadorNormal);
         this.name = name;
         this.value = value;
         this.minValue = minValue;
