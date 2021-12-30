@@ -48,8 +48,7 @@ public class SinaisBiomedicosService {
 
         return new SinalBiomedicoDTO(
                 colestrol.getId(),
-                colestrol.getDate(),
-                "Colestrol",
+                colestrol.getDate(), colestrol.getUtilizadorNormal().getUserName(),
                 helper,
                 0,
                 300,
@@ -66,9 +65,8 @@ public class SinaisBiomedicosService {
 
     @GET // means: to call this endpoint, we need to use the HTTP GET method
     @Path("/colestrol/")
-    @RolesAllowed({"Administrador"})
+    @RolesAllowed({"Administrador","Doutor"})
     public List<SinalBiomedicoDTO> getAllColestrolRegisters() {
-
         return toDTOsColestrol(colestrolBean.getAllColestrol());
     }
     @GET // means: to call this endpoint, we need to use the HTTP GET method
@@ -98,6 +96,36 @@ public class SinaisBiomedicosService {
                 .build();
     }
 
+
+    @GET // means: to call this endpoint, we need to use the HTTP GET method
+    @Path("/colestrol/graph")
+    @RolesAllowed({"Administrador","Doutor"})
+    public Response getDataForGraph() {
+        List<UtilizadorNormal> all = utilizadorBean.getAllNormalUsers();
+        System.out.println("Are you Here ?");
+        List<Float> data = new LinkedList<>();
+        List<String> label = new LinkedList<>();
+        for (UtilizadorNormal u: all
+             ) {
+            if (u != null) {
+                for (Colestrol colestrol:u.getColestrolList()
+                ) {
+                    data.add(colestrol.getNivelColestrol());
+                    label.add(new SimpleDateFormat("kk:mm dd/MM/yyyy").format(colestrol.getDate()));
+                }
+            }
+        }
+        if (all != null){
+            return Response.status(Response.Status.OK)
+                    .entity(new GraphDTO(data,label))
+                    .build();
+        }
+        return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                .entity("ERROR_FINDING_UTILIZADORES_RECORD")
+                .build();
+
+
+    }
     @GET
     @Path("/colestrol/{id}")
     @RolesAllowed({"UtilizadorNormal","Administrador"})
@@ -453,6 +481,8 @@ public class SinaisBiomedicosService {
 
         return Response.status(Response.Status.ACCEPTED).build();
     }
+
+
 
 
 }

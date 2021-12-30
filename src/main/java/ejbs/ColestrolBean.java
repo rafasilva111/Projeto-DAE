@@ -76,19 +76,9 @@ public class ColestrolBean {
                 }
                 colestrol.setUtilizadorNormal(utilizadorNormal);
             }
-
-            if (sinalBiomedicoDTO.getDate() !=null){
-                colestrol.setDate(new Date(Long.parseLong(sinalBiomedicoDTO.getDate())));
-            }
-
-            if (sinalBiomedicoDTO.getValue().get(0)!=null){
-                colestrol.setNivelColestrol(Float.parseFloat(sinalBiomedicoDTO.getValue().get(0)));
-            }
             if (sinalBiomedicoDTO.getDescricao()!=null){
                 colestrol.setDescricao(sinalBiomedicoDTO.getDescricao());
             }
-
-
 
         }else
             throw new MyEntityNotFoundException("Registo de colestrol nao foi encontrado id:"+idColestrol);

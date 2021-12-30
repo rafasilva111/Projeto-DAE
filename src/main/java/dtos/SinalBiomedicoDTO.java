@@ -35,7 +35,7 @@ public class SinalBiomedicoDTO implements Serializable {
             case muitoalto:
                 this.classification="Muito Alto";
                 break;
-                case alto:
+            case alto:
                 this.classification="Alto";
                 break;
             case medio:

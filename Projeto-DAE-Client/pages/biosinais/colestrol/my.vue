@@ -122,7 +122,6 @@ export default {
           .then((graph) => {
             this.labels = graph.label
             this.data = graph.data
-
             this.ready = true
 
           })

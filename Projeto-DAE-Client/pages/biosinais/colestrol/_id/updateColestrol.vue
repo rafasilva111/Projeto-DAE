@@ -54,7 +54,12 @@ export default {
 
       })
         .then(() => {
+        if (this.$auth.user.groups =="UtilizadorNormal"){
           this.$router.push('/biosinais/colestrol/my')
+        }
+        else {
+          this.$router.push('/biosinais/colestrol/all')
+        }
         })
         .catch(error => {
           this.errorMsg = error.response.data
