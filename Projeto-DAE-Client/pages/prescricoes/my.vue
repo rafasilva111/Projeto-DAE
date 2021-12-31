@@ -4,7 +4,18 @@
       <b-container class="modal-content rounded-6 shadow" >
         <h1 CLASS=" p-3" style="text-align:center">Prescrições Ativas</h1>
         <b-table striped  :items="colestrol" :fields="fields" :filter="criteria" :filter-function="ativas" style="float:left;">
-        </b-table>
+        <template v-slot:cell(actions)="row">
+                            <nuxt-link
+                              class="btn btn-dark btn-sm"
+                              :to="`/biosinais/colestrol/${row.item.id}/updateColestrol`">Atualizar</nuxt-link>
+                            <button
+                              class="btn btn-danger btn-sm" cli
+                              @click="apagar(row.item.id)">Apagar</button>
+                          </template>
+                        </b-table>
+                        <b-row >
+                          <b-col lg="6" class="pb-4"><nuxt-link   class="btn btn-dark btn-sm" to="/biosinais/colestrol/createColestrol"  >Inserir Registo</nuxt-link></b-col>
+                        </b-row>
       </b-container>
     </div>
 
@@ -13,7 +24,7 @@
         <h1 CLASS=" p-3" style="text-align:center">Histórico</h1>
         <b-table striped  :items="colestrol" :filter="criteria" :filter-function="historico" :fields="fields" style="float:left;">
         </b-table>
-        
+
       </b-container>
     </div>
   </div>
@@ -29,7 +40,7 @@ export default {
       ready: false,
       labels: [],
       data: [],
-      fields: [ 'dataInicio','dataFim','doutorName','tipo','descricao'],
+      fields: [ 'dataInicio','dataFim','doutorName','tipo','descricao','actions'],
       colestrol: [],
       user: null,
       criteria: "hey",
@@ -46,6 +57,7 @@ export default {
           .then((colestrol) => {
             this.colestrol =
               colestrol
+
           })
 
       })

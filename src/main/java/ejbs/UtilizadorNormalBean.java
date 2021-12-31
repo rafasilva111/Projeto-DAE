@@ -35,7 +35,6 @@ public class UtilizadorNormalBean {
     }
 
     public UtilizadorNormal getUserByUsername(String name){
-        System.out.println(""+name);
         return (UtilizadorNormal) em.createQuery("SELECT c FROM UtilizadorNormal c WHERE c.userName LIKE ?1").setParameter(1, name).getSingleResult();
     }
 
