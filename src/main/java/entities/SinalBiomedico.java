@@ -34,11 +34,10 @@ public class SinalBiomedico implements Serializable {
         this.descricao = descricao;
     }
 
-    public SinalBiomedico(UtilizadorNormal utilizadorNormal) {
+    public SinalBiomedico(UtilizadorNormal utilizadorNormal,String descricao) {
         this.date= new Date(System.currentTimeMillis());
         this.utilizadorNormal = utilizadorNormal;
-        this.classification = Classification.erro;
-        this.descricao = "";
+        this.descricao = descricao;
     }
 
     public Classification getClassification() {

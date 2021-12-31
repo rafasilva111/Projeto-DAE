@@ -2,6 +2,7 @@ package ejbs;
 
 import dtos.SinalBiomedicoDTO;
 import entities.Outro;
+import entities.OutroCategories;
 import entities.UtilizadorNormal;
 import exceptions.MyEntityNotFoundException;
 
@@ -17,11 +18,9 @@ public class OutroBean {
     @PersistenceContext
     private EntityManager em;
 
-    public void create(SinalBiomedicoDTO outroEntity, String utilizadorNormalID){
+    public void create(Float value,String descricao, String utilizadorNormalID,String outroCatID){
 
         UtilizadorNormal utilizadorNormal =em.find(UtilizadorNormal.class,utilizadorNormalID);
-
-
         try {
             if (utilizadorNormal == null){
                 throw new MyEntityNotFoundException("Utilizador inserido nao existe");
@@ -29,8 +28,17 @@ public class OutroBean {
         }catch (MyEntityNotFoundException e){
             System.err.print(e.getMessage());
         }
-        int count = getAllOutros().size();
-        Outro outro = new Outro(outroEntity.getName(),Float.parseFloat(outroEntity.getValue().get(0)),outroEntity.getMinValue(),outroEntity.getMaxValue(),utilizadorNormal);
+        OutroCategories outroCategories =em.find(OutroCategories.class,outroCatID);
+        try {
+            if (outroCategories == null){
+                throw new MyEntityNotFoundException("Categoria inserida nao existe");
+            }
+        }catch (MyEntityNotFoundException e){
+            System.err.print(e.getMessage());
+        }
+
+
+        Outro outro = new Outro(outroCategories.getName(),value,utilizadorNormal,descricao,outroCategories);
         utilizadorNormal.addOutrosRegister(outro);
         em.persist(outro);
     };
@@ -65,16 +73,10 @@ public class OutroBean {
             if (sinalBiomedicoDTO.getValue()!=null){
                 outro.setValue(sinalBiomedicoDTO.getValue().get(0));
             }
-
-            try {
-                outro.setMaxValue(sinalBiomedicoDTO.getMaxValue());
-            }catch (NullPointerException e){
+            if (sinalBiomedicoDTO.getDescricao()!=null){
+                outro.setValue(sinalBiomedicoDTO.getDescricao());
             }
 
-            try{
-                outro.setMinValue(sinalBiomedicoDTO.getMinValue());
-            }catch (NullPointerException e){
-            }
 
         }else
             throw new MyEntityNotFoundException("Registo de outro nao foi encontrado id:"+idOutro);

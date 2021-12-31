@@ -30,6 +30,8 @@ public class ConfigBean {
     @EJB
     private AdminBean adminBean;
     @EJB
+    private OutroBean outroBean;
+    @EJB
     private OutroCategoriesBean outroCategoriesBean;
 
 
@@ -50,8 +52,8 @@ public class ConfigBean {
         pesagemBean.create( (float) 60, (float) 1.78,utilzador1.getId(),"");
         pesagemBean.create((float) 97, (float) 1.88,utilzador1.getId(),"");
 
-        bpmBean.create(123,utilzador1.getId());
-        bpmBean.create(250,utilzador1.getId());
+        bpmBean.create(123,"Bues de batimentos",utilzador1.getId());
+        bpmBean.create(250,"Depois de um sprint",utilzador1.getId());
         Date dateFim = null;
         try {
             dateFim =new SimpleDateFormat("dd/MM/yyyy").parse("29/12/2022");
@@ -70,8 +72,10 @@ public class ConfigBean {
         prescricaoBean.create(dateFim, Prescricao.TypePrescricoes.Exercicio,"Tens de comar x comprimidos",utilzador1.getId(),doutor.getId());
         prescricaoBean.create(dateFim2, Prescricao.TypePrescricoes.Medica,"Tens de comar x comprimidos",utilzador1.getId(),doutor.getId());
 
-        outroCategoriesBean.create("Temperatura Corporal",(float) 14.1,(float) 12.1);
+        OutroCategories outroCat = outroCategoriesBean.create("Temperatura Corporal",(float) 14.1,(float) 12.1);
 
+
+        outroBean.create((float) 123,"curti",utilzador1.getId(),outroCat.getId());
 
         System.out.println();
     }

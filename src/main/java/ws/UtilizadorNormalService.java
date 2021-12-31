@@ -5,20 +5,13 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.SecurityContext;
 
+import dtos.AdministradorDTO;
 import dtos.DoutorDTO;
 import dtos.SinalBiomedicoDTO;
 import dtos.UtilizadorDTO;
-import ejbs.BioSinaisBean;
-import ejbs.DoutorBean;
-import ejbs.DocumentBean;
-import ejbs.UserBean;
-import ejbs.UtilizadorNormalBean;
-import entities.Colestrol;
-import entities.Doutor;
-import entities.Utilizador;
-import entities.Document;
+import ejbs.*;
+import entities.*;
 import entities.enums.UserType;
-import entities.UtilizadorNormal;
 import exceptions.MyEntityNotFoundException;
 
 import javax.ws.rs.core.Context;
@@ -44,6 +37,8 @@ public class UtilizadorNormalService {
     private DoutorBean doutorBean;
     @EJB
     private DocumentBean documentBean;
+    @EJB
+    private AdminBean adminBean;
 
     private SinaisBiomedicosService helper;
     private DocumentsService documentsService;
@@ -85,6 +80,19 @@ public class UtilizadorNormalService {
                 toDTOsUtilizadores(utilizadorNormal.getPatients() ));
 
     }
+
+    private AdministradorDTO toDTOcomRegistosAdministrador(Administrador administrador) {
+
+        return new AdministradorDTO(
+                administrador.getId(),
+                administrador.getPassword(),
+                administrador.getEmail(),
+                administrador.getData(),
+                administrador.getUserName(),
+                administrador.isSuperUser());
+
+    }
+
     protected List<UtilizadorDTO> toDTOsUtilizadores(List<UtilizadorNormal> students) {
         return students.stream().map(this::toDTOsemRegistos).collect(Collectors.toList());
     }
@@ -134,8 +142,8 @@ public class UtilizadorNormalService {
 
         //check 
         Principal principal = securityContext.getUserPrincipal();
-
-        if(!(securityContext.isUserInRole("Administrator") ||
+        System.out.println();
+        if(!(securityContext.isUserInRole("Administrador") ||
                 securityContext.isUserInRole("UtilizadorNormal")  &&
                         principal.getName().equals(username))) {
             return Response.status(Response.Status.FORBIDDEN).build();
@@ -158,19 +166,20 @@ public class UtilizadorNormalService {
         //check
 
         Principal principal = securityContext.getUserPrincipal();
-        if (principal== null){
-            System.out.println("problemas");
-        }
-        if(!(securityContext.isUserInRole("Administrator") || securityContext.isUserInRole("Doutor") ||
+        if(!(securityContext.isUserInRole("Administrador") || securityContext.isUserInRole("Doutor") ||
                 securityContext.isUserInRole("UtilizadorNormal")  &&
                         principal.getName().equals(username))) {
             return Response.status(Response.Status.FORBIDDEN).build();
         }
 
-        System.out.println("IM OUT MOTHERFUCKER");
+        if(securityContext.isUserInRole("Administrador")){
+            Administrador doutor = adminBean.getUserByUsername(username);
+            return Response.status(Response.Status.OK)
+                    .entity(toDTOcomRegistosAdministrador(doutor))
+                    .build();
+        }
         if(securityContext.isUserInRole("Doutor")){
             Doutor doutor = doutorBean.getUserByUsername(username);
-            System.out.println("IM IN MOFO");
             return Response.status(Response.Status.OK)
                     .entity(toDTOcomRegistosDoutor(doutor))
                     .build();

@@ -3,6 +3,7 @@ package ws;
 import com.nimbusds.jose.proc.SecurityContext;
 import dtos.GraphDTO;
 import dtos.SinalBiomedicoDTO;
+import dtos.SinalBiomedicoOutroDTO;
 import ejbs.*;
 import entities.*;
 import exceptions.MyEntityNotFoundException;
@@ -50,8 +51,6 @@ public class SinaisBiomedicosService {
                 colestrol.getId(),
                 colestrol.getDate(), colestrol.getUtilizadorNormal().getUserName(),
                 helper,
-                0,
-                300,
                 colestrol.getUtilizadorNormal().getId(),
                 colestrol.getDescricao(),
                 colestrol.getClassification()
@@ -193,8 +192,6 @@ public class SinaisBiomedicosService {
                 pesagem.getDate(),
                 pesagem.getUtilizadorNormal().getUserName(),
                 helper,
-                0,
-                300,
                 pesagem.getUtilizadorNormal().getId(),
                 pesagem.getDescricao(),
                 pesagem.getClassification()
@@ -337,8 +334,6 @@ public class SinaisBiomedicosService {
                 bpm.getDate(),
                 bpm.getUtilizadorNormal().getUserName(),
                 helper,
-                0,
-                300,
                 bpm.getUtilizadorNormal().getId(),
                 bpm.getDescricao(),
                 bpm.getClassification()
@@ -438,7 +433,7 @@ public class SinaisBiomedicosService {
     @POST
     @Path("/bpm/{idUtilizador}/create")
     public Response createBpm (@PathParam("idUtilizador") String idUtilizador,  SinalBiomedicoDTO sinalBiomedicoDTO) throws MyEntityNotFoundException{
-        bpmBean.create(Float.parseFloat(sinalBiomedicoDTO.getValue().get(0)),idUtilizador);
+        bpmBean.create(Float.parseFloat(sinalBiomedicoDTO.getValue().get(0)),sinalBiomedicoDTO.getDescricao(),idUtilizador);
         return Response.status(Response.Status.CREATED).build();
     }
 
@@ -474,8 +469,6 @@ public class SinaisBiomedicosService {
                 outro.getName()
                 ,
                 helper,
-                outro.getMinValue(),
-                outro.getMaxValue(),
                 outro.getUtilizadorNormal().getId(),
                 outro.getDescricao(),
                 outro.getClassification()
@@ -519,8 +512,8 @@ public class SinaisBiomedicosService {
 
     @POST
     @Path("/bpm/{idOutro}/create")
-    public Response createOutro (@PathParam("idOutro") String idUtilizador,  SinalBiomedicoDTO sinalBiomedicoDTO) throws MyEntityNotFoundException{
-        outroBean.create(sinalBiomedicoDTO,idUtilizador);
+    public Response createOutro (@PathParam("idOutro") String idUtilizador,  SinalBiomedicoOutroDTO sinalBiomedicoDTO) throws MyEntityNotFoundException{
+        outroBean.create(Float.parseFloat(sinalBiomedicoDTO.getValue()),sinalBiomedicoDTO.getDescricao(),idUtilizador,sinalBiomedicoDTO.getOutroCategoriesID());
         return Response.status(Response.Status.CREATED).build();
     }
 

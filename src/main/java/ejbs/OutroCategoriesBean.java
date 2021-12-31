@@ -22,9 +22,10 @@ public class OutroCategoriesBean {
     @PersistenceContext
     private EntityManager em;
 
-    public void create(String name, Float maxValues, Float minValues){
-
-        em.persist(new OutroCategories(name,maxValues,minValues));
+    public OutroCategories create(String name, Float maxValues, Float minValues){
+        OutroCategories outro = new OutroCategories(name,maxValues,minValues);
+        em.persist(outro);
+        return outro;
     };
 
 

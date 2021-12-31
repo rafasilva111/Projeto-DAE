@@ -13,7 +13,7 @@
             <b-dropdown-item @click.prevent="goColestrol">Colestrol</b-dropdown-item>
             <b-dropdown-item @click.prevent="goPesagem">Peso/Altura</b-dropdown-item>
             <b-dropdown-item @click.prevent="goBPM">BPM's</b-dropdown-item>
-            <b-dropdown-item @click.prevent="goColestrol">Outros Sinais</b-dropdown-item>
+            <b-dropdown-item @click.prevent="goOutro">Outros Sinais</b-dropdown-item>
             <b-dropdown-item @click.prevent="goMyFiles">Ficheiros Partilhados</b-dropdown-item>
           </b-nav-item-dropdown>
 
@@ -86,7 +86,6 @@ export default {
       else {
         this.$router.push('/biosinais/colestrol/all')
       }
-      this.$router.push('/biosinais/bpms/my')
     },
     goMyFiles() {
       if (this.$auth.user.groups =="UtilizadorNormal"){
@@ -95,16 +94,14 @@ export default {
       else {
         this.$router.push('/files/all')
       }
-      this.$router.push('/files/my')
     },
-    goPrescricoes() {
+    goOutro() {
       if (this.$auth.user.groups =="UtilizadorNormal"){
-        this.$router.push('/prescricoes/my')
+        this.$router.push('/biosinais/outros/my')
       }
       else {
-        this.$router.push('/prescricoes/all')
+        this.$router.push('/biosinais/outros/all')
       }
-      this.$router.push('/presicoes/my')
     }
   },
   computed: {
