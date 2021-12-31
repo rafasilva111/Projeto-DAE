@@ -1,5 +1,7 @@
 package entities;
 
+import entities.enums.Classification;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -17,20 +19,13 @@ public class BPM extends SinalBiomedico implements Serializable {
     private int numeroBatimentos;
 
 
-    public BPM(  int numeroBatimentos,UtilizadorNormal utilizadorNormal) {
-        super();
+    public BPM(int numeroBatimentos, UtilizadorNormal utilizadorNormal, Classification classification,String descricao) {
+        super(utilizadorNormal,classification,descricao);
         this.numeroBatimentos = numeroBatimentos;
        }
 
-    public BPM(long id, int numeroBatimentos, UtilizadorNormal utilizadorNormal) {
-        super(id,utilizadorNormal);
-        this.numeroBatimentos = numeroBatimentos;
-
-    }
-
 
     public BPM() {
-
     }
 
 

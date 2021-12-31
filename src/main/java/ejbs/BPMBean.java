@@ -4,6 +4,7 @@ import dtos.SinalBiomedicoDTO;
 import entities.BPM;
 import entities.Colestrol;
 import entities.UtilizadorNormal;
+import entities.enums.Classification;
 import exceptions.MyEntityNotFoundException;
 
 import javax.ejb.Stateless;
@@ -19,7 +20,7 @@ public class BPMBean {
     @PersistenceContext
     private EntityManager em;
 
-    public void create(float batimentos, String utilizadorNormalID){
+    public void create(float batimentos, String descricao, String utilizadorNormalID){
 
         UtilizadorNormal utilizadorNormal =em.find(UtilizadorNormal.class,utilizadorNormalID);
 
@@ -31,8 +32,8 @@ public class BPMBean {
         }catch (MyEntityNotFoundException e){
             System.err.print(e.getMessage());
         }
-        int count = getAllBPM().size();
-        BPM utilizadorN = new BPM(count+1000,Math.round(batimentos),utilizadorNormal);
+
+        BPM utilizadorN = new BPM(Math.round(batimentos),utilizadorNormal,Classification.alto,descricao);
         utilizadorNormal.addBpmRegister(utilizadorN);
         em.persist(utilizadorN);
     };

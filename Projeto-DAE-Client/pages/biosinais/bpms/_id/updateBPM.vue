@@ -1,7 +1,7 @@
 <template>
   <div>
-    <b-container class="modal-content rounded-6 shadow" >
-      <caption style="text-align:center">Atualizar Registo: BPM</caption>
+    <b-container class="modal-content rounded-6 shadow p-4" >
+      <caption class = "pb-4" style="text-align:center">Atualizar Registo: BPM</caption>
 
       <form  :disabled="!isFormValid">
 
@@ -49,12 +49,18 @@ export default {
       this.errorMsg = false
     },
     update() {
-      this.$axios.$put(`/api/biosinais/bpms/${this.id}`, {
+      this.$axios.$put(`/api/biosinais/bpm/${this.id}`, {
         descricao: this.descricao
 
       })
         .then(() => {
-          this.$router.push('/biosinais/bpms/my')
+        if (this.$auth.user.groups =="UtilizadorNormal"){
+                  this.$router.push('/biosinais/bpms/my')
+                }
+                else {
+                  this.$router.push('/biosinais/bpms/all')
+                }
+
         })
         .catch(error => {
           this.errorMsg = error.response.data

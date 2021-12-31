@@ -1,30 +1,134 @@
 <template>
-  <div>
-    <b-container class="modal-content rounded-6 shadow" >
-      <caption style="text-align:center">Colestrol</caption>
-      <b-table striped  :items="colestrol" :fields="fields" title="Colestrol" style="float:left;">
+  <div class="pt-4">
+    <div>
+    <b-container class="modal-content rounded-6 shadow p-4" >
+      <h1 class = "pb-4" style="text-align:center">Pesagem</h1>
+      <b-table striped  :items="pesagem" :fields="fields"  style="float:left;">
         <template v-slot:cell(actions)="row">
           <nuxt-link
-            class="btn btn-link"
-            :to="`/students/${row.item.username}/details`">Details</nuxt-link>
-          <nuxt-link
-            class="btn btn-link"
-            :to="`/students/${row.item.username}/updateStudent`">Update</nuxt-link>
-          <nuxt-link :to="`/students/${row.item.username}/send-email`">Send email</nuxt-link>
+            class="btn btn-dark btn-sm"
+            :to="`/biosinais/pesagem/${row.item.id}/updatePesagem`">Atualizar</nuxt-link>
+          <button
+            class="btn btn-danger btn-sm"
+            @click="apagar(row.item.id)">Apagar</button>
+
+
+        </template>
+        <template v-slot:cell(IMC)="row">
+          {{ IMCcomputed(row.item.height,row.item.weight) }}
         </template>
       </b-table>
-      <nuxt-link to="/">Back</nuxt-link>
+      <b-row >
+        <b-col lg="6" class="pb-4"><nuxt-link   class="btn btn-dark btn-sm" to="/biosinais/pesagem/createPesagem"  >Inserir Registo</nuxt-link></b-col>
+
+      </b-row>
     </b-container>
-    <nuxt-link to="/students/createStudent">Create a New Student</nuxt-link>
+    </div>
+    <div class="pt-4">
+      <b-container class="modal-content rounded-6 shadow" >
+        <caption style="text-align:center">Gráfico</caption>
+        <chartjs-line v-if="ready" v-bind:labels = "labels" v-bind:data="data"></chartjs-line>
+      </b-container>
+    </div>
+
   </div>
+
+
+
 </template>
 
 <script>
+
 export default {
-  name: "all"
+  data () {
+    return {
+      graphData: [],
+      ready: false,
+      labels: [],
+      data: [],
+      fields: [
+        {
+        key: 'name',
+        label: 'Utente',
+        },
+        {
+          key: 'date',
+          label: 'Data',
+        },
+        {
+          key: 'value[0]',
+          label: 'Altura',
+        },
+        {
+          key: 'value[1]',
+          label: 'Peso',
+        },
+        {
+          key: 'value[2]',
+          label: 'IMC',
+        },
+        {
+          key: 'classification',
+          label: 'Classificação',
+        },
+        {
+          key: 'descricao',
+          label: 'Descrição',
+        },
+        {
+          key: 'actions',
+          label: 'Actions',
+
+        }
+      ],
+      pesagem: [],
+      user: null,
+
+
+    }
+  },
+  created () {
+    this.$axios.$get('/api/user/'+this.$auth.user.sub+'/registers')
+      .then((user) => {
+        this.user = user
+        this.$axios.$get('/api/biosinais/pesagem/')
+          .then((pesagem) => {
+            this.pesagem = pesagem
+          })
+          this.$axios.$get('/api/biosinais/pesagem/graph')
+                                                .then((graph) => {
+                                                  this.labels = graph.label
+                                                  this.data = graph.data
+                                                  this.ready = true
+
+                                                })
+
+      })
+  },
+
+  methods: {
+    apagar: function (value){
+
+      this.$axios.$delete('/api/biosinais/pesagem/'+value)
+        .then(() => {
+          this.$axios.$get('/api/biosinais/pesagem/'+this.user.id)
+            .then((pesagem) => {
+              this.pesagem = pesagem
+            })
+
+
+        })
+  },
+    IMCcomputed: function (altura,peso) {
+      // `this` points to the vm instance
+      console.log(altura+" "+peso);
+      return peso*(altura*altura);
+    },
+
+  },
+  computed: {
+    // a computed getter
+
+  }
 }
 </script>
-
-<style scoped>
-
-</style>

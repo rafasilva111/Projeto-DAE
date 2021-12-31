@@ -13,15 +13,24 @@
             <b-dropdown-item @click.prevent="goColestrol">Colestrol</b-dropdown-item>
             <b-dropdown-item @click.prevent="goPesagem">Peso/Altura</b-dropdown-item>
             <b-dropdown-item @click.prevent="goBPM">BPM's</b-dropdown-item>
-            <b-dropdown-item @click.prevent="goColestrol">Outros Sinais</b-dropdown-item>
+            <b-dropdown-item @click.prevent="goOutro">Outros Sinais</b-dropdown-item>
             <b-dropdown-item @click.prevent="goMyFiles">Ficheiros Partilhados</b-dropdown-item>
           </b-nav-item-dropdown>
 
-          <li class="nav-item" v-if="!superUser">
-            <nuxt-link class="nav-link" to="/prescricoes/my" >Prescrições todas</nuxt-link>
+          <li class="nav-item" v-if="superUser || doctor">
+            <nuxt-link class="nav-link" to="/prescricoes/all" >Todas as Prescrições</nuxt-link>
           </li>
           <li class="nav-item" v-else >
-            <nuxt-link class="nav-link" to="/prescricoes/all" >Prescrições </nuxt-link>
+            <nuxt-link class="nav-link" to="/prescricoes/my" >Prescrições </nuxt-link>
+          </li>
+          <li class="nav-item" v-if="superUser || doctor">
+            <nuxt-link class="nav-link" to="/" >Utilizadores</nuxt-link>
+          </li>
+          <li class="nav-item" v-if="superUser">
+            <nuxt-link class="nav-link" to="/" >Medicos</nuxt-link>
+          </li>
+          <li class="nav-item" v-if="superUser">
+            <nuxt-link class="nav-link" to="/admin/biosinais/all" >Biosinais</nuxt-link>
           </li>
 
         </b-navbar-nav>
@@ -77,7 +86,6 @@ export default {
       else {
         this.$router.push('/biosinais/colestrol/all')
       }
-      this.$router.push('/biosinais/bpms/my')
     },
     goMyFiles() {
       if (this.$auth.user.groups =="UtilizadorNormal"){
@@ -86,25 +94,31 @@ export default {
       else {
         this.$router.push('/files/all')
       }
-      this.$router.push('/files/my')
     },
-    goPrescricoes() {
+    goOutro() {
       if (this.$auth.user.groups =="UtilizadorNormal"){
-        this.$router.push('/prescricoes/my')
+        this.$router.push('/biosinais/outros/my')
       }
       else {
-        this.$router.push('/prescricoes/all')
+        this.$router.push('/biosinais/outros/all')
       }
-      this.$router.push('/presicoes/my')
     }
   },
   computed: {
     superUser() {
-      if (this.$auth.user.groups =="UtilizadorNormal"){
-        return false;
+      if (this.$auth.user.groups =="Administrador"){
+        return true;
       }
       else {
+        return false;
+      }
+    },
+    doctor() {
+      if (this.$auth.user.groups =="Doutor"){
         return true;
+      }
+      else {
+        return false;
       }
     },
     created() {

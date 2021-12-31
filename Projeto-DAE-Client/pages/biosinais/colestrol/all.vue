@@ -1,28 +1,119 @@
 <template>
-  <div>
-    <b-container class="modal-content rounded-6 shadow" >
-      <caption style="text-align:center">Colestrol</caption>
-      <b-table striped  :items="colestrol" :fields="fields" title="Colestrol" style="float:left;">
+  <div class="pt-4">
+    <div>
+    <b-container class="modal-content rounded-6 shadow p-4 "  >
+      <h1 class =" pb-4" style="text-align:center">Colestrol</h1>
+      <b-table  :items="colestrol" :fields="fields" title="Colestrol" style="float:left;">
         <template v-slot:cell(actions)="row">
           <nuxt-link
-            class="btn btn-link"
-            :to="`/students/${row.item.username}/details`">Details</nuxt-link>
-          <nuxt-link
-            class="btn btn-link"
-            :to="`/students/${row.item.username}/updateStudent`">Update</nuxt-link>
-          <nuxt-link :to="`/students/${row.item.username}/send-email`">Send email</nuxt-link>
+            class="btn btn-dark btn-sm"
+            :to="`/biosinais/colestrol/${row.item.id}/updateColestrol`">Atualizar</nuxt-link>
+          <button
+            class="btn btn-danger btn-sm" cli
+            @click="apagar(row.item.id)">Apagar</button>
+
+
         </template>
       </b-table>
-      <nuxt-link to="/">Back</nuxt-link>
+      <b-row >
+        <b-col lg="6" class="pb-4"><nuxt-link   class="btn btn-dark btn-sm" to="/biosinais/colestrol/createColestrol"  >Inserir Registo</nuxt-link></b-col>
+
+      </b-row>
     </b-container>
-    <nuxt-link to="/students/createStudent">Create a New Student</nuxt-link>
+    </div>
+    <div class="pt-4">
+      <b-container class="modal-content rounded-6 shadow" >
+        <caption style="text-align:center">Gráfico</caption>
+        <chartjs-line v-if="ready" v-bind:labels = "labels" v-bind:data="data"></chartjs-line>
+      </b-container>
+    </div>
+
+
+
   </div>
+
+
+
 </template>
 
 <script>
 export default {
-  name: "all"
-}
+  data () {
+    return {
+      graphData: [],
+      ready: false,
+      labels: [],
+      data: [],
+
+      fields: [
+        {
+        key: 'name',
+        label: 'Utente',
+        },
+        {
+          key: 'date',
+          label: 'Data',
+        },
+        {
+          key: 'value[0]',
+          label: 'Nivel de Colestrol',
+        },
+        {
+          key: 'classification',
+          label: 'Classificação',
+        },
+        {
+          key: 'descricao',
+          label: 'Descrição',
+        },
+        {
+          key: 'actions',
+          label: 'Actions',
+
+        }
+      ],
+      colestrol: [],
+      user: null,
+
+
+    }
+  },
+  created () {
+        console.log(this.user)
+        this.$axios.$get('/api/user/'+this.$auth.user.sub+'/registers')
+          .then((user) => {
+            this.user = user
+            this.$axios.$get('/api/biosinais/colestrol/')
+              .then((colestrol) => {
+                this.colestrol = colestrol
+              })
+              this.$axios.$get('/api/biosinais/colestrol/graph')
+                                      .then((graph) => {
+                                        this.labels = graph.label
+                                        this.data = graph.data
+                                        this.ready = true
+
+                                      })
+          })
+
+
+      },
+
+      methods: {
+      apagar: function (value){
+
+        this.$axios.$delete('/api/biosinais/colestrol/'+value)
+          .then(() => {
+            this.$axios.$get('/api/biosinais/colestrol/'+this.user.id)
+              .then((colestrol) => {
+                this.colestrol = colestrol
+              })
+
+          })
+      },
+
+      }
+    }
 </script>
 
 <style scoped>

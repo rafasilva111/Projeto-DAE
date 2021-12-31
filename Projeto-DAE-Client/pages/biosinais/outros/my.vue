@@ -1,5 +1,5 @@
 <template>
-  <div class="pt-4">
+  <div class="pt-2">
     <div>
     <b-container class="modal-content rounded-6 shadow" >
       <h1 style="text-align:center">Pesagem</h1>

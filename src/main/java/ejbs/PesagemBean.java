@@ -48,7 +48,7 @@ public class PesagemBean {
         }
 
         System.out.println("hello"+ classification);
-        Pesagem pesagem = new Pesagem(id+100, imc,peso,classification,descricao, altura,utilizadorNormal);
+        Pesagem pesagem = new Pesagem( imc,peso,classification,descricao, altura,utilizadorNormal);
         utilizadorNormal.addPesagemRegister(pesagem);
         em.persist(pesagem);
     };

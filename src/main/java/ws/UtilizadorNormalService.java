@@ -5,16 +5,13 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.SecurityContext;
 
+import dtos.AdministradorDTO;
+import dtos.DoutorDTO;
 import dtos.SinalBiomedicoDTO;
 import dtos.UtilizadorDTO;
-import ejbs.BioSinaisBean;
-import ejbs.DocumentBean;
-import ejbs.UserBean;
-import ejbs.UtilizadorNormalBean;
-import entities.Colestrol;
-import entities.Document;
+import ejbs.*;
+import entities.*;
 import entities.enums.UserType;
-import entities.UtilizadorNormal;
 import exceptions.MyEntityNotFoundException;
 
 import javax.ws.rs.core.Context;
@@ -22,6 +19,7 @@ import javax.ws.rs.core.Response;
 import java.security.Principal;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Path("/user")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -32,7 +30,15 @@ public class UtilizadorNormalService {
     @EJB
     private UtilizadorNormalBean utilizadorNormalBean;
     @EJB
+    private BioSinaisBean bioSinaisBean;
+    @EJB
+    private UserBean userBean;
+    @EJB
+    private DoutorBean doutorBean;
+    @EJB
     private DocumentBean documentBean;
+    @EJB
+    private AdminBean adminBean;
 
     private SinaisBiomedicosService helper;
     private DocumentsService documentsService;
@@ -59,6 +65,36 @@ public class UtilizadorNormalService {
                 documentsService.documentsToDTOs(documentBean.getStudentDocuments(utilizadorNormal.getUserName()))
 
                 );
+    }
+    private DoutorDTO toDTOcomRegistosDoutor(Doutor utilizadorNormal) {
+        PrescricoesService ps = new PrescricoesService();
+
+        return new DoutorDTO(
+                utilizadorNormal.getId(),
+                utilizadorNormal.getPassword(),
+                utilizadorNormal.getEmail(),
+                utilizadorNormal.getData(),
+                utilizadorNormal.getUserName(),
+                UserType.Doutor,
+                ps.toDTOsPrescricoes(utilizadorNormal.getPrescricoes()),
+                toDTOsUtilizadores(utilizadorNormal.getPatients() ));
+
+    }
+
+    private AdministradorDTO toDTOcomRegistosAdministrador(Administrador administrador) {
+
+        return new AdministradorDTO(
+                administrador.getId(),
+                administrador.getPassword(),
+                administrador.getEmail(),
+                administrador.getData(),
+                administrador.getUserName(),
+                administrador.isSuperUser());
+
+    }
+
+    protected List<UtilizadorDTO> toDTOsUtilizadores(List<UtilizadorNormal> students) {
+        return students.stream().map(this::toDTOsemRegistos).collect(Collectors.toList());
     }
 
     private List<SinalBiomedicoDTO> preencher(UtilizadorNormal utilizadorNormal) {
@@ -97,6 +133,8 @@ public class UtilizadorNormalService {
     }
 
 
+
+
     @GET
     @Path("{username}")
     public Response getStudentDetails(@PathParam("username") String username)
@@ -104,8 +142,8 @@ public class UtilizadorNormalService {
 
         //check 
         Principal principal = securityContext.getUserPrincipal();
-
-        if(!(securityContext.isUserInRole("Administrator") ||
+        System.out.println();
+        if(!(securityContext.isUserInRole("Administrador") ||
                 securityContext.isUserInRole("UtilizadorNormal")  &&
                         principal.getName().equals(username))) {
             return Response.status(Response.Status.FORBIDDEN).build();
@@ -128,18 +166,29 @@ public class UtilizadorNormalService {
         //check
 
         Principal principal = securityContext.getUserPrincipal();
-        if (principal== null){
-            System.out.println("problemas");
-        }
-        if(!(securityContext.isUserInRole("Administrator") ||
+        if(!(securityContext.isUserInRole("Administrador") || securityContext.isUserInRole("Doutor") ||
                 securityContext.isUserInRole("UtilizadorNormal")  &&
                         principal.getName().equals(username))) {
             return Response.status(Response.Status.FORBIDDEN).build();
+        }
+
+        if(securityContext.isUserInRole("Administrador")){
+            Administrador doutor = adminBean.getUserByUsername(username);
+            return Response.status(Response.Status.OK)
+                    .entity(toDTOcomRegistosAdministrador(doutor))
+                    .build();
+        }
+        if(securityContext.isUserInRole("Doutor")){
+            Doutor doutor = doutorBean.getUserByUsername(username);
+            return Response.status(Response.Status.OK)
+                    .entity(toDTOcomRegistosDoutor(doutor))
+                    .build();
         }
         UtilizadorNormal student = utilizadorNormalBean.getUserByUsername(username);
         if(student == null) {
             throw new MyEntityNotFoundException("Student with username " +
                     username + " not found.");
+
         }
         System.out.println(toDTOcomRegistos(student).toString());
 

@@ -37,4 +37,5 @@ public class UtilizadorNormalBean {
     public UtilizadorNormal getUserByUsername(String name){
         return (UtilizadorNormal) em.createQuery("SELECT c FROM UtilizadorNormal c WHERE c.userName = ?1").setParameter(1, name).getSingleResult();
     }
+
 }

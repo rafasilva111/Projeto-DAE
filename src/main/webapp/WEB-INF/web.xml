@@ -5,8 +5,8 @@
 http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
     <security-role>
-        <description>Administrator</description>
-        <role-name>Administrator</role-name>
+        <description>Administrador</description>
+        <role-name>Administrador</role-name>
     </security-role>
     <security-role>
         <description>UtilizadorNormal</description>

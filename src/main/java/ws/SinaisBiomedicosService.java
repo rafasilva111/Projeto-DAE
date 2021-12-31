@@ -3,6 +3,7 @@ package ws;
 import com.nimbusds.jose.proc.SecurityContext;
 import dtos.GraphDTO;
 import dtos.SinalBiomedicoDTO;
+import dtos.SinalBiomedicoOutroDTO;
 import ejbs.*;
 import entities.*;
 import exceptions.MyEntityNotFoundException;
@@ -48,11 +49,8 @@ public class SinaisBiomedicosService {
 
         return new SinalBiomedicoDTO(
                 colestrol.getId(),
-                colestrol.getDate(),
-                "Colestrol",
+                colestrol.getDate(), colestrol.getUtilizadorNormal().getUserName(),
                 helper,
-                0,
-                300,
                 colestrol.getUtilizadorNormal().getId(),
                 colestrol.getDescricao(),
                 colestrol.getClassification()
@@ -66,9 +64,8 @@ public class SinaisBiomedicosService {
 
     @GET // means: to call this endpoint, we need to use the HTTP GET method
     @Path("/colestrol/")
-    @RolesAllowed({"Administrador"})
+    @RolesAllowed({"Administrador","Doutor"})
     public List<SinalBiomedicoDTO> getAllColestrolRegisters() {
-
         return toDTOsColestrol(colestrolBean.getAllColestrol());
     }
     @GET // means: to call this endpoint, we need to use the HTTP GET method
@@ -98,6 +95,36 @@ public class SinaisBiomedicosService {
                 .build();
     }
 
+
+    @GET // means: to call this endpoint, we need to use the HTTP GET method
+    @Path("/colestrol/graph")
+    @RolesAllowed({"Administrador","Doutor"})
+    public Response getDataForGraph() {
+        List<UtilizadorNormal> all = utilizadorBean.getAllNormalUsers();
+        System.out.println("Are you Here ?");
+        List<Float> data = new LinkedList<>();
+        List<String> label = new LinkedList<>();
+        for (UtilizadorNormal u: all
+             ) {
+            if (u != null) {
+                for (Colestrol colestrol:u.getColestrolList()
+                ) {
+                    data.add(colestrol.getNivelColestrol());
+                    label.add(new SimpleDateFormat("kk:mm dd/MM/yyyy").format(colestrol.getDate()));
+                }
+            }
+        }
+        if (all != null){
+            return Response.status(Response.Status.OK)
+                    .entity(new GraphDTO(data,label))
+                    .build();
+        }
+        return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                .entity("ERROR_FINDING_UTILIZADORES_RECORD")
+                .build();
+
+
+    }
     @GET
     @Path("/colestrol/{id}")
     @RolesAllowed({"UtilizadorNormal","Administrador"})
@@ -163,10 +190,8 @@ public class SinaisBiomedicosService {
         return new SinalBiomedicoDTO(
                 pesagem.getId(),
                 pesagem.getDate(),
-                "Pesagem",
+                pesagem.getUtilizadorNormal().getUserName(),
                 helper,
-                0,
-                300,
                 pesagem.getUtilizadorNormal().getId(),
                 pesagem.getDescricao(),
                 pesagem.getClassification()
@@ -235,6 +260,38 @@ public class SinaisBiomedicosService {
                 .build();
     }
 
+
+    @GET // means: to call this endpoint, we need to use the HTTP GET method
+    @Path("/pesagem/graph")
+    @RolesAllowed({"Administrador","Doutor"})
+    public Response getDataForGraphPesagem() {
+
+        List<UtilizadorNormal> all2 = utilizadorBean.getAllNormalUsers();
+
+        System.out.println("Are you Here ?");
+        List<Float> data = new LinkedList<>();
+        List<String> label = new LinkedList<>();
+        for (UtilizadorNormal u: all2
+        ) {
+            if (u != null) {
+                for (Pesagem pesagem:u.getPesagemList()
+                ) {
+                    data.add(pesagem.getIMC());
+                    label.add(new SimpleDateFormat("kk:mm dd/MM/yyyy").format(pesagem.getDate()));
+                }
+            }
+        }
+        if (all2 != null){
+            return Response.status(Response.Status.OK)
+                    .entity(new GraphDTO(data,label))
+                    .build();
+        }
+        return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                .entity("ERROR_FINDING_UTILIZADORES_RECORD")
+                .build();
+    }
+
+
     @POST
     @Path("/pesagem/{idUtilizador}/create")
     public Response createPesagem (@PathParam("idUtilizador") String idUtilizador,  SinalBiomedicoDTO sinalBiomedicoDTO) throws MyEntityNotFoundException{
@@ -275,10 +332,8 @@ public class SinaisBiomedicosService {
         return new SinalBiomedicoDTO(
                 bpm.getId(),
                 bpm.getDate(),
-                "Bpm",
+                bpm.getUtilizadorNormal().getUserName(),
                 helper,
-                0,
-                300,
                 bpm.getUtilizadorNormal().getId(),
                 bpm.getDescricao(),
                 bpm.getClassification()
@@ -294,7 +349,6 @@ public class SinaisBiomedicosService {
     @GET // means: to call this endpoint, we need to use the HTTP GET method
     @Path("/bpm/")
     public List<SinalBiomedicoDTO> getAllBPMSRegisters() {
-
         return toDTOsBPM(bpmBean.getAllBPM());
     }
 
@@ -319,6 +373,35 @@ public class SinaisBiomedicosService {
                 .entity("ERROR_FINDING_COLESTROL_RECORD")
                 .build();
     }
+    @GET // means: to call this endpoint, we need to use the HTTP GET method
+    @Path("/bpms/graph")
+    @RolesAllowed({"Administrador","Doutor"})
+    public Response getDataForGraphBPM() {
+
+        List<UtilizadorNormal> all3 = utilizadorBean.getAllNormalUsers();
+
+        List<Float> data = new LinkedList<>();
+        List<String> label = new LinkedList<>();
+        for (UtilizadorNormal u: all3
+        ) {
+            if (u != null) {
+                for (BPM pesagem:u.getBpmList()
+                ) {
+                    data.add((float) pesagem.getNumeroBatimentos());
+                    label.add(new SimpleDateFormat("kk:mm dd/MM/yyyy").format(pesagem.getDate()));
+                }
+            }
+        }
+        if (all3 != null){
+            return Response.status(Response.Status.OK)
+                    .entity(new GraphDTO(data,label))
+                    .build();
+        }
+        return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                .entity("ERROR_FINDING_UTILIZADORES_RECORD")
+                .build();
+    }
+
 
     @GET // means: to call this endpoint, we need to use the HTTP GET method
     @Path("/bpm/{id}/graph")
@@ -350,7 +433,7 @@ public class SinaisBiomedicosService {
     @POST
     @Path("/bpm/{idUtilizador}/create")
     public Response createBpm (@PathParam("idUtilizador") String idUtilizador,  SinalBiomedicoDTO sinalBiomedicoDTO) throws MyEntityNotFoundException{
-        bpmBean.create(Float.parseFloat(sinalBiomedicoDTO.getValue().get(0)),idUtilizador);
+        bpmBean.create(Float.parseFloat(sinalBiomedicoDTO.getValue().get(0)),sinalBiomedicoDTO.getDescricao(),idUtilizador);
         return Response.status(Response.Status.CREATED).build();
     }
 
@@ -386,8 +469,6 @@ public class SinaisBiomedicosService {
                 outro.getName()
                 ,
                 helper,
-                outro.getMinValue(),
-                outro.getMaxValue(),
                 outro.getUtilizadorNormal().getId(),
                 outro.getDescricao(),
                 outro.getClassification()
@@ -431,8 +512,8 @@ public class SinaisBiomedicosService {
 
     @POST
     @Path("/bpm/{idOutro}/create")
-    public Response createOutro (@PathParam("idOutro") String idUtilizador,  SinalBiomedicoDTO sinalBiomedicoDTO) throws MyEntityNotFoundException{
-        outroBean.create(sinalBiomedicoDTO,idUtilizador);
+    public Response createOutro (@PathParam("idOutro") String idUtilizador,  SinalBiomedicoOutroDTO sinalBiomedicoDTO) throws MyEntityNotFoundException{
+        outroBean.create(Float.parseFloat(sinalBiomedicoDTO.getValue()),sinalBiomedicoDTO.getDescricao(),idUtilizador,sinalBiomedicoDTO.getOutroCategoriesID());
         return Response.status(Response.Status.CREATED).build();
     }
 
@@ -453,6 +534,8 @@ public class SinaisBiomedicosService {
 
         return Response.status(Response.Status.ACCEPTED).build();
     }
+
+
 
 
 }

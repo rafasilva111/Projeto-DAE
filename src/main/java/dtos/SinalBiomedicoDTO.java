@@ -14,20 +14,16 @@ public class SinalBiomedicoDTO implements Serializable {
     private String date;
     private String name;
     private List<String> value;
-    private float minValue;
-    private float maxValue;
     private String utilizadorNormalID;
     private String descricao;
     private String classification;
 
 
-    public SinalBiomedicoDTO(String id, Date date, String name, List<String> value, float minValue, float maxValue, String utilizadorNormalID, String descricao, Classification classification) {
+    public SinalBiomedicoDTO(String id, Date date, String name, List<String> value,  String utilizadorNormalID, String descricao, Classification classification) {
         this.id = id;
         this.name = name;
         this.date = new SimpleDateFormat("dd/MM/yyyy kk:mm").format(date);
         this.value = value;
-        this.minValue = minValue;
-        this.maxValue = maxValue;
         this.utilizadorNormalID = utilizadorNormalID;
         this.descricao = descricao;
 
@@ -35,7 +31,7 @@ public class SinalBiomedicoDTO implements Serializable {
             case muitoalto:
                 this.classification="Muito Alto";
                 break;
-                case alto:
+            case alto:
                 this.classification="Alto";
                 break;
             case medio:
@@ -105,21 +101,6 @@ public class SinalBiomedicoDTO implements Serializable {
         this.value = value;
     }
 
-    public float getMinValue() {
-        return minValue;
-    }
-
-    public void setMinValue(float minValue) {
-        this.minValue = minValue;
-    }
-
-    public float getMaxValue() {
-        return maxValue;
-    }
-
-    public void setMaxValue(float maxValue) {
-        this.maxValue = maxValue;
-    }
 
     public String getUtilizadorNormalID() {
         return utilizadorNormalID;
@@ -136,8 +117,6 @@ public class SinalBiomedicoDTO implements Serializable {
                 ", date='" + date + '\'' +
                 ", name='" + name + '\'' +
                 ", value=" + value +
-                ", minValue=" + minValue +
-                ", maxValue=" + maxValue +
                 ", utilizadorNormalID='" + utilizadorNormalID + '\'' +
                 ", descricao='" + descricao + '\'' +
                 ", classification='" + classification + '\'' +
