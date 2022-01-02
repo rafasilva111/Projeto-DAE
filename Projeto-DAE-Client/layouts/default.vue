@@ -24,13 +24,19 @@
             <nuxt-link class="nav-link" to="/prescricoes/my" >Prescrições </nuxt-link>
           </li>
           <li class="nav-item" v-if="superUser || doctor">
-            <nuxt-link class="nav-link" to="/" >Utilizadores</nuxt-link>
+            <nuxt-link class="nav-link" to="/listings/utentes" >Utilizadores</nuxt-link>
           </li>
           <li class="nav-item" v-if="superUser">
             <nuxt-link class="nav-link" to="/" >Medicos</nuxt-link>
           </li>
           <li class="nav-item" v-if="superUser">
             <nuxt-link class="nav-link" to="/admin/biosinais/all" >Biosinais</nuxt-link>
+          </li>
+          <li class="nav-item" v-if="superUser || doctor">
+            <nuxt-link class="nav-link" to="/listings/doutores" >Doutores</nuxt-link>
+          </li>
+          <li class="nav-item" v-if="superUser || doctor">
+            <nuxt-link class="nav-link" to="/listings/admins" >Administradores</nuxt-link>
           </li>
 
         </b-navbar-nav>
@@ -102,7 +108,8 @@ export default {
       else {
         this.$router.push('/biosinais/outros/all')
       }
-    }
+    },
+
   },
   computed: {
     superUser() {

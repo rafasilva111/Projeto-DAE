@@ -93,9 +93,35 @@ public class UtilizadorNormalService {
 
     }
 
+
     protected List<UtilizadorDTO> toDTOsUtilizadores(List<UtilizadorNormal> students) {
         return students.stream().map(this::toDTOsemRegistos).collect(Collectors.toList());
     }
+
+    protected List<DoutorDTO> toDTOsDoctors(List<Doutor> docs) {
+        return docs.stream().map(this::toDTOcomRegistosDoutor).collect(Collectors.toList());
+    }
+    protected List<AdministradorDTO> toDTOsAdmins(List<Administrador> admins) {
+        return admins.stream().map(this::toDTOcomRegistosAdministrador).collect(Collectors.toList());
+    }
+    @GET // means: to call this endpoint, we need to use the HTTP GET method
+    @Path("/alladmins/")
+    public List<AdministradorDTO> getAllAdmins() {
+        return toDTOsAdmins(adminBean.getAllAdmins());
+    }
+
+    @GET // means: to call this endpoint, we need to use the HTTP GET method
+    @Path("/alldocs/")
+    public List<DoutorDTO> getAllDocs() {
+        return toDTOsDoctors(doutorBean.getAllDoctors());
+    }
+
+    @GET // means: to call this endpoint, we need to use the HTTP GET method
+    @Path("/allusers/")
+    public List<UtilizadorDTO> getAllUsers() {
+        return toDTOsUtilizadores(utilizadorNormalBean.getAllNormalUsers());
+    }
+
 
     private List<SinalBiomedicoDTO> preencher(UtilizadorNormal utilizadorNormal) {
         List<SinalBiomedicoDTO> list = new LinkedList<>();
@@ -196,4 +222,5 @@ public class UtilizadorNormalService {
                 .entity(toDTOcomRegistos(student))
                 .build();
     }
+
 }

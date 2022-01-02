@@ -110,6 +110,7 @@ export default {
   },
   created () {
 
+
     this.$axios.$get('/api/user/'+this.$auth.user.sub+'/registers')
       .then((user) => {
         this.user = user
