@@ -116,4 +116,9 @@ public class PrescricaoBean {
         }
 
     }
+
+    public List<Prescricao> getUserByUsername(String id){
+        return (List<Prescricao>) em.createQuery("SELECT c FROM Prescricao c WHERE c.doutor.id LIKE ?1").setParameter(1, id).getResultList();
+    }
+
 }

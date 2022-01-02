@@ -14,7 +14,7 @@
                   </template>
                 </b-table>
                 <b-row >
-                  <b-col lg="6" class="pb-4"><nuxt-link   class="btn btn-dark btn-sm" to="/prescricoes/createPrescricao"  >Inserir Registo</nuxt-link></b-col>
+                  <b-col lg="6" class="pb-4"><nuxt-link   class="btn btn-dark btn-sm" to="/biosinais/colestrol/createColestrol"  >Inserir Registo</nuxt-link></b-col>
                 </b-row>
       </b-container>
     </div>

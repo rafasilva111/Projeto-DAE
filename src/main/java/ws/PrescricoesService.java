@@ -3,22 +3,24 @@ package ws;
 import dtos.GraphDTO;
 import dtos.PrescricaoDTO;
 import dtos.SinalBiomedicoDTO;
+import ejbs.DoutorBean;
 import ejbs.PrescricaoBean;
 import ejbs.UtilizadorNormalBean;
 import entities.Colestrol;
+import entities.Doutor;
 import entities.Prescricao;
 import entities.UtilizadorNormal;
 import exceptions.MyEntityNotFoundException;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
+import javax.management.relation.Role;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Path("/prescricoes")
@@ -30,6 +32,9 @@ public class PrescricoesService {
     protected PrescricaoBean prescricaoBean;
     @EJB
     protected UtilizadorNormalBean utilizadorBean;
+    @EJB
+    protected DoutorBean doutorBean;
+
 
 
     protected PrescricaoDTO toDTO(Prescricao prescricao) {
@@ -91,6 +96,7 @@ public class PrescricoesService {
     public Response getPrescricaoByUser(@PathParam("id") String idUtilizador){
         UtilizadorNormal utilizadorNormal = utilizadorBean.find(idUtilizador);
 
+
         if (utilizadorNormal != null) {
             return Response.status(Response.Status.OK)
                     .entity(toDTOsPrescricoes(utilizadorNormal.getPrescricoesList()))
@@ -100,6 +106,30 @@ public class PrescricoesService {
 
         return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                 .entity("ERROR_FINDING_COLESTROL_RECORD")
+                .build();
+
+    }
+    @GET
+    @Path("/doutor/{id}")
+    @RolesAllowed({"Administrador","Doutor"})
+    public Response getPrescricaoByDoctor(@PathParam("id") String idUtilizador){
+        Doutor utilizadorNormal = doutorBean.find(idUtilizador);
+        List<Prescricao> pes = prescricaoBean.getUserByUsername(idUtilizador);
+        if(pes.isEmpty()){
+            return Response.status(Response.Status.OK)
+                .entity("")
+                .build();
+        }
+
+        if (utilizadorNormal != null) {
+            return Response.status(Response.Status.OK)
+                    .entity(toDTOsPrescricoes(pes))
+                    .build();
+
+        }
+
+        return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                .entity("ERROR_FINDING_DOCTOR_RECORD")
                 .build();
 
     }
@@ -120,7 +150,6 @@ public class PrescricoesService {
     public Response updatePrescricao (@PathParam("id") String idColestrol, PrescricaoDTO prescricaoDTO) throws MyEntityNotFoundException {
 
         prescricaoBean.update(idColestrol, prescricaoDTO);
-
         return Response.status(Response.Status.ACCEPTED)
                 .build();
     }
@@ -130,7 +159,6 @@ public class PrescricoesService {
     @RolesAllowed({"Administrador","Doutor"})
     public Response deleteColestrol (@PathParam("id") String idColestrol) throws MyEntityNotFoundException {
         prescricaoBean.delete(idColestrol);
-
         return Response.status(Response.Status.ACCEPTED).build();
     }
 }
