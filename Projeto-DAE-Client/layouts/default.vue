@@ -81,10 +81,10 @@ export default {
     },
     goBPM() {
       if (this.$auth.user.groups =="UtilizadorNormal"){
-        this.$router.push('/biosinais/colestrol/my')
+        this.$router.push('/biosinais/bpms/my')
       }
       else {
-        this.$router.push('/biosinais/colestrol/all')
+        this.$router.push('/biosinais/bpms/all')
       }
     },
     goMyFiles() {
