@@ -102,7 +102,7 @@ export default {
 
         }
       ],
-      bpms: [{"date" : "12","bpm" : "25", "classification" : "123","descricao" : "653"}],
+      bpms: [],
       user: null,
 
 
@@ -133,10 +133,9 @@ export default {
 
       this.$axios.$delete('/api/biosinais/bpm/'+value)
         .then(() => {
-          this.$axios.$get('/api/biosinais/bpm/'+this.user.id)
-            .then((colestrol) => {
-              this.colestrol = colestrol
-            })
+          const indice = this.bpms.findIndex(pesagem => pesagem.id === value)
+          if (~indice)
+            this.bpms.splice(indice, 1)
         })
     },
 

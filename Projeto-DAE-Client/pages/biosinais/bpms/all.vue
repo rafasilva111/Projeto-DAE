@@ -102,14 +102,12 @@ export default {
       methods: {
       apagar: function (value){
 
-        this.$axios.$delete('/api/biosinais/bpms/'+value)
-          .then(() => {
-            this.$axios.$get('/api/biosinais/colestrol/'+this.user.id)
-              .then((colestrol) => {
-                this.colestrol = colestrol
-              })
-
-          })
+          this.$axios.$delete('/api/biosinais/bpm/'+value)
+            .then(() => {
+              const indice = this.bpm.findIndex(pesagem => pesagem.id === value)
+              if (~indice)
+                this.bpm.splice(indice, 1)
+            })
       },
 
       }

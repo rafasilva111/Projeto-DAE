@@ -20,102 +20,102 @@ public class PesagemBean {
     @PersistenceContext
     private EntityManager em;
 
-    public void create( float peso, float altura, String utilizadorNormalID,String descricao){
+    public void create(float peso, float altura, String utilizadorNormalID, String descricao) {
 
-        UtilizadorNormal utilizadorNormal =em.find(UtilizadorNormal.class,utilizadorNormalID);
+        UtilizadorNormal utilizadorNormal = em.find(UtilizadorNormal.class, utilizadorNormalID);
         try {
-            if (utilizadorNormal == null){
+            if (utilizadorNormal == null) {
                 throw new MyEntityNotFoundException("Utilizador inserido nao existe");
             }
-        }catch (MyEntityNotFoundException e){
+        } catch (MyEntityNotFoundException e) {
             System.err.print(e.getMessage());
         }
 
-        int id = getAllPesagens().size();
-        float imc = peso/(altura*altura);
-        Classification classification=null;
+        int id = getPesagemRegisters().size();
+        float imc = peso / (altura * altura);
+        Classification classification = null;
 
-        if (imc<18.5){
+        if (imc < 18.5) {
             classification = Classification.baixo;
-        }if (imc>=18.5&&imc<=24.9){
+        }
+        if (imc >= 18.5 && imc <= 24.9) {
             classification = Classification.medio;
         }
-        if (imc>24.9&& imc<=30){
+        if (imc > 24.9 && imc <= 30) {
             classification = Classification.alto;
         }
-        if(imc>30) {
+        if (imc > 30) {
             classification = Classification.muitoalto;
         }
 
-        System.out.println("hello"+ classification);
-        Pesagem pesagem = new Pesagem( imc,peso,classification,descricao, altura,utilizadorNormal);
+        System.out.println("hello" + classification);
+        Pesagem pesagem = new Pesagem(imc, peso, classification, descricao, altura, utilizadorNormal);
         utilizadorNormal.addPesagemRegister(pesagem);
         em.persist(pesagem);
-    };
+    }
+
+    ;
 
 
-
-
-    public List<Pesagem> getAllPesagens(){
+    public List<Pesagem> getAllPesagemRegisters() {
         return (List<Pesagem>) em.createNamedQuery("getAllPesagemRegisters").getResultList();
     }
-    public Pesagem find(String id){
 
-        return em.find(Pesagem.class,id);
+    public List<Pesagem> getPesagemRegisters() {
+        return (List<Pesagem>) em.createNamedQuery("getPesagemRegisters").getResultList();
+    }
+
+    public Pesagem find(String id) {
+        Pesagem pesagem = em.find(Pesagem.class, id);
+        if (pesagem.isDeleted()) {
+            throw new MyEntityNotFoundException("Registo de colestrol nao foi encontrado id: " + id);
+        }
+        return pesagem;
     }
 
     public void update(String id, SinalBiomedicoDTO sinalBiomedicoDTO) {
         Pesagem pesagem = em.find(Pesagem.class, id);
-        if(pesagem!=null){
+        if (pesagem != null) {
             em.lock(pesagem, LockModeType.PESSIMISTIC_WRITE);
 
-            if (sinalBiomedicoDTO.getUtilizadorNormalID()!= null){
+            if (sinalBiomedicoDTO.getUtilizadorNormalID() != null) {
                 UtilizadorNormal utilizadorNormal = em.find(UtilizadorNormal.class, sinalBiomedicoDTO.getUtilizadorNormalID());
-                if (utilizadorNormal == null){
+                if (utilizadorNormal == null) {
 
-                    throw new MyEntityNotFoundException("Utilizador nao foi encontrado id:"+ sinalBiomedicoDTO.getUtilizadorNormalID());
+                    throw new MyEntityNotFoundException("Utilizador nao foi encontrado id:" + sinalBiomedicoDTO.getUtilizadorNormalID());
 
                 }
                 pesagem.setUtilizadorNormal(utilizadorNormal);
 
             }
 
-            if (sinalBiomedicoDTO.getDescricao()!=null){
+            if (sinalBiomedicoDTO.getDescricao() != null) {
                 pesagem.setDescricao(sinalBiomedicoDTO.getDescricao());
             }
 
-            if (sinalBiomedicoDTO.getDate() !=null){
+            if (sinalBiomedicoDTO.getDate() != null) {
                 pesagem.setDate(new Date(Long.parseLong(sinalBiomedicoDTO.getDate())));
             }
 
-            if (sinalBiomedicoDTO.getValue() !=null){
+            if (sinalBiomedicoDTO.getValue() != null) {
                 pesagem.setAltura(Float.parseFloat(sinalBiomedicoDTO.getValue().get(0)));
                 pesagem.setPeso(Float.parseFloat(sinalBiomedicoDTO.getValue().get(1)));
             }
 
 
-        }else
-            throw new MyEntityNotFoundException("Registo de Pesagem nao foi encontrado id:"+id);
+        } else
+            throw new MyEntityNotFoundException("Registo de Pesagem nao foi encontrado id:" + id);
     }
 
     public void delete(String idPesagem) {
-        Pesagem pesagem = em.find(Pesagem.class, idPesagem);
-        UtilizadorNormal utilizador = em.find(UtilizadorNormal.class,pesagem.getUtilizadorNormal().getId());
-        utilizador.remove(pesagem);
+        Pesagem colestrol = em.find(Pesagem.class, idPesagem);
+        colestrol.delete();
 
-        int isSuccessful = em.createQuery("delete from Pesagem p where p.id = :id ")
-                .setParameter("id", idPesagem)
-                .executeUpdate();
+        if (colestrol != null) {
+            em.persist(colestrol);
 
-        if(pesagem!=null){
-            em.detach(pesagem);
-
-        }else
+        } else
             throw new MyEntityNotFoundException("Registo de colestrol nao foi encontrado");
 
-
-        if (isSuccessful == 0) {
-            throw new OptimisticLockException(" product modified concurrently");
-        }
-        }
+    }
 }

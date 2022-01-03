@@ -6,8 +6,12 @@ import java.util.Date;
 import java.util.List;
 @NamedQueries({
         @NamedQuery(
+                name = "getOutroRegisters",
+                query = "SELECT s FROM Outro s WHERE S.deleted = FALSE ORDER BY s.id  " // JPQL
+        ),
+        @NamedQuery(
                 name = "getAllOutroRegisters",
-                query = "SELECT s FROM Outro s ORDER BY s.id" // JPQL
+                query = "SELECT s FROM Outro s ORDER BY s.id  " // JPQL
         ),
 })
 @Entity

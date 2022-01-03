@@ -144,12 +144,9 @@ export default {
 
       this.$axios.$delete('/api/biosinais/pesagem/'+value)
         .then(() => {
-          this.$axios.$get('/api/biosinais/pesagem/'+this.user.id)
-            .then((colestrol) => {
-              this.colestrol = colestrol
-            })
-
-
+          const indice = this.pesagem.findIndex(pesagem => pesagem.id === value)
+          if (~indice)
+            this.pesagem.splice(indice, 1)
         })
   },
     IMCcomputed: function (altura,peso) {

@@ -131,16 +131,12 @@ export default {
   methods: {
   apagar: function (value){
 
-    this.$axios.$delete('/api/biosinais/colestrol/'+value)
-      .then(() => {
-        this.$axios.$get('/api/biosinais/colestrol/'+this.user.id)
-          .then((colestrol) => {
-            this.colestrol = colestrol
-          })
-
-
-
-      })
+      this.$axios.$delete('/api/biosinais/bpm/'+value)
+        .then(() => {
+          const indice = this.colestrol.findIndex(pesagem => pesagem.id === value)
+          if (~indice)
+            this.colestrol.splice(indice, 1)
+        })
   },
 
   }

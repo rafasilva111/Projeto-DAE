@@ -66,6 +66,7 @@ public class SinalBiomedicoDTO implements Serializable {
     public SinalBiomedicoDTO() {
     }
 
+
     public String getDate() {
         return date;
     }
