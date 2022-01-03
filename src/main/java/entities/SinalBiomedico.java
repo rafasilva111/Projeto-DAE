@@ -23,6 +23,7 @@ public class SinalBiomedico implements Serializable {
     private UtilizadorNormal utilizadorNormal;
     private Classification classification;
     private String descricao;
+    private boolean deleted;
 
     public SinalBiomedico() {
     }
@@ -32,12 +33,14 @@ public class SinalBiomedico implements Serializable {
         this.utilizadorNormal = utilizadorNormal;
         this.classification = classification;
         this.descricao = descricao;
+        this.deleted = false;
     }
 
     public SinalBiomedico(UtilizadorNormal utilizadorNormal,String descricao) {
         this.date= new Date(System.currentTimeMillis());
         this.utilizadorNormal = utilizadorNormal;
         this.descricao = descricao;
+        this.deleted = false;
     }
 
     public Classification getClassification() {
@@ -52,6 +55,16 @@ public class SinalBiomedico implements Serializable {
 
     public String getDescricao() {
         return descricao;
+    }
+
+    public void delete(){this.deleted= true; }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 
     public void setDescricao(String descricao) {

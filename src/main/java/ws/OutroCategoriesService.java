@@ -52,6 +52,26 @@ public class OutroCategoriesService {
         return toDTOsOutroCategories(outroCategoriesBean.getAllCatagories());
     }
 
+    @GET
+    @Path("/{id}")
+    @RolesAllowed({"UtilizadorNormal","Administrador","Doutor"})
+    public Response getCatById(@PathParam("id") String idUtilizador){
+        OutroCategories outroCategories = outroCategoriesBean.find(idUtilizador);
+
+
+        if (outroCategories != null) {
+            return Response.status(Response.Status.OK)
+                    .entity(toDTO(outroCategories))
+                    .build();
+
+        }
+
+        return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                .entity("ERROR_FINDING_COLESTROL_RECORD")
+                .build();
+
+    }
+
 
     @POST
     @Path("/create")

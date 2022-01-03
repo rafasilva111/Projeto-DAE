@@ -1,18 +1,18 @@
 <template>
   <div>
     <b-container class="modal-content rounded-6 shadow" >
-      <caption style="text-align:center">BPM</caption>
+      <h1 class="p-4" style="text-align:center">{{this.outrosCat.name}}</h1>
 
     <form  :disabled="!isFormValid">
       <b-form-group
-        id="colestrol"
+        id="valor"
         description="Este valor é obrigatório"
         label="Inserir valor medido:"
-        label-for="colestrol"
-        :invalid-feedback="invalidColestrolFeedback"
-        :state="isColestrolValid"
+        label-for="valor"
+        :invalid-feedback="invalidValorFeedback"
+        :state="isValorValid"
       >
-      <b-input id="descricao" v-model.trim="colestrol" :state="isColestrolValid" trim></b-input>
+        <b-input id="valor" v-model.trim="valor" :state="isValorValid" trim></b-input>
       </b-form-group>
       <b-form-group
         id="descricao"
@@ -41,11 +41,12 @@
 export default {
   data() {
     return {
-      colestrol: null,
+      valor: null,
       descricao: null,
-      valores: [],
       errorMsg: false,
-      user: null
+      user: null,
+      id: this.$route.params.id,
+      outrosCat: [],
     }
   },
   created() {
@@ -53,30 +54,38 @@ export default {
       .then((user) => {
         this.user = user
       })
+    this.$axios.$get('/api/admin/outro/'+this.id)
+      .then((outroCat) => {
+        this.outrosCat = outroCat
+      })
+
   },
   computed: {
-    invalidColestrolFeedback () {
-      if (!this.colestrol) {
+
+    invalidValorFeedback () {
+      if (!this.valor) {
         return null
       }
 
-      let value = parseFloat(this.colestrol);
-      if (isNaN(parseFloat(this.colestrol)) && isFinite(this.colestrol)){
+
+      if (isNaN(parseFloat(this.valor)) && isFinite(this.valor)){
         return "Inserir um valor válido"
       }
-      if (!(value >=0 && value<=500)){
-        return "Inserir um valor entre [0,500]"
+
+      if (!( this.valor>=this.outrosCat.minValues && this.valor<=this.outrosCat.maxValues)){
+        return "Inserir um valor entre ["+this.outrosCat.minValues+","+this.outrosCat.maxValues+"]"
       }
+
       return ''
     },
-    isColestrolValid () {
-      if (this.invalidColestrolFeedback === null) {
+    isValorValid () {
+      if (this.invalidValorFeedback === null) {
         return null
       }
-      return this.invalidColestrolFeedback === ''
+      return this.invalidValorFeedback === ''
     },
     isFormValid () {
-      if (! this.isColestrolValid) {
+      if (! this.isValorValid) {
         return false
       }
       return true
@@ -91,15 +100,18 @@ export default {
     },
     create() {
 
-
-      this.$axios.$post('/api/biosinais/colestrol/'+this.user.id+'/create', {
-        value: [this.colestrol,0],
-
+      this.$axios.$post('/api/biosinais/outro/'+this.user.id+'/create', {
+        value: this.valor,
+        outroCategoriesID: this.id,
         descricao: this.descricao
       })
         .then(() => {
-
-          this.$router.push('/biosinais/colestrol/my')
+          if (this.$auth.user.groups =="UtilizadorNormal"){
+            this.$router.push('/biosinais/outros/my')
+          }
+          else {
+            this.$router.push('/biosinais/outros/all')
+          }
         })
         .catch(error => {
           this.errorMsg = error.response.data

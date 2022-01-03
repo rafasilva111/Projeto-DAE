@@ -1,9 +1,7 @@
 package ejbs;
 
 import dtos.SinalBiomedicoDTO;
-import entities.Outro;
-import entities.OutroCategories;
-import entities.UtilizadorNormal;
+import entities.*;
 import exceptions.MyEntityNotFoundException;
 
 import javax.ejb.Stateless;
@@ -44,12 +42,21 @@ public class OutroBean {
     };
 
 
-    public List<Outro> getAllOutros(){
+    public List<Outro> getAllBpmRegisters(){
         return (List<Outro>) em.createNamedQuery("getAllOutroRegisters").getResultList();
     }
-    public Outro find(String id){
 
-        return em.find(Outro.class,id);
+    public List<Outro> getBpmRegisters(){
+        return (List<Outro>) em.createNamedQuery("getOutroRegisters").getResultList();
+    }
+
+    public Outro find(String id){
+        Outro outro = em.find(Outro.class,id);
+
+        if (outro.isDeleted()){
+            throw new MyEntityNotFoundException("Registo de colestrol nao foi encontrado id: "+id);
+        }
+        return outro;
     }
 
     public void update(String idOutro, SinalBiomedicoDTO sinalBiomedicoDTO) {
@@ -69,12 +76,8 @@ public class OutroBean {
             if (sinalBiomedicoDTO.getDate() !=null){
                 outro.setDate(new Date(Long.parseLong(sinalBiomedicoDTO.getDate())));
             }
-
-            if (sinalBiomedicoDTO.getValue()!=null){
-                outro.setValue(sinalBiomedicoDTO.getValue().get(0));
-            }
             if (sinalBiomedicoDTO.getDescricao()!=null){
-                outro.setValue(sinalBiomedicoDTO.getDescricao());
+                outro.setDescricao(sinalBiomedicoDTO.getDescricao());
             }
 
 
@@ -85,8 +88,9 @@ public class OutroBean {
 
     public void delete(String idOutro) {
         Outro colestrol = em.find(Outro.class, idOutro);
+        colestrol.delete();
         if(colestrol!=null){
-            em.detach(colestrol);
+            em.persist(colestrol);
         }else
             throw new MyEntityNotFoundException("Registo de outro nao foi encontrado");
     }

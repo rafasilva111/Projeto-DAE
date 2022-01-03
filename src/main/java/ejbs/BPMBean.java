@@ -3,6 +3,7 @@ package ejbs;
 import dtos.SinalBiomedicoDTO;
 import entities.BPM;
 import entities.Colestrol;
+import entities.Pesagem;
 import entities.UtilizadorNormal;
 import entities.enums.Classification;
 import exceptions.MyEntityNotFoundException;
@@ -21,10 +22,17 @@ public class BPMBean {
     private EntityManager em;
 
     public void create(float batimentos, String descricao, String utilizadorNormalID){
-
+        Classification classification = Classification.muitobaixo;
         UtilizadorNormal utilizadorNormal =em.find(UtilizadorNormal.class,utilizadorNormalID);
 
-
+        if (batimentos<60){
+            classification = Classification.baixo;
+        }
+        if (batimentos>=60&& batimentos<=100){
+            classification = Classification.medio;
+        }if (batimentos>100){
+            classification = Classification.alto;
+        }
         try {
             if (utilizadorNormal == null){
                 throw new MyEntityNotFoundException("Utilizador inserido nao existe");
@@ -33,18 +41,23 @@ public class BPMBean {
             System.err.print(e.getMessage());
         }
 
-        BPM utilizadorN = new BPM(Math.round(batimentos),utilizadorNormal,Classification.alto,descricao);
+        BPM utilizadorN = new BPM(Math.round(batimentos),utilizadorNormal,classification,descricao);
         utilizadorNormal.addBpmRegister(utilizadorN);
         em.persist(utilizadorN);
     };
 
-
-    public List<BPM> getAllBPM(){
-        return (List<BPM>) em.createNamedQuery("getAllBPMRegisters").getResultList();
+    public List<BPM> getAllBpmRegisters(){
+        return (List<BPM>) em.createNamedQuery("getAllBpmRegisters").getResultList();
     }
-    public BPM find(String id){
 
-        return em.find(BPM.class,id);
+    public List<BPM> getBpmRegisters(){
+        return (List<BPM>) em.createNamedQuery("getBpmRegisters").getResultList();
+    } public BPM find(String id){
+        BPM colestrol = em.find(BPM.class,id);
+        if (colestrol.isDeleted()){
+            throw new MyEntityNotFoundException("Registo de colestrol nao foi encontrado id: "+id);
+        }
+        return colestrol;
     }
 
     public void update(String idBPM, SinalBiomedicoDTO sinalBiomedicoDTO) {
@@ -81,20 +94,13 @@ public class BPMBean {
 
     public void delete(String idBPM) {
         BPM colestrol = em.find(BPM.class, idBPM);
-        UtilizadorNormal utilizador = em.find(UtilizadorNormal.class,colestrol.getUtilizadorNormal().getId());
-        utilizador.remove(colestrol);
+        colestrol.delete();
 
         if(colestrol!=null){
-            em.detach(colestrol);
+            em.persist(colestrol);
 
         }else
             throw new MyEntityNotFoundException("Registo de colestrol nao foi encontrado");
 
-        int isSuccessful = em.createQuery("delete from SinalBiomedico p where p.id = :id ")
-                .setParameter("id", idBPM)
-                .executeUpdate();
-        if (isSuccessful == 0) {
-            throw new OptimisticLockException(" product modified concurrently");
-        }
     }
 }
