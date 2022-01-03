@@ -41,13 +41,16 @@ public class UtilizadorNormalService {
     private SinaisBiomedicosService helper;
 
     private UtilizadorDTO toDTOsemRegistos(UtilizadorNormal utilizadorNormal) {
+        System.out.println(utilizadorNormal.toString());
         return new UtilizadorDTO(
                 utilizadorNormal.getId(),
                 utilizadorNormal.getPassword(),
                 utilizadorNormal.getEmail(),
                 utilizadorNormal.getData(),
                 utilizadorNormal.getUserName(),
-                UserType.UtilizadorNormal);
+                UserType.UtilizadorNormal,
+                utilizadorNormal.getDoctor()==null ?"":utilizadorNormal.getDoctor().getUserName());
+
     }
     private UtilizadorDTO toDTOcomRegistos(UtilizadorNormal utilizadorNormal) {
         System.out.println("aqui aqui+"+utilizadorNormal.getDocuments());
@@ -87,9 +90,35 @@ public class UtilizadorNormalService {
 
     }
 
+
     protected List<UtilizadorDTO> toDTOsUtilizadores(List<UtilizadorNormal> students) {
         return students.stream().map(this::toDTOsemRegistos).collect(Collectors.toList());
     }
+
+    protected List<DoutorDTO> toDTOsDoctors(List<Doutor> docs) {
+        return docs.stream().map(this::toDTOcomRegistosDoutor).collect(Collectors.toList());
+    }
+    protected List<AdministradorDTO> toDTOsAdmins(List<Administrador> admins) {
+        return admins.stream().map(this::toDTOcomRegistosAdministrador).collect(Collectors.toList());
+    }
+    @GET // means: to call this endpoint, we need to use the HTTP GET method
+    @Path("/alladmins/")
+    public List<AdministradorDTO> getAllAdmins() {
+        return toDTOsAdmins(adminBean.getAllAdmins());
+    }
+
+    @GET // means: to call this endpoint, we need to use the HTTP GET method
+    @Path("/alldocs/")
+    public List<DoutorDTO> getAllDocs() {
+        return toDTOsDoctors(doutorBean.getAllDoctors());
+    }
+
+    @GET // means: to call this endpoint, we need to use the HTTP GET method
+    @Path("/allusers/")
+    public List<UtilizadorDTO> getAllUsers() {
+        return toDTOsUtilizadores(utilizadorNormalBean.getAllNormalUsers());
+    }
+
 
     private List<SinalBiomedicoDTO> preencher(UtilizadorNormal utilizadorNormal) {
         List<SinalBiomedicoDTO> list = new LinkedList<>();
@@ -125,26 +154,51 @@ public class UtilizadorNormalService {
 
 
     @GET
-    @Path("{username}")
-    public Response getStudentDetails(@PathParam("username") String username)
+    @Path("{username}/{type}")
+    public Response getUserDetails(@PathParam("username") String username,@PathParam("type") String type)
             throws MyEntityNotFoundException {
 
         //check 
         Principal principal = securityContext.getUserPrincipal();
         System.out.println();
-        if(!(securityContext.isUserInRole("Administrador") ||
-                securityContext.isUserInRole("UtilizadorNormal")  &&
+        if(!(securityContext.isUserInRole("Administrador") ||  securityContext.isUserInRole("Doutor")||
+        securityContext.isUserInRole("UtilizadorNormal")  &&
                         principal.getName().equals(username))) {
             return Response.status(Response.Status.FORBIDDEN).build();
         }
-        UtilizadorNormal student = utilizadorNormalBean.getUserByUsername(username);
-        if(student == null) {
-            throw new MyEntityNotFoundException("Student with username " +
-                    username + " not found.");
+        switch (type){
+            case "utente":
+                UtilizadorNormal student = utilizadorNormalBean.getUserByUsername(username);
+                if(student == null) {
+                    throw new MyEntityNotFoundException("User with username " +
+                            username + " not found.");
+                }
+                return Response.status(Response.Status.OK)
+                        .entity(toDTOsemRegistos(student))
+                        .build();
+
+            case "doutor":
+                Doutor doutor = doutorBean.getUserByUsername(username);
+                if(doutor == null) {
+                    throw new MyEntityNotFoundException("User with username " +
+                            username + " not found.");
+                }
+                return Response.status(Response.Status.OK)
+                        .entity(toDTOcomRegistosDoutor(doutor))
+                        .build();
+
+            case "admin":
+                Administrador admin = adminBean.getUserByUsername(username);
+                if(admin == null) {
+                    throw new MyEntityNotFoundException("User with username " +
+                            username + " not found.");
+                }
+                return Response.status(Response.Status.OK)
+                        .entity(toDTOcomRegistosAdministrador(admin))
+                        .build();
         }
-        return Response.status(Response.Status.OK)
-                .entity(toDTOsemRegistos(student))
-                .build();
+        throw new MyEntityNotFoundException("User with username " +
+                username + " not found.");
     }
 
     @GET
@@ -185,4 +239,5 @@ public class UtilizadorNormalService {
                 .entity(toDTOcomRegistos(student))
                 .build();
     }
+
 }
