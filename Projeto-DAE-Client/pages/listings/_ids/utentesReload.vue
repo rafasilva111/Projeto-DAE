@@ -38,7 +38,7 @@
     <div class="pt-4">
       <b-container  class="modal-content rounded-6 shadow" >
         <h1 CLASS=" p-3" style="text-align:center">Informações</h1>
-        <b-table  ref="table" striped over :items="utentes" :fields="fields2" style="float:left;">
+        <b-table  ref="table" striped  v-bind:items="utentes" :filter="criteria" :fields="fields2" style="float:left;">
         </b-table>
 
       </b-container>
@@ -138,7 +138,7 @@ export default {
 
     find : function (value){
           //console.log(value)
-          this.$axios.$get('/api/user/' + value.username + '/utente')
+          this.$axios.$get('/api/user/' + value.username + '/')
             .then((user) => {
               this.user = user
              // console.log(user);
@@ -160,15 +160,16 @@ export default {
 
     nameSearch: function(){
       console.log(this.username)
-      this.$axios.$get('/api/user/' + this.username + '/utente')
+      this.$axios.$get('/api/user/' + this.username + '/')
         .then((user) => {
           this.user = user
           // console.log(user);
           this.utentes.push(user)
           console.log(this.utentes)
-          console.log(this.$refs)
-          this.$refs.table.$forceUpdate();
+          this.$refs.table.refresh();
         })
+
+
     }
 
   }

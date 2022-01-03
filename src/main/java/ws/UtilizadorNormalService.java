@@ -165,8 +165,8 @@ public class UtilizadorNormalService {
 
 
     @GET
-    @Path("{username}")
-    public Response getUserDetails(@PathParam("username") String username)
+    @Path("{username}/{type}")
+    public Response getUserDetails(@PathParam("username") String username,@PathParam("type") String type)
             throws MyEntityNotFoundException {
 
         //check 
@@ -177,16 +177,39 @@ public class UtilizadorNormalService {
                         principal.getName().equals(username))) {
             return Response.status(Response.Status.FORBIDDEN).build();
         }
+        switch (type){
+            case "utente":
+                UtilizadorNormal student = utilizadorNormalBean.getUserByUsername(username);
+                if(student == null) {
+                    throw new MyEntityNotFoundException("User with username " +
+                            username + " not found.");
+                }
+                return Response.status(Response.Status.OK)
+                        .entity(toDTOsemRegistos(student))
+                        .build();
 
-        UtilizadorNormal student = utilizadorNormalBean.getUserByUsername(username);
-        if(student == null) {
-            throw new MyEntityNotFoundException("Student with username " +
-                    username + " not found.");
+            case "doutor":
+                Doutor doutor = doutorBean.getUserByUsername(username);
+                if(doutor == null) {
+                    throw new MyEntityNotFoundException("User with username " +
+                            username + " not found.");
+                }
+                return Response.status(Response.Status.OK)
+                        .entity(toDTOcomRegistosDoutor(doutor))
+                        .build();
 
+            case "admin":
+                Administrador admin = adminBean.getUserByUsername(username);
+                if(admin == null) {
+                    throw new MyEntityNotFoundException("User with username " +
+                            username + " not found.");
+                }
+                return Response.status(Response.Status.OK)
+                        .entity(toDTOcomRegistosAdministrador(admin))
+                        .build();
         }
-        return Response.status(Response.Status.OK)
-                .entity(toDTOsemRegistos(student))
-                .build();
+        throw new MyEntityNotFoundException("User with username " +
+                username + " not found.");
     }
 
     @GET
