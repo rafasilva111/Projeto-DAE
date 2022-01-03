@@ -60,6 +60,8 @@ public class UtilizadorNormal extends Utilizador implements Serializable {
         this.doctor = null;
     }
 
+
+
     public List<Document> getDocuments() {
         return documents;
     }

@@ -11,7 +11,8 @@
                 </template>
               </b-select>
                 <b-row >
-                  <b-col lg="6" style="text-align:center" class="p-4"><nuxt-link   class="btn btn-dark btn-sm" to="/prescricoes/createPrescricao"  >Mostrar Utente</nuxt-link></b-col>
+                  <b-col lg="6" style="text-align:center" class="p-4">
+                    <nuxt-link class="btn btn-dark btn-sm" to=""  >Mostrar Doutor</nuxt-link></b-col>
                 </b-row>
          <h3 CLASS=" p-3" style="text-align:center">Procurar Por Nome</h3>
 
@@ -26,10 +27,23 @@
       </b-form-group>
 
 
-
-      <button class="btn btn-dark btn-sm" type="reset">Limpar</button>
-      <nuxt-link   class="btn btn-dark btn-sm" to=""  >Procurar</nuxt-link>
     </form>
+        <nuxt-link  style="text-align:center" class="btn btn-dark btn-sm" to=""  >Procurar</nuxt-link>
+      </b-container>
+    </div>
+    <div class="pt-4">
+      <b-container class="modal-content rounded-6 shadow" >
+        <h1 CLASS=" p-3" style="text-align:center">Informações</h1>
+        <b-table striped  :items="colestrol" :filter="criteria" :filter-function="historico" :fields="fields" style="float:left;">
+        </b-table>
+
+      </b-container>
+    </div>
+    <div class="pt-4">
+      <b-container class="modal-content rounded-6 shadow" >
+        <h1 CLASS=" p-3" style="text-align:center">Utentes Associados</h1>
+        <b-table striped  :items="colestrol" :filter="criteria" :filter-function="historico" :fields="fields" style="float:left;">
+        </b-table>
 
       </b-container>
     </div>
@@ -46,7 +60,7 @@ export default {
       ready: false,
       labels: [],
       data: [],
-      fields: [ 'dataInicio','dataFim','doutorName','tipo','descricao','actions'],
+      fields: [ 'nome','email','regCategoria1','regCategoria2','regCategoria3','totalDePrescrições'],
       colestrol: [],
       user: null,
       criteria: "hey",

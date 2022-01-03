@@ -4,15 +4,17 @@
       <b-container class="modal-content rounded-6 shadow" >
         <h1 CLASS=" p-3" style="text-align:center">Utentes</h1>
         <h3 CLASS=" p-3" style="text-align:center">Lista Completa de Utentes</h3>
-        <b-select :options="courses" style="text-align:center" required value-field="code" text-field="username">
-                <template v-slot:first>
-                  <option :value="null" disabled>-- Select Utente --
-                  </option>
-                </template>
-              </b-select>
-                <b-row >
-                  <b-col lg="6" style="text-align:center" class="p-4"><nuxt-link   class="btn btn-dark btn-sm" to="/prescricoes/createPrescricao"  >Mostrar Utente</nuxt-link></b-col>
-                </b-row>
+
+        <select v-model="selected" style="text-align:center"  @change="filterItem(selected)">
+          <option v-for="item in courses" :value="item" :key="item.id">
+            {{"Utente: "+ item.username +" /  Email: "+ item.email }}
+          </option>
+        </select>
+        <div class="pb-4"></div>
+        <button
+          class="btn btn-dark btn-sm" cli
+          @click="find(selected)">Procurar</button>
+
          <h3 CLASS=" p-3" style="text-align:center">Procurar Por Nome</h3>
 
 
@@ -27,13 +29,22 @@
 
 
 
-      <button class="btn btn-dark btn-sm" type="reset">Limpar</button>
-      <button  class="btn btn-dark btn-sm" @click.prevent="find"  >Procurar</button>
     </form>
+        <nuxt-link  style="text-align:center" class="btn btn-dark btn-sm" to=""  >Procurar</nuxt-link>
+      </b-container>
+    </div>
+    <div class="pt-4">
+      <b-container class="modal-content rounded-6 shadow" >
+        <h1 CLASS=" p-3" style="text-align:center">Informações</h1>
+        <b-table striped  :items="colestrol" :filter="criteria" :fields="fields" style="float:left;">
+        </b-table>
 
       </b-container>
     </div>
   </div>
+
+
+
 
 </template>
 
@@ -46,12 +57,36 @@ export default {
       ready: false,
       labels: [],
       data: [],
-      fields: [ 'dataInicio','dataFim','doutorName','tipo','descricao','actions'],
+      fields: [ 'nome','email','regCategoria1','regCategoria2','regCategoria3','nomeMedicoAssociado','totalDePrescrições'],
       colestrol: [],
       user: null,
       criteria: "hey",
       courses: [],
       username: null,
+      selected:null,
+      fields2: [
+        {
+          key: 'date',
+          label: 'Data',
+        },
+        {
+          key: 'value[0]',
+          label: 'Nivel de Colestrol',
+        },
+        {
+          key: 'classification',
+          label: 'Classificação',
+        },
+        {
+          key: 'descricao',
+          label: 'Descrição',
+        },
+        {
+          key: 'actions',
+          label: 'Actions',
+
+        }
+      ]
 
 
 
@@ -97,45 +132,25 @@ export default {
 
   methods: {
 
-    historico: function (row){
-
-      var hoje = (row.dataFim).split("/",3)
-
-      var date = new Date();
-      if (new Date(hoje[2].split(" ")[0],hoje[1],hoje[0])<date) {
-        return true;
-      }
-
-      return false;
-    },
-
-    ativas: function (row){
-
-      var hoje = (row.dataFim).split("/",3)
-
-      var date = new Date();
-      if (new Date(hoje[2].split(" ")[0],hoje[1],hoje[0])<date) {
-        return false;
-      }
-
-      return true;
-    },
-
-    find : function (){
-      var username = this.username
-
-
-        this.$axios.$get('/api/user/'+username+'/registers')
-          .then((username) => {
-          this.username = username
-          this.$axios.$get('/api/user/' + username + '/')
+    find : function (value){
+          console.log(value)
+          this.$axios.$get('/api/user/' + value.username + '/')
             .then((user) => {
               this.user = user
               console.log(user);
             })
+      },
 
-        })
+    filterItem: function(value) {
+      if (value != null) {
+        //console.log("Selected no filter")
+        console.log(value)
+      }else{
+        //console.log("Selected "+this.selected.measurement+" / "+this.selected.unit)
+        console.log("Dead")
       }
+    },
+
   }
 }
 

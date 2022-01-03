@@ -44,13 +44,16 @@ public class UtilizadorNormalService {
     private DocumentsService documentsService;
 
     private UtilizadorDTO toDTOsemRegistos(UtilizadorNormal utilizadorNormal) {
+        System.out.println(utilizadorNormal.toString());
         return new UtilizadorDTO(
                 utilizadorNormal.getId(),
                 utilizadorNormal.getPassword(),
                 utilizadorNormal.getEmail(),
                 utilizadorNormal.getData(),
                 utilizadorNormal.getUserName(),
-                UserType.UtilizadorNormal);
+                UserType.UtilizadorNormal,
+                utilizadorNormal.getDoctor()==null ?"":utilizadorNormal.getDoctor().getUserName());
+
     }
     private UtilizadorDTO toDTOcomRegistos(UtilizadorNormal utilizadorNormal) {
         documentsService = new DocumentsService();
@@ -163,21 +166,23 @@ public class UtilizadorNormalService {
 
     @GET
     @Path("{username}")
-    public Response getStudentDetails(@PathParam("username") String username)
+    public Response getUserDetails(@PathParam("username") String username)
             throws MyEntityNotFoundException {
 
         //check 
         Principal principal = securityContext.getUserPrincipal();
         System.out.println();
-        if(!(securityContext.isUserInRole("Administrador") ||
-                securityContext.isUserInRole("UtilizadorNormal")  &&
+        if(!(securityContext.isUserInRole("Administrador") ||  securityContext.isUserInRole("Doutor")||
+        securityContext.isUserInRole("UtilizadorNormal")  &&
                         principal.getName().equals(username))) {
             return Response.status(Response.Status.FORBIDDEN).build();
         }
+
         UtilizadorNormal student = utilizadorNormalBean.getUserByUsername(username);
         if(student == null) {
             throw new MyEntityNotFoundException("Student with username " +
                     username + " not found.");
+
         }
         return Response.status(Response.Status.OK)
                 .entity(toDTOsemRegistos(student))

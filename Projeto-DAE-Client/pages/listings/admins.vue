@@ -4,14 +4,14 @@
       <b-container class="modal-content rounded-6 shadow" >
         <h1 CLASS=" p-3" style="text-align:center">Administradores</h1>
         <h3 CLASS=" p-3" style="text-align:center">Lista Completa de Administradores</h3>
-        <b-select :options="courses" style="text-align:center" required value-field="code" text-field="username">
+        <b-select :options="courses" v-model = "selected" style="text-align:center" required value-field="code" text-field="username">
                 <template v-slot:first>
                   <option :value="null" disabled>-- Select Administrador --
                   </option>
                 </template>
               </b-select>
                 <b-row >
-                  <b-col lg="6" style="text-align:center" class="p-4"><nuxt-link   class="btn btn-dark btn-sm" to="/prescricoes/createPrescricao"  >Mostrar Utente</nuxt-link></b-col>
+                  <b-col lg="6" style="text-align:center" class="p-4"><nuxt-link   class="btn btn-dark btn-sm" to="/prescricoes/createPrescricao"  >Mostrar Administrador</nuxt-link></b-col>
                 </b-row>
          <h3 CLASS=" p-3" style="text-align:center">Procurar Por Nome</h3>
 
@@ -25,11 +25,16 @@
       <b-input id="username" v-model.trim="username" :state="isUsernameValid" trim></b-input>
       </b-form-group>
 
-
-
-      <button class="btn btn-dark btn-sm" type="reset">Limpar</button>
-      <nuxt-link   class="btn btn-dark btn-sm" to=""  >Procurar</nuxt-link>
     </form>
+        <nuxt-link  style="text-align:center" class="btn btn-dark btn-sm" to=""  >Procurar</nuxt-link>
+
+      </b-container>
+    </div>
+    <div class="pt-4">
+      <b-container class="modal-content rounded-6 shadow" >
+        <h1 CLASS=" p-3" style="text-align:center">Informações</h1>
+        <b-table striped  :items="colestrol" :filter="criteria" :filter-function="historico" :fields="fields" style="float:left;">
+        </b-table>
 
       </b-container>
     </div>
@@ -46,12 +51,13 @@ export default {
       ready: false,
       labels: [],
       data: [],
-      fields: [ 'dataInicio','dataFim','doutorName','tipo','descricao','actions'],
+      fields: [ 'dataCriação','nome','email','estado'],
       colestrol: [],
       user: null,
       criteria: "hey",
       courses: [],
       username: null,
+      selected: null,
 
 
 
