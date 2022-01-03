@@ -1,6 +1,8 @@
 package dtos;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class SinalBiomedicoOutroDTO implements Serializable {
@@ -12,9 +14,9 @@ public class SinalBiomedicoOutroDTO implements Serializable {
     private String outroCategoriesID;
     private String descricao;
 
-    public SinalBiomedicoOutroDTO(String id, String date, String name, String value, String utilizadorNormalID, String outroCategoriesID, String descricao) {
+    public SinalBiomedicoOutroDTO(String id, Date date, String name, String value, String utilizadorNormalID, String outroCategoriesID, String descricao) {
         this.id = id;
-        this.date = date;
+        this.date = new SimpleDateFormat("dd/MM/yyyy kk:mm").format(date);
         this.name = name;
         this.value = value;
         this.utilizadorNormalID = utilizadorNormalID;

@@ -36,12 +36,9 @@ public class UtilizadorNormalService {
     @EJB
     private DoutorBean doutorBean;
     @EJB
-    private DocumentBean documentBean;
-    @EJB
     private AdminBean adminBean;
 
     private SinaisBiomedicosService helper;
-    private DocumentsService documentsService;
 
     private UtilizadorDTO toDTOsemRegistos(UtilizadorNormal utilizadorNormal) {
         return new UtilizadorDTO(
@@ -53,7 +50,6 @@ public class UtilizadorNormalService {
                 UserType.UtilizadorNormal);
     }
     private UtilizadorDTO toDTOcomRegistos(UtilizadorNormal utilizadorNormal) {
-        documentsService = new DocumentsService();
         System.out.println("aqui aqui+"+utilizadorNormal.getDocuments());
         return new UtilizadorDTO(
                 utilizadorNormal.getId(),
@@ -61,9 +57,7 @@ public class UtilizadorNormalService {
                 utilizadorNormal.getEmail(),
                 utilizadorNormal.getData(),
                 utilizadorNormal.getUserName(),
-                UserType.UtilizadorNormal,preencher(utilizadorNormal),
-                documentsService.documentsToDTOs(documentBean.getStudentDocuments(utilizadorNormal.getUserName()))
-
+                UserType.UtilizadorNormal,preencher(utilizadorNormal)
                 );
     }
     private DoutorDTO toDTOcomRegistosDoutor(Doutor utilizadorNormal) {
@@ -122,12 +116,7 @@ public class UtilizadorNormalService {
                 list.add(helper.toDTO(coletrol));
             }
         }
-        if (!utilizadorNormal.getOutrosList().isEmpty()){
-            for (var coletrol:utilizadorNormal.getOutrosList()
-            ) {
-                list.add(helper.toDTO(coletrol));
-            }
-        }
+
 
         return list;
     }

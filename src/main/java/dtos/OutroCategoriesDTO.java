@@ -15,10 +15,10 @@ public class OutroCategoriesDTO implements Serializable {
     private String name;
     private Float maxValues;
     private Float minValues;
-    private List<SinalBiomedicoDTO> outro;
+    private List<SinalBiomedicoOutroDTO> outro;
     private String date;
 
-    public OutroCategoriesDTO(String id,Date data, String name, Float maxValues, Float minValues, List<SinalBiomedicoDTO> outro) {
+    public OutroCategoriesDTO(String id,Date data, String name, Float maxValues, Float minValues, List<SinalBiomedicoOutroDTO> outro) {
         this.id = id;
         this.name = name;
         this.maxValues = maxValues;
@@ -70,11 +70,4 @@ public class OutroCategoriesDTO implements Serializable {
         this.minValues = minValues;
     }
 
-    public List<SinalBiomedicoDTO> getOutro() {
-        return outro;
-    }
-
-    public void setOutro(List<SinalBiomedicoDTO> outro) {
-        this.outro = outro;
-    }
 }

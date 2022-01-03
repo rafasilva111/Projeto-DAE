@@ -458,32 +458,31 @@ public class SinaisBiomedicosService {
 
     //BPM
 
-    protected SinalBiomedicoDTO toDTO(Outro outro) {
+    protected SinalBiomedicoOutroDTO toDTO(Outro outro) {
 
         List<String> helper = new LinkedList<>();
         helper.add( outro.getValue()+"");
 
-        return new SinalBiomedicoDTO(
+        return new SinalBiomedicoOutroDTO(
                 outro.getId(),
                 outro.getDate(),
-                outro.getName()
-                ,
-                helper,
+                outro.getName(),
+                outro.getValue()+"",
                 outro.getUtilizadorNormal().getId(),
-                outro.getDescricao(),
-                outro.getClassification()
+                outro.getOutroCategories().getId(),
+                outro.getDescricao()
         );
 
     }
 
     // converts an entire list of entities into a list of DTOs
-    protected List<SinalBiomedicoDTO> toDTOsOutro(List<Outro> outros) {
+    protected List<SinalBiomedicoOutroDTO> toDTOsOutro(List<Outro> outros) {
         return outros.stream().map(this::toDTO).collect(Collectors.toList());
     }
 
     @GET // means: to call this endpoint, we need to use the HTTP GET method
     @Path("/outro/")
-    public List<SinalBiomedicoDTO> getAllOutroRegisters() {
+    public List<SinalBiomedicoOutroDTO> getAllOutroRegisters() {
 
         return toDTOsOutro(outroBean.getAllOutros());
     }
