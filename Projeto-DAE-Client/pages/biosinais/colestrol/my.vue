@@ -131,7 +131,7 @@ export default {
   methods: {
   apagar: function (value){
 
-      this.$axios.$delete('/api/biosinais/bpm/'+value)
+      this.$axios.$delete('/api/biosinais/colestrol/'+value)
         .then(() => {
           const indice = this.colestrol.findIndex(pesagem => pesagem.id === value)
           if (~indice)

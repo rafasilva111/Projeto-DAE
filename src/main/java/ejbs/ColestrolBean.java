@@ -96,6 +96,9 @@ public class ColestrolBean {
     public void delete(String idColestrol) {
         Colestrol colestrol = em.find(Colestrol.class, idColestrol);
         colestrol.delete();
+        UtilizadorNormal utilizadorNormal = em.find(UtilizadorNormal.class,colestrol.getUtilizadorNormal().getId());
+        utilizadorNormal.remove(colestrol);
+        em.persist(utilizadorNormal);
 
         if(colestrol!=null){
             em.persist(colestrol);

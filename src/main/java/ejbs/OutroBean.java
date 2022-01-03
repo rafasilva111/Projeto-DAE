@@ -88,6 +88,7 @@ public class OutroBean {
 
     public void delete(String idOutro) {
         Outro colestrol = em.find(Outro.class, idOutro);
+
         colestrol.delete();
         if(colestrol!=null){
             em.persist(colestrol);

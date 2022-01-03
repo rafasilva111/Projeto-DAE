@@ -94,11 +94,11 @@ public class BPMBean {
 
     public void delete(String idBPM) {
         BPM colestrol = em.find(BPM.class, idBPM);
-        colestrol.delete();
+
 
         if(colestrol!=null){
             em.persist(colestrol);
-
+            colestrol.delete();
         }else
             throw new MyEntityNotFoundException("Registo de colestrol nao foi encontrado");
 
