@@ -1,18 +1,18 @@
 <template>
   <div>
     <b-container class="modal-content rounded-6 shadow" >
-      <caption style="text-align:center">Pesagem</caption>
+      <caption style="text-align:center">Prescrições</caption>
 
     <form  :disabled="!isFormValid">
       <b-form-group
-        id="colestrol"
-        description="Este valor é obrigatório"
-        label="Inserir valor medido:"
-        label-for="colestrol"
-        :invalid-feedback="invalidAlturaFeedback"
-        :state="isAlturaValid"
+        id="Data"
+        description="Este valor é obrigatório, utilizar formato dd/mm/yyyy"
+        label="Data de fim da prescrição:"
+        label-for="Data"
+        :invalid-feedback="invalidDataFeedback"
+        :state="isDataValid"
       >
-        <b-input id="altura" v-model.trim="altura" :state="isAlturaValid" trim></b-input>
+        <b-input id="altura" v-model.trim="data" :state="isDataValid" trim></b-input>
       </b-form-group>
       <b-form-group
         id="peso"
@@ -24,6 +24,11 @@
       >
         <b-input id="peso" v-model.trim="peso" :state="isPesoValid" trim></b-input>
       </b-form-group>
+      <b-form-select v-model="tipo" label="Inserir Peso medido:" :options="presType" >
+        <b-input id="peso" v-model.trim="peso" :state="isPesoValid" trim></b-input>
+      </b-form-select>
+
+
       <b-form-group
         id="descricao"
         label="Inserir anotações:"
@@ -51,12 +56,20 @@
 export default {
   data() {
     return {
-      altura: null,
-      peso: null,
+
+      data: null,
+      tipo: null,
       descricao: null,
+      utilizador: null,
       valores: [],
       errorMsg: false,
-      user: null
+      user: null,
+      presType: [
+        { value: null, text: 'Selecionar opção' },
+        { value: 'Exercicio', text: 'Exercicio' },
+        { value: 'Medica', text: 'Medica' },
+        { value: 'Nutricional', text: 'Nutricional' },
+      ],
     }
   },
   created() {
@@ -66,25 +79,22 @@ export default {
       })
   },
   computed: {
-    invalidAlturaFeedback () {
-      if (!this.altura) {
+    invalidDataFeedback () {
+      if (!this.data) {
         return null
       }
 
-      let value = parseFloat(this.altura);
-      if (isNaN(parseFloat(this.altura)) && isFinite(this.altura)){
+      if (!isNaN(new Date(this.data)) ){
         return "Inserir um valor válido"
       }
-      if (!(value >=0 && value<3)){
-        return "Inserir um valor entre [0,3] (m)"
-      }
+
       return ''
     },
-    isAlturaValid () {
-      if (this.invalidAlturaFeedback === null) {
+    isDataValid () {
+      if (this.invalidDataFeedback === null) {
         return null
       }
-      return this.invalidAlturaFeedback === ''
+      return this.invalidDataFeedback === ''
     },
 
     invalidPesoFeedback () {
@@ -112,7 +122,7 @@ export default {
       return this.invalidPesoFeedback === ''
     },
     isFormValid () {
-      if (! this.isPesoValid) {
+      if (! this.isDataValid) {
         return false
       }if (! this.isAlturaValid) {
         return false

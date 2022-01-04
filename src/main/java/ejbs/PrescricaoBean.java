@@ -6,6 +6,7 @@ import entities.Colestrol;
 import entities.Doutor;
 import entities.Prescricao;
 import entities.UtilizadorNormal;
+import entities.enums.UserType;
 import exceptions.MyEntityNotFoundException;
 
 import javax.ejb.Stateless;
@@ -22,7 +23,7 @@ public class PrescricaoBean {
     private EntityManager em;
 
 
-    public void create(Date dataFim, Prescricao.TypePrescricoes tipo, String descricao, String utilizadorNormalId, String doutorId){
+    public void create(Date dataFim, String tipo, String descricao, String utilizadorNormalId, String doutorId){
 
         UtilizadorNormal utilizadorNormal =em.find(UtilizadorNormal.class,utilizadorNormalId);
         try {
@@ -43,9 +44,8 @@ public class PrescricaoBean {
             System.err.print(e.getMessage());
         }
 
-        int id =getAllPrescricoes().size();
 
-        Prescricao prescricao = new Prescricao(id,dataFim, tipo,descricao,utilizadorNormal,doutor);
+        Prescricao prescricao = new Prescricao(dataFim, Prescricao.TypePrescricoes.Exercicio ,descricao,utilizadorNormal,doutor);
 
         utilizadorNormal.addPrescicaoRegister(prescricao);
         doutor.addPrescicaoRegister(prescricao);

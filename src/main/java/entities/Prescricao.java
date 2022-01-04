@@ -27,18 +27,6 @@ public class Prescricao implements Serializable {
 
 
     public Prescricao(Date dataFim, TypePrescricoes tipo, String descricao, UtilizadorNormal utilizadorNormal,Doutor doutor) {
-        this.id = System.currentTimeMillis()+"";
-        this.dataInicio = new Date(System.currentTimeMillis());
-        this.dataFim = dataFim;
-        this.tipo = tipo;
-        this.descricao = descricao;
-        this.utilizadorNormal = utilizadorNormal;
-        this.doutor = doutor;
-        this.enabled = true;
-    }
-
-    public Prescricao(int id,Date dataFim, TypePrescricoes tipo, String descricao, UtilizadorNormal utilizadorNormal,Doutor doutor) {
-        this.id = id+"";
         this.dataInicio = new Date(System.currentTimeMillis());
         this.dataFim = dataFim;
         this.tipo = tipo;

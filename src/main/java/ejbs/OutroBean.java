@@ -87,11 +87,17 @@ public class OutroBean {
     }
 
     public void delete(String idOutro) {
-        Outro colestrol = em.find(Outro.class, idOutro);
+        Outro outro = em.find(Outro.class, idOutro);
+        OutroCategories outCat = em.find(OutroCategories.class,outro.getOutroCategories().getId());
+        outCat.remove(outro);
+        em.persist(outCat);
+        UtilizadorNormal utilizadorNormal = em.find(UtilizadorNormal.class,outro.getUtilizadorNormal().getId());
+        utilizadorNormal.remove(outro);
+        em.persist(utilizadorNormal);
 
-        colestrol.delete();
-        if(colestrol!=null){
-            em.persist(colestrol);
+        outro.delete();
+        if(outro!=null){
+            em.persist(outro);
         }else
             throw new MyEntityNotFoundException("Registo de outro nao foi encontrado");
     }

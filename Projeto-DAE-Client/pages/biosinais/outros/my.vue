@@ -88,7 +88,7 @@ export default {
   methods: {
     apagar: function (value){
 
-      this.$axios.$delete('/api/biosinais/outros/'+value)
+      this.$axios.$delete('/api/biosinais/outro/'+value)
         .then(() => {
           const indice = this.pesagem.findIndex(pesagem => pesagem.id === value)
           if (~indice)

@@ -17,6 +17,7 @@ import java.util.logging.Logger;
 @Entity
 public class Utilizador implements Serializable {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private String id;
 
     private String userName;
@@ -25,9 +26,7 @@ public class Utilizador implements Serializable {
     private Date data;
 
 
-    public Utilizador(String password,String email,String userName) {
-        this.id = System.currentTimeMillis()+"";
-
+    public Utilizador(String password, @Email String email,String userName) {
         this.password = hashPassword(password);
         this.email = email;
         this.userName = userName;

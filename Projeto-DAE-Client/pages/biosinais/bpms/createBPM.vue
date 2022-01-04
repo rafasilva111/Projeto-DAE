@@ -92,14 +92,14 @@ export default {
     create() {
 
 
-      this.$axios.$post('/api/biosinais/colestrol/'+this.user.id+'/create', {
+      this.$axios.$post('/api/biosinais/bpm/'+this.user.id+'/create', {
         value: [this.colestrol,0],
 
         descricao: this.descricao
       })
         .then(() => {
 
-          this.$router.push('/biosinais/colestrol/my')
+          this.$router.push('/biosinais/bpm/my')
         })
         .catch(error => {
           this.errorMsg = error.response.data
