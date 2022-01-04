@@ -158,6 +158,9 @@ public class UtilizadorNormal extends Utilizador implements Serializable {
        }
 
     }
+
+
+
     public void remove(Pesagem colestrol) {
 
        if (this.pesagemList.contains(colestrol)){

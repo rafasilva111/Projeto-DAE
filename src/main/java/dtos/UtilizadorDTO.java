@@ -15,7 +15,6 @@ public class UtilizadorDTO implements Serializable {
     private String data;
     private String tipo;
     private List<SinalBiomedicoDTO> mysignals;
-    private List<DocumentDTO> documents;
     private String doutorUsername;
 
 
@@ -68,15 +67,8 @@ public class UtilizadorDTO implements Serializable {
         this.mysignals = mysignals;
     }
 
-    public List<DocumentDTO> getDocuments() {
-        return documents;
-    }
 
-    public void setDocuments(List<DocumentDTO> documents) {
-        this.documents = documents;
-    }
-
-    public UtilizadorDTO(String id, String password, String email, Date data, String userName, UserType utilizadorNormal, List<SinalBiomedicoDTO> preencher) {
+    public UtilizadorDTO() {
     }
 
     public String getId() {

@@ -53,15 +53,17 @@ public class UtilizadorNormalService {
 
     }
     private UtilizadorDTO toDTOcomRegistos(UtilizadorNormal utilizadorNormal) {
-        System.out.println("aqui aqui+"+utilizadorNormal.getDocuments());
+        //todo needs to be implemeted agaian, is calling empty construct
+
         return new UtilizadorDTO(
                 utilizadorNormal.getId(),
                 utilizadorNormal.getPassword(),
                 utilizadorNormal.getEmail(),
                 utilizadorNormal.getData(),
                 utilizadorNormal.getUserName(),
-                UserType.UtilizadorNormal,preencher(utilizadorNormal)
-                );
+                UserType.UtilizadorNormal,
+                utilizadorNormal.getDoctor()==null ?"":utilizadorNormal.getDoctor().getUserName());
+
     }
     private DoutorDTO toDTOcomRegistosDoutor(Doutor utilizadorNormal) {
         PrescricoesService ps = new PrescricoesService();
@@ -215,7 +217,6 @@ public class UtilizadorNormalService {
                         principal.getName().equals(username))) {
             return Response.status(Response.Status.FORBIDDEN).build();
         }
-
         if(securityContext.isUserInRole("Administrador")){
             Administrador doutor = adminBean.getUserByUsername(username);
             return Response.status(Response.Status.OK)
@@ -228,16 +229,17 @@ public class UtilizadorNormalService {
                     .entity(toDTOcomRegistosDoutor(doutor))
                     .build();
         }
+
         UtilizadorNormal student = utilizadorNormalBean.getUserByUsername(username);
         if(student == null) {
             throw new MyEntityNotFoundException("Student with username " +
                     username + " not found.");
 
         }
-        System.out.println(toDTOcomRegistos(student).toString());
+
 
         return Response.status(Response.Status.OK)
-                .entity(toDTOcomRegistos(student))
+                .entity(toDTOsemRegistos(student))
                 .build();
     }
 
