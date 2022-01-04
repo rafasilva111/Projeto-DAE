@@ -8,8 +8,12 @@ import java.util.Date;
 
 @NamedQueries({
         @NamedQuery(
+                name = "getColestrolRegisters",
+                query = "SELECT s FROM Colestrol s WHERE S.deleted = FALSE ORDER BY s.id  " // JPQL
+        ),
+        @NamedQuery(
                 name = "getAllColestrolRegisters",
-                query = "SELECT s FROM Colestrol s ORDER BY s.id" // JPQL
+                query = "SELECT s FROM Colestrol s ORDER BY s.id  " // JPQL
         ),
 })
 @Entity

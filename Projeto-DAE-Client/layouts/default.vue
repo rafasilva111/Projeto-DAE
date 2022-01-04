@@ -14,7 +14,6 @@
             <b-dropdown-item @click.prevent="goPesagem">Peso/Altura</b-dropdown-item>
             <b-dropdown-item @click.prevent="goBPM">BPM's</b-dropdown-item>
             <b-dropdown-item @click.prevent="goOutro">Outros Sinais</b-dropdown-item>
-            <b-dropdown-item @click.prevent="goMyFiles">Ficheiros Partilhados</b-dropdown-item>
           </b-nav-item-dropdown>
 
           <li class="nav-item" v-if="superUser || doctor">

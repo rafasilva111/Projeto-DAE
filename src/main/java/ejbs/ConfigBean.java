@@ -74,8 +74,12 @@ public class ConfigBean {
 
         OutroCategories outroCat = outroCategoriesBean.create("Temperatura Corporal",(float) 14.1,(float) 12.1);
 
+        OutroCategories outroCat2 = outroCategoriesBean.create("Numero de unhas cortadas",(float) 0,(float) 21);
+
 
         outroBean.create((float) 123,"curti",utilzador1.getId(),outroCat.getId());
+        outroBean.create((float) 21,"não curti",utilzador1.getId(),outroCat2.getId());
+        outroBean.create((float) 12,"curti",utilzador1.getId(),outroCat.getId());
 
         System.out.println();
     }

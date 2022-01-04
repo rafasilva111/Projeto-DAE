@@ -31,7 +31,7 @@ public class ColestrolBean {
         }catch (MyEntityNotFoundException e){
             System.err.print(e.getMessage());
         }
-        int count = getAllColestrol().size();
+        int count = getColestrol().size();
 
         Colestrol colestrol = null;
         if (nivelColestrol<200) {
@@ -57,9 +57,17 @@ public class ColestrolBean {
     public List<Colestrol> getAllColestrol(){
         return (List<Colestrol>) em.createNamedQuery("getAllColestrolRegisters").getResultList();
     }
-    public Colestrol find(String id){
 
-        return em.find(Colestrol.class,id);
+    public List<Colestrol> getColestrol(){
+        return (List<Colestrol>) em.createNamedQuery("getColestrolRegisters").getResultList();
+    }
+    public Colestrol find(String id){
+        Colestrol colestrol = em.find(Colestrol.class,id);
+        if (colestrol.isDeleted()){
+            throw new MyEntityNotFoundException("Registo de colestrol nao foi encontrado id: "+id);
+        }
+
+        return colestrol;
     }
 
     public void update(String idColestrol, SinalBiomedicoDTO sinalBiomedicoDTO) {
@@ -87,21 +95,17 @@ public class ColestrolBean {
 
     public void delete(String idColestrol) {
         Colestrol colestrol = em.find(Colestrol.class, idColestrol);
-        UtilizadorNormal utilizador = em.find(UtilizadorNormal.class,colestrol.getUtilizadorNormal().getId());
-        utilizador.remove(colestrol);
+        colestrol.delete();
+        UtilizadorNormal utilizadorNormal = em.find(UtilizadorNormal.class,colestrol.getUtilizadorNormal().getId());
+        utilizadorNormal.remove(colestrol);
+        em.persist(utilizadorNormal);
 
         if(colestrol!=null){
-            em.detach(colestrol);
+            em.persist(colestrol);
 
         }else
             throw new MyEntityNotFoundException("Registo de colestrol nao foi encontrado");
 
-        int isSuccessful = em.createQuery("delete from SinalBiomedico p where p.id = :id ")
-                .setParameter("id", idColestrol)
-                .executeUpdate();
-        if (isSuccessful == 0) {
-            throw new OptimisticLockException(" product modified concurrently");
-        }
-
     }
+
 }

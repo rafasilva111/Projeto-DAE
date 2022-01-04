@@ -32,9 +32,9 @@ public class OutroCategoriesBean {
     public List<OutroCategories> getAllCatagories(){
         return (List<OutroCategories>) em.createNamedQuery("getAllOutroCatRegisters").getResultList();
     }
-    public Colestrol find(String id){
+    public OutroCategories find(String id){
 
-        return em.find(Colestrol.class,id);
+        return em.find(OutroCategories.class,id);
     }
 
     public void update(String idOutroCat, OutroCategoriesDTO sinalBiomedicoDTO) {

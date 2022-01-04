@@ -19,7 +19,7 @@
         </template>
       </b-table>
       <b-row >
-        <b-col lg="6" class="pb-4"><nuxt-link   class="btn btn-dark btn-sm" to="/biosinais/pesagem/createPesagem"  >Inserir Registo</nuxt-link></b-col>
+        <b-col lg="6" class="pb-4"><nuxt-link v-if="doctor"   class="btn btn-dark btn-sm" to="/biosinais/pesagem/createPesagem"  >Inserir Registo</nuxt-link></b-col>
 
       </b-row>
     </b-container>
@@ -111,13 +111,11 @@ export default {
 
       this.$axios.$delete('/api/biosinais/pesagem/'+value)
         .then(() => {
-          this.$axios.$get('/api/biosinais/pesagem/'+this.user.id)
-            .then((pesagem) => {
-              this.pesagem = pesagem
-            })
-
-
+          const indice = this.pesagem.findIndex(pesagem => pesagem.id === value)
+          if (~indice)
+            this.pesagem.splice(indice, 1)
         })
+    },
   },
     IMCcomputed: function (altura,peso) {
       // `this` points to the vm instance
@@ -125,10 +123,18 @@ export default {
       return peso*(altura*altura);
     },
 
-  },
+
   computed: {
     // a computed getter
 
+    doctor() {
+      if (this.$auth.user.groups =="Doutor"){
+        return true;
+      }
+      else {
+        return false;
+      }
+    },
   }
 }
 </script>

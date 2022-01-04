@@ -6,7 +6,7 @@
           <div class="p-3" style="width: 600px; display: table-cell; ">
             <b-container class="modal-content rounded-4 shadow p-4" fluid="sm">
               <h1 class="pb-4" style="text-align:center">{{outro.name}}</h1>
-              <b-table striped :items="pesagem" :fields="fields" style="float:left;">
+              <b-table striped :items="qualquer(outro.name)" :fields="fields" style="float:left;">
                 <template v-slot:cell(actions)="row">
                   <nuxt-link
                     class="btn btn-dark btn-sm"
@@ -17,15 +17,12 @@
                     @click="apagar(row.item.id)">Apagar
                   </button>
                 </template>
-                <template v-slot:cell(IMC)="row">
-                  {{ IMCcomputed(row.item.height, row.item.weight) }}
-                </template>
               </b-table>
               <b-row>
                 <b-col lg="6" class="pb-4">
-                  <nuxt-link class="btn btn-dark btn-sm" to="/biosinais/pesagem/createPesagem">Inserir Registo
+                  <nuxt-link class="btn btn-dark btn-sm" v-if="doctor" :to="`/biosinais/outros/${outro.id}/create/`">Inserir Registo
                   </nuxt-link>
-                  <button  class="btn btn-danger btn-sm float-right" to="/biosinais/pesagem/createPesagem">Eliminar Tipo
+                  <button  class="btn btn-danger btn-sm" to="/biosinais/pesagem/createPesagem">Eliminar Tipo
                   </button>
                 </b-col>
               </b-row>
@@ -35,9 +32,9 @@
 
         </div>
       </div>
-      <div>
+      <div class="p-3">
         <b-container>
-          <div>
+          <div >
             <b-button class="btn btn-dark btn-sm" float @click.prevent="adicionarTipo">Adicionar novo tipo de dado Biomedico</b-button>
           </div>
         </b-container>
@@ -55,11 +52,10 @@ export default {
       ready: false,
       labels: [],
       data: [],
-
-      users: [1,2,3],
       fields: [
+
         {
-          key: 'name',
+          key: 'date',
           label: 'Utente',
         },
         {
@@ -67,20 +63,8 @@ export default {
           label: 'Data',
         },
         {
-          key: 'value[0]',
-          label: 'Altura',
-        },
-        {
-          key: 'value[1]',
-          label: 'Peso',
-        },
-        {
-          key: 'value[2]',
-          label: 'IMC',
-        },
-        {
-          key: 'classification',
-          label: 'Classificação',
+          key: 'value',
+          label: 'Valor medido',
         },
         {
           key: 'descricao',
@@ -104,35 +88,45 @@ export default {
           .then((outrosCat) => {
             this.outrosCat = outrosCat
           })
+        this.$axios.$get('/api/biosinais/outro')
+         .then((outros) => {
+        this.data = outros
+      })
   },
 
   methods: {
     apagar: function (value) {
 
-      this.$axios.$delete('/api/biosinais/pesagem/' + value)
+      this.$axios.$delete('/api/biosinais/outro/'+value)
         .then(() => {
-          this.$axios.$get('/api/biosinais/pesagem/' + this.user.id)
-            .then((pesagem) => {
-              this.pesagem = pesagem
-            })
-
-
+          const indice = this.data.findIndex(pesagem => pesagem.id === value)
+          if (~indice)
+            this.data.splice(indice, 1)
         })
-    },
-    IMCcomputed: function (altura, peso) {
-      // `this` points to the vm instance
-      console.log(altura + " " + peso);
-      return peso * (altura * altura);
     },
 
     adicionarTipo(){
+      this.$router.push('/admin/biosinais/create')
+    },
+    qualquer(value){
 
+      return this.data.filter(function (el){
+        return el.name ==value;
+      });
     }
 
   },
   computed: {
     // a computed getter
 
+    doctor() {
+      if (this.$auth.user.groups =="Doutor"){
+        return true;
+      }
+      else {
+        return false;
+      }
+    },
   }
 }
 </script>

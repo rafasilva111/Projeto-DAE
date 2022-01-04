@@ -64,9 +64,16 @@ public class SinaisBiomedicosService {
 
     @GET // means: to call this endpoint, we need to use the HTTP GET method
     @Path("/colestrol/")
-    @RolesAllowed({"Administrador","Doutor"})
+    @RolesAllowed({"Doutor"})
+    public List<SinalBiomedicoDTO> getColestrolRegisters() {
+        return toDTOsColestrol(colestrolBean.getColestrol());
+    }
+
+    @GET // means: to call this endpoint, we need to use the HTTP GET method
+    @Path("/colestrol/")
+    @RolesAllowed({"Administrador"})
     public List<SinalBiomedicoDTO> getAllColestrolRegisters() {
-        return toDTOsColestrol(colestrolBean.getAllColestrol());
+        return toDTOsColestrol(colestrolBean.getColestrol());
     }
     @GET // means: to call this endpoint, we need to use the HTTP GET method
     @Path("/colestrol/{id}/graph")
@@ -81,9 +88,12 @@ public class SinaisBiomedicosService {
 
             for (Colestrol colestrol:utilizadorNormal.getColestrolList()
             ) {
-                data.add(colestrol.getNivelColestrol());
-                label.add(new SimpleDateFormat("kk:mm dd/MM/yyyy").format(colestrol.getDate()));
-            }
+                if (colestrol.isDeleted()){
+                    data.add(colestrol.getNivelColestrol());
+                    label.add(new SimpleDateFormat("kk:mm dd/MM/yyyy").format(colestrol.getDate()));
+
+                }
+          }
 
             return Response.status(Response.Status.OK)
                     .entity(new GraphDTO(data,label))
@@ -109,9 +119,12 @@ public class SinaisBiomedicosService {
             if (u != null) {
                 for (Colestrol colestrol:u.getColestrolList()
                 ) {
-                    data.add(colestrol.getNivelColestrol());
-                    label.add(new SimpleDateFormat("kk:mm dd/MM/yyyy").format(colestrol.getDate()));
-                }
+                    if (!colestrol.isDeleted()){
+                        data.add(colestrol.getNivelColestrol());
+                        label.add(new SimpleDateFormat("kk:mm dd/MM/yyyy").format(colestrol.getDate()));
+
+                    }
+                      }
             }
         }
         if (all != null){
@@ -127,7 +140,7 @@ public class SinaisBiomedicosService {
     }
     @GET
     @Path("/colestrol/{id}")
-    @RolesAllowed({"UtilizadorNormal","Administrador"})
+    @RolesAllowed({"UtilizadorNormal","Administrador","Doutor"})
     public Response getColestrolByUser(@PathParam("id") String idUtilizador){
         UtilizadorNormal utilizadorNormal = utilizadorBean.find(idUtilizador);
 
@@ -212,9 +225,12 @@ public class SinaisBiomedicosService {
 
             for (Pesagem pesagem:utilizadorNormal.getPesagemList()
             ) {
-                data.add(pesagem.getIMC());
-                label.add(new SimpleDateFormat("kk:mm dd/MM/yyyy").format(pesagem.getDate()));
-            }
+                if (!pesagem.isDeleted()){
+                    data.add(pesagem.getIMC());
+                    label.add(new SimpleDateFormat("kk:mm dd/MM/yyyy").format(pesagem.getDate()));
+
+                }
+        }
 
             return Response.status(Response.Status.OK)
                     .entity(new GraphDTO(data,label))
@@ -235,7 +251,7 @@ public class SinaisBiomedicosService {
     @Path("/pesagem/")
     public List<SinalBiomedicoDTO> getAllPesagensRegisters() {
 
-        return toDTOsPesagem(pesagemBean.getAllPesagens());
+        return toDTOsPesagem(pesagemBean.getPesagemRegisters());
     }
 
     @GET
@@ -276,9 +292,12 @@ public class SinaisBiomedicosService {
             if (u != null) {
                 for (Pesagem pesagem:u.getPesagemList()
                 ) {
-                    data.add(pesagem.getIMC());
-                    label.add(new SimpleDateFormat("kk:mm dd/MM/yyyy").format(pesagem.getDate()));
-                }
+                    if (!pesagem.isDeleted()){
+                        data.add(pesagem.getIMC());
+                        label.add(new SimpleDateFormat("kk:mm dd/MM/yyyy").format(pesagem.getDate()));
+                    }
+
+               }
             }
         }
         if (all2 != null){
@@ -349,7 +368,7 @@ public class SinaisBiomedicosService {
     @GET // means: to call this endpoint, we need to use the HTTP GET method
     @Path("/bpm/")
     public List<SinalBiomedicoDTO> getAllBPMSRegisters() {
-        return toDTOsBPM(bpmBean.getAllBPM());
+        return toDTOsBPM(bpmBean.getBpmRegisters());
     }
 
     @GET
@@ -387,9 +406,13 @@ public class SinaisBiomedicosService {
             if (u != null) {
                 for (BPM pesagem:u.getBpmList()
                 ) {
+                    if (!pesagem.isDeleted()){
                     data.add((float) pesagem.getNumeroBatimentos());
                     label.add(new SimpleDateFormat("kk:mm dd/MM/yyyy").format(pesagem.getDate()));
+
+                    }
                 }
+
             }
         }
         if (all3 != null){
@@ -416,9 +439,11 @@ public class SinaisBiomedicosService {
 
             for (BPM pesagem:utilizadorNormal.getBpmList()
             ) {
-                data.add((float) pesagem.getNumeroBatimentos());
-                label.add(new SimpleDateFormat("kk:mm dd/MM/yyyy").format(pesagem.getDate()));
-            }
+                if (!pesagem.isDeleted()) {
+                    data.add((float) pesagem.getNumeroBatimentos());
+                    label.add(new SimpleDateFormat("kk:mm dd/MM/yyyy").format(pesagem.getDate()));
+
+                }}
 
             return Response.status(Response.Status.OK)
                     .entity(new GraphDTO(data,label))
@@ -468,7 +493,7 @@ public class SinaisBiomedicosService {
                 outro.getDate(),
                 outro.getName(),
                 outro.getValue()+"",
-                outro.getUtilizadorNormal().getId(),
+                outro.getUtilizadorNormal().getUserName(),
                 outro.getOutroCategories().getId(),
                 outro.getDescricao()
         );
@@ -480,11 +505,13 @@ public class SinaisBiomedicosService {
         return outros.stream().map(this::toDTO).collect(Collectors.toList());
     }
 
+
     @GET // means: to call this endpoint, we need to use the HTTP GET method
     @Path("/outro/")
+    @RolesAllowed({"Administrador","Doutor"})
     public List<SinalBiomedicoOutroDTO> getAllOutroRegisters() {
 
-        return toDTOsOutro(outroBean.getAllOutros());
+        return toDTOsOutro(outroBean.getBpmRegisters());
     }
 
     @GET
@@ -510,14 +537,14 @@ public class SinaisBiomedicosService {
     }
 
     @POST
-    @Path("/bpm/{idOutro}/create")
+    @Path("/outro/{idOutro}/create")
     public Response createOutro (@PathParam("idOutro") String idUtilizador,  SinalBiomedicoOutroDTO sinalBiomedicoDTO) throws MyEntityNotFoundException{
         outroBean.create(Float.parseFloat(sinalBiomedicoDTO.getValue()),sinalBiomedicoDTO.getDescricao(),idUtilizador,sinalBiomedicoDTO.getOutroCategoriesID());
         return Response.status(Response.Status.CREATED).build();
     }
 
     @PUT
-    @Path("/bpm/{idOutro}")
+    @Path("/outro/{idOutro}")
     public Response updateOutro (@PathParam("idOutro") String idBpm, SinalBiomedicoDTO sinalBiomedicoDTO) throws MyEntityNotFoundException {
 
         outroBean.update(idBpm, sinalBiomedicoDTO);
@@ -527,9 +554,9 @@ public class SinaisBiomedicosService {
     }
 
     @DELETE
-    @Path("/bpm/{idOutro}")
+    @Path("/outro/{idOutro}")
     public Response deleteOutro (@PathParam("idOutro") String idPesagem) throws MyEntityNotFoundException {
-        bpmBean.delete(idPesagem);
+        outroBean.delete(idPesagem);
 
         return Response.status(Response.Status.ACCEPTED).build();
     }

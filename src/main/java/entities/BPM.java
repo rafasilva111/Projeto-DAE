@@ -9,8 +9,12 @@ import java.util.Date;
 
 @NamedQueries({
         @NamedQuery(
-                name = "getAllBPMRegisters",
-                query = "SELECT s FROM BPM s ORDER BY s.id" // JPQL
+                name = "getBpmRegisters",
+                query = "SELECT s FROM BPM s WHERE S.deleted = FALSE ORDER BY s.id  " // JPQL
+        ),
+        @NamedQuery(
+                name = "getAllBpmRegisters",
+                query = "SELECT s FROM BPM s ORDER BY s.id  " // JPQL
         ),
 })
 @Entity
