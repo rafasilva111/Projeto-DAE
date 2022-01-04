@@ -13,6 +13,7 @@ import java.util.Date;
 @Entity
 public class Prescricao implements Serializable {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private String id;
     private Date dataInicio;
     private Date dataFim;

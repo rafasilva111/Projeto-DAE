@@ -64,8 +64,8 @@ public class ConfigBean {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        prescricaoBean.create(dateFim, Prescricao.TypePrescricoes.Medica,"Tens de comar x comprimidos",utilzador1.getId(),doutor.getId());
-        prescricaoBean.create(dateFim, Prescricao.TypePrescricoes.Medica,"Tens de comar x comprimidos",utilzador1.getId(),doutor.getId());
+        prescricaoBean.create(dateFim, "","Tens de comar x comprimidos",utilzador1.getId(),doutor.getId());
+        prescricaoBean.create(dateFim, "","Tens de comar x comprimidos",utilzador1.getId(),doutor.getId());
 
         Date dateFim2 = null;
         try {
@@ -73,8 +73,8 @@ public class ConfigBean {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        prescricaoBean.create(dateFim, Prescricao.TypePrescricoes.Exercicio,"Tens de comar x comprimidos",utilzador1.getId(),doutor.getId());
-        prescricaoBean.create(dateFim2, Prescricao.TypePrescricoes.Medica,"Tens de comar x comprimidos",utilzador1.getId(),doutor.getId());
+        prescricaoBean.create(dateFim, "","Tens de comar x comprimidos",utilzador1.getId(),doutor.getId());
+        prescricaoBean.create(dateFim2, "","Tens de comar x comprimidos",utilzador1.getId(),doutor.getId());
 
         OutroCategories outroCat = outroCategoriesBean.create("Temperatura Corporal",(float) 14.1,(float) 12.1);
 
