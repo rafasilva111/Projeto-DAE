@@ -95,6 +95,9 @@ public class BPMBean {
     public void delete(String idBPM) {
         BPM colestrol = em.find(BPM.class, idBPM);
 
+        UtilizadorNormal utilizadorNormal = em.find(UtilizadorNormal.class,colestrol.getUtilizadorNormal().getId());
+        utilizadorNormal.remove(colestrol);
+        em.persist(utilizadorNormal);
 
         if(colestrol!=null){
             em.persist(colestrol);
