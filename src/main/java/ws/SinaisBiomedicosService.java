@@ -88,7 +88,8 @@ public class SinaisBiomedicosService {
 
             for (Colestrol colestrol:utilizadorNormal.getColestrolList()
             ) {
-                if (colestrol.isDeleted()){
+
+                if (!colestrol.isDeleted()){
                     data.add(colestrol.getNivelColestrol());
                     label.add(new SimpleDateFormat("kk:mm dd/MM/yyyy").format(colestrol.getDate()));
 
@@ -111,7 +112,6 @@ public class SinaisBiomedicosService {
     @RolesAllowed({"Administrador","Doutor"})
     public Response getDataForGraph() {
         List<UtilizadorNormal> all = utilizadorBean.getAllNormalUsers();
-        System.out.println("Are you Here ?");
         List<Float> data = new LinkedList<>();
         List<String> label = new LinkedList<>();
         for (UtilizadorNormal u: all
@@ -168,8 +168,6 @@ public class SinaisBiomedicosService {
     @Path("/colestrol/{idUtilizador}/create")
     public Response createColestrol (@PathParam("idUtilizador") String idUtilizador,  SinalBiomedicoDTO sinalBiomedicoDTO) throws MyEntityNotFoundException{
 
-
-        System.out.println("aqui aqui"+ sinalBiomedicoDTO.getValue());
         colestrolBean.create(Float.parseFloat(sinalBiomedicoDTO.getValue().get(1)),idUtilizador, sinalBiomedicoDTO.getDescricao());
         return Response.status(Response.Status.CREATED).build();
     }
@@ -221,8 +219,6 @@ public class SinaisBiomedicosService {
         if (utilizadorNormal != null) {
             List<Float> data = new LinkedList<>();
             List<String> label = new LinkedList<>();
-
-
             for (Pesagem pesagem:utilizadorNormal.getPesagemList()
             ) {
                 if (!pesagem.isDeleted()){
@@ -284,7 +280,6 @@ public class SinaisBiomedicosService {
 
         List<UtilizadorNormal> all2 = utilizadorBean.getAllNormalUsers();
 
-        System.out.println("Are you Here ?");
         List<Float> data = new LinkedList<>();
         List<String> label = new LinkedList<>();
         for (UtilizadorNormal u: all2

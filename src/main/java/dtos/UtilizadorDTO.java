@@ -118,4 +118,12 @@ public class UtilizadorDTO implements Serializable {
     public void setTipo(String tipo) {
         this.tipo = tipo;
     }
+
+    public String getDoutorUsername() {
+        return doutorUsername;
+    }
+
+    public void setDoutorUsername(String doutorUsername) {
+        this.doutorUsername = doutorUsername;
+    }
 }

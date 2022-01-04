@@ -66,10 +66,6 @@ public class UtilizadorNormal extends Utilizador implements Serializable {
         return documents;
     }
 
-    public void addDocument(Document document){
-        this.documents.add(document);
-    }
-
 
     public void setDocuments(List<Document> documents) {
         this.documents = documents;
@@ -146,6 +142,15 @@ public class UtilizadorNormal extends Utilizador implements Serializable {
            List<Colestrol> colestrols = this.getColestrolList();
            colestrols.remove(colestrol);
            this.colestrolList = colestrols;
+       }
+
+    }
+    public void remove(Outro outro) {
+
+       if (this.outrosList.contains(outro)){
+           List<Outro> outrosList = this.getOutrosList();
+           outrosList.remove(outro);
+           this.outrosList = outrosList;
        }
 
     }

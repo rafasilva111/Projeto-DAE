@@ -86,4 +86,16 @@ public class OutroCategories implements Serializable {
     public void setDate(Date date) {
         this.date = date;
     }
+
+
+
+    public void remove(Outro outro) {
+
+        if (this.outro.contains(outro)){
+            List<Outro> outros = this.getOutro();
+            outros.remove(outro);
+            this.outro = outros;
+        }
+
+    }
 }

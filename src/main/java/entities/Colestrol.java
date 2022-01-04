@@ -27,7 +27,7 @@ public class Colestrol extends SinalBiomedico implements Serializable {
         this.nivelColestrol = nivelColestrol;
     }
 
-    public Colestrol(long id, float nivelColestrol, UtilizadorNormal utilizadorNormal, Classification classification,String descricao) {
+    public Colestrol(float nivelColestrol, UtilizadorNormal utilizadorNormal, Classification classification,String descricao) {
         super(utilizadorNormal,classification,descricao);
         this.nivelColestrol = nivelColestrol;
 

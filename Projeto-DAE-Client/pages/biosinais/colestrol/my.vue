@@ -138,6 +138,13 @@ export default {
           const indice = this.colestrol.findIndex(pesagem => pesagem.id === value)
           if (~indice)
             this.colestrol.splice(indice, 1)
+          this.$axios.$get('/api/biosinais/colestrol/'+this.user.id+'/graph')
+            .then((graph) => {
+              this.labels = graph.label
+              this.data = graph.data
+              this.ready = true
+
+            })
         })
   },
 
