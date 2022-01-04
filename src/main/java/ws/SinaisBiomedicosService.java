@@ -168,8 +168,6 @@ public class SinaisBiomedicosService {
     @Path("/colestrol/{idUtilizador}/create")
     public Response createColestrol (@PathParam("idUtilizador") String idUtilizador,  SinalBiomedicoDTO sinalBiomedicoDTO) throws MyEntityNotFoundException{
 
-
-        System.out.println("aqui aqui"+ sinalBiomedicoDTO.getValue());
         colestrolBean.create(Float.parseFloat(sinalBiomedicoDTO.getValue().get(1)),idUtilizador, sinalBiomedicoDTO.getDescricao());
         return Response.status(Response.Status.CREATED).build();
     }
@@ -317,8 +315,6 @@ public class SinaisBiomedicosService {
         if (sinalBiomedicoDTO.getValue().size()!=2){
             throw new IndexOutOfBoundsException("Não foi enviado array com dois elementos "+ sinalBiomedicoDTO.getValue().size()+ sinalBiomedicoDTO.getValue().get(0));
         }
-
-
         pesagemBean.create(Float.parseFloat(sinalBiomedicoDTO.getValue().get(0).replace(',','.')),Float.parseFloat(sinalBiomedicoDTO.getValue().get(1).replace(',','.')) ,idUtilizador,sinalBiomedicoDTO.getDescricao());
         return Response.status(Response.Status.CREATED).build();
     }

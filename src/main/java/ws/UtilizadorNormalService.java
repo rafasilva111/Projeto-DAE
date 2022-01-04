@@ -5,10 +5,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.SecurityContext;
 
-import dtos.AdministradorDTO;
-import dtos.DoutorDTO;
-import dtos.SinalBiomedicoDTO;
-import dtos.UtilizadorDTO;
+import dtos.*;
 import ejbs.*;
 import entities.*;
 import entities.enums.UserType;
@@ -49,7 +46,7 @@ public class UtilizadorNormalService {
                 utilizadorNormal.getData(),
                 utilizadorNormal.getUserName(),
                 UserType.UtilizadorNormal,
-                utilizadorNormal.getDoctor()==null ?"":utilizadorNormal.getDoctor().getUserName());
+                utilizadorNormal.getDoctor()==null ?"":utilizadorNormal.getDoctor().getUserName(),utilizadorNormal.getDoctor().getId());
 
     }
     private UtilizadorDTO toDTOcomRegistos(UtilizadorNormal utilizadorNormal) {
@@ -62,7 +59,7 @@ public class UtilizadorNormalService {
                 utilizadorNormal.getData(),
                 utilizadorNormal.getUserName(),
                 UserType.UtilizadorNormal,
-                utilizadorNormal.getDoctor()==null ?"":utilizadorNormal.getDoctor().getUserName());
+                utilizadorNormal.getDoctor()==null ?"":utilizadorNormal.getDoctor().getUserName(),utilizadorNormal.getDoctor().getId());
 
     }
     private DoutorDTO toDTOcomRegistosDoutor(Doutor utilizadorNormal) {
@@ -243,4 +240,14 @@ public class UtilizadorNormalService {
                 .build();
     }
 
+    @POST
+    @Path("/new/create")
+    public Response createUser (UtilizadorDTO utilizadorDTO) throws MyEntityNotFoundException{
+
+        System.out.println(utilizadorDTO.getUsername());
+        System.out.println(utilizadorDTO.getDoutorId());
+        System.out.println("Here Bro");
+        utilizadorNormalBean.create(utilizadorDTO.getUsername(),utilizadorDTO.getPassword(),utilizadorDTO.getEmail(),utilizadorDTO.getDoutorId());
+        return Response.status(Response.Status.CREATED).build();
+    }
 }

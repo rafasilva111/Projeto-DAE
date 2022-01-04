@@ -1,8 +1,11 @@
 package ejbs;
 
 import entities.Doutor;
+import entities.Pesagem;
 import entities.Utilizador;
 import entities.UtilizadorNormal;
+import entities.enums.Classification;
+import exceptions.MyEntityNotFoundException;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -15,11 +18,18 @@ public class UtilizadorNormalBean {
     @PersistenceContext
     private EntityManager em;
 
-    public UtilizadorNormal create(String password, @Email String email, String username, Doutor doutor){
+    public UtilizadorNormal create( String username,String password,String email, String doutorId){
 
-        UtilizadorNormal utilizadorNormal = new UtilizadorNormal(password,email,username,doutor);
-
+        System.out.println(doutorId);
+        Doutor doc = em.find(Doutor.class,doutorId);
+        System.out.println(doc);
+        System.out.println("Dude");
+        UtilizadorNormal utilizadorNormal = new UtilizadorNormal(password,email,username,doc);
         em.persist(utilizadorNormal);
+
+        doc.addPatientsRegister(utilizadorNormal);
+        em.persist(doc);
+
         return  utilizadorNormal;
     };
 
@@ -38,5 +48,7 @@ public class UtilizadorNormalBean {
         System.out.println("aqui"+ name);
         return (UtilizadorNormal) em.createQuery("SELECT c FROM UtilizadorNormal c WHERE c.userName LIKE ?1").setParameter(1, name).getSingleResult();
     }
+
+
 
 }

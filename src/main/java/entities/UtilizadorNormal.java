@@ -42,7 +42,7 @@ public class UtilizadorNormal extends Utilizador implements Serializable {
 
     }
 
-    public UtilizadorNormal( String password,@Email String email,String username,Doutor doutor) {
+    public UtilizadorNormal( String password, String email,String username,Doutor doutor) {
         super( password, email,username);
         this.bpmList = new LinkedList<>();
         this.pesagemList = new LinkedList<>();
@@ -51,7 +51,7 @@ public class UtilizadorNormal extends Utilizador implements Serializable {
         this.doctor = doutor;
 
     }
-    public UtilizadorNormal( String password,@Email String email,String username) {
+    public UtilizadorNormal( String password, String email,String username) {
         super( password, email,username);
         this.bpmList = new LinkedList<>();
         this.pesagemList = new LinkedList<>();

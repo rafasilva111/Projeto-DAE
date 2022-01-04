@@ -60,26 +60,33 @@ export default {
           })
   },
   methods: {
+    create() {
+      this.$axios.$post('/api/user/new/create', {
+        username : this.username,
+
+        password : this.password,
+
+        email : this.email,
+
+        doutorId : this.selected.id
+
+      })
+        .then(() => {
+          console.log(this.selected.id,this.username,this.password,this.email)
+          this.$router.push('/auth/login/')
+        })
+        .catch(error => {
+          this.errorMsg = error.response.data
+        })
+    },
+
+
+
+
+
     onSubmit() {
-      let promise = this.$auth.loginWith('local', {
-        data: {
-          username: this.username,
-      password: this.password
-    }
-    })
-      promise.then(() => {
-        this.$toast.success('You are logged in!').goAway(3000)
-        // check if the user $auth.user object is set
-        console.log(this.$auth.user)
-        // TODO redirect based on the user role
-        // eg:
-        if (this.$auth.user.groups.includes('UtilizadorNormal') || this.$auth.user.groups.includes('Administrador')) {
-          this.$router.push('/')
-        }
-      })
-      promise.catch(() => {
-        this.$toast.error('Sorry, you cant register. Ensure your credentials are compliant').goAway(3000)
-      })
+      console.log(this.selected.id)
+      this.create()
     },
     onReset() {
       this.username = null

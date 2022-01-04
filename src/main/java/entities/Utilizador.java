@@ -21,12 +21,11 @@ public class Utilizador implements Serializable {
 
     private String userName;
     private String password;
-    @Email
     private String email;
     private Date data;
 
 
-    public Utilizador(String password, @Email String email,String userName) {
+    public Utilizador(String password,String email,String userName) {
         this.id = System.currentTimeMillis()+"";
 
         this.password = hashPassword(password);

@@ -27,6 +27,9 @@ public class Doutor extends Utilizador implements Serializable {
         this.prescricoes = new LinkedList<>();
     }
 
+    public void setPatients(List<UtilizadorNormal> patients) {
+        this.patients = patients;
+    }
 
     public Doutor() {
 
@@ -51,5 +54,8 @@ public class Doutor extends Utilizador implements Serializable {
 
     public void addPrescicaoRegister(Prescricao colestrol){
         this.prescricoes.add(colestrol);
+    }
+    public void addPatientsRegister(UtilizadorNormal utente){
+        this.patients.add(utente);
     }
 }

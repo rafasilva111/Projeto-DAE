@@ -38,9 +38,10 @@ public class ConfigBean {
     @PostConstruct
     public void populateDB() {
 
-        UtilizadorNormal utilzador1 = utilizadorNormalBean.create("rafa","rafa@gmail.com","rafael",null);
-        UtilizadorNormal utilzador2 = utilizadorNormalBean.create("rafa","rafa2@gmail.com","rafaelsilva",null);
         Doutor doutor = doutorBean.create("rafa","doctor@gmail.com","rafaelferreira");
+        UtilizadorNormal utilzador1 = utilizadorNormalBean.create("rafa","rafa@gmail.com","rafael",doutor.getId());
+        UtilizadorNormal utilzador2 = utilizadorNormalBean.create("rafa","rafa2@gmail.com","rafaelsilva",doutor.getId());
+
         Administrador administrador = adminBean.create("rafa","doctor@gmail.com","rafaelfrancisco");
 
 
