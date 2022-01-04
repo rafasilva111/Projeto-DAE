@@ -6,13 +6,18 @@ import java.util.Date;
 
 @NamedQueries({
         @NamedQuery(
+                name = "getPrescricoesRegisters",
+                query = "SELECT s FROM Prescricao s WHERE S.deleted = FALSE ORDER BY s.id  " // JPQL
+        ),
+        @NamedQuery(
                 name = "getAllPrescricoesRegisters",
-                query = "SELECT s FROM Prescricao s ORDER BY s.id" // JPQL
+                query = "SELECT s FROM Prescricao s ORDER BY s.id  " // JPQL
         ),
 })
 @Entity
 public class Prescricao implements Serializable {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private String id;
     private Date dataInicio;
     private Date dataFim;
@@ -23,6 +28,7 @@ public class Prescricao implements Serializable {
     @ManyToOne
     private Doutor doutor;
     private boolean enabled;
+    private boolean deleted;
 
 
 
@@ -101,6 +107,17 @@ public class Prescricao implements Serializable {
 
     public void setTipo(TypePrescricoes tipo) {
         this.tipo = tipo;
+    }
+
+    public void delete() {
+        this.deleted = true;
+    }
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 
     public enum  TypePrescricoes {

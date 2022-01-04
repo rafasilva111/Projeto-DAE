@@ -145,6 +145,17 @@ public class UtilizadorNormal extends Utilizador implements Serializable {
        }
 
     }
+
+    public void remove(Prescricao prescricao) {
+
+        if (this.prescricoesList.contains(prescricao)){
+            List<Prescricao> colestrols = this.getPrescricoesList();
+            colestrols.remove(prescricao);
+            this.prescricoesList = colestrols;
+        }
+
+    }
+
     public void remove(Outro outro) {
 
        if (this.outrosList.contains(outro)){

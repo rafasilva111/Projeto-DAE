@@ -34,7 +34,7 @@
           <li class="nav-item" v-if="superUser || doctor">
             <nuxt-link class="nav-link" to="/listings/doutores" >Doutores</nuxt-link>
           </li>
-          <li class="nav-item" v-if="superUser || doctor">
+          <li class="nav-item" v-if="superUser ">
             <nuxt-link class="nav-link" to="/listings/admins" >Administradores</nuxt-link>
           </li>
 

@@ -7,7 +7,7 @@
         <template v-slot:cell(actions)="row">
                             <nuxt-link
                               class="btn btn-dark btn-sm"
-                              :to="`/biosinais/colestrol/${row.item.id}/updateColestrol`">Atualizar</nuxt-link>
+                              :to="`/prescricoes/${row.item.id}/updatePrescricao`">Atualizar</nuxt-link>
                             <button
                               class="btn btn-danger btn-sm" cli
                               @click="apagar(row.item.id)">Apagar</button>

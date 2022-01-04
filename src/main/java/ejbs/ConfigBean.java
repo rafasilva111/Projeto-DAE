@@ -39,8 +39,8 @@ public class ConfigBean {
     public void populateDB() {
 
         Doutor doutor = doutorBean.create("rafa","doctor@gmail.com","rafaelferreira");
-        UtilizadorNormal utilzador1 = utilizadorNormalBean.create("rafa","rafa@gmail.com","rafael",doutor.getId());
-        UtilizadorNormal utilzador2 = utilizadorNormalBean.create("rafa","rafa2@gmail.com","rafaelsilva",doutor.getId());
+        UtilizadorNormal utilzador1 = utilizadorNormalBean.create("rafa","rafael","rafa@gmail.com",doutor.getId());
+        UtilizadorNormal utilzador2 = utilizadorNormalBean.create("rafael","rafaelsilva","rafa2@gmail.com",doutor.getId());
 
         Administrador administrador = adminBean.create("rafa","doctor@gmail.com","rafaelfrancisco");
 
@@ -61,8 +61,8 @@ public class ConfigBean {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        prescricaoBean.create(dateFim, Prescricao.TypePrescricoes.Medica,"Tens de comar x comprimidos",utilzador1.getId(),doutor.getId());
-        prescricaoBean.create(dateFim, Prescricao.TypePrescricoes.Medica,"Tens de comar x comprimidos",utilzador1.getId(),doutor.getId());
+        prescricaoBean.create(dateFim, "","Tens de comar x comprimidos",utilzador1.getId(),doutor.getId());
+        prescricaoBean.create(dateFim, "","Tens de comar x comprimidos",utilzador1.getId(),doutor.getId());
 
         Date dateFim2 = null;
         try {
@@ -70,8 +70,8 @@ public class ConfigBean {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        prescricaoBean.create(dateFim, Prescricao.TypePrescricoes.Exercicio,"Tens de comar x comprimidos",utilzador1.getId(),doutor.getId());
-        prescricaoBean.create(dateFim2, Prescricao.TypePrescricoes.Medica,"Tens de comar x comprimidos",utilzador1.getId(),doutor.getId());
+        prescricaoBean.create(dateFim, "","Tens de comar x comprimidos",utilzador1.getId(),doutor.getId());
+        prescricaoBean.create(dateFim2, "","Tens de comar x comprimidos",utilzador1.getId(),doutor.getId());
 
         OutroCategories outroCat = outroCategoriesBean.create("Temperatura Corporal",(float) 14.1,(float) 12.1);
 

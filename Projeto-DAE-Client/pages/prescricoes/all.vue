@@ -7,7 +7,7 @@
         <template v-slot:cell(actions)="row">
                     <nuxt-link
                       class="btn btn-dark btn-sm"
-                      :to="`/biosinais/colestrol/${row.item.id}/updateColestrol`">Atualizar</nuxt-link>
+                      :to="`/prescricoes/${row.item.id}/updatePrescricao`">Atualizar</nuxt-link>
                     <button
                       class="btn btn-danger btn-sm" cli
                       @click="apagar(row.item.id)">Apagar</button>
@@ -48,23 +48,43 @@ export default {
 
     }
   },
+
   created () {
 
     this.$axios.$get('/api/user/'+this.$auth.user.sub+'/registers')
       .then((user) => {
         this.user = user
-        this.$axios.$get('/api/prescricoes/doutor/'+this.user.id)
-          .then((colestrol) => {
-            this.colestrol =
-              colestrol
-              console.log(colestrol);
-          })
+        console.log(this.$auth.user.groups)
+        if (this.$auth.user.groups =="Administrador"){
+          this.$axios.$get('/api/prescricoes/')
+            .then((colestrol) => {
+              this.colestrol =
+                colestrol
+            })
+
+        }
+        else{
+          this.$axios.$get('/api/prescricoes/doutor/'+this.user.id)
+            .then((colestrol) => {
+              this.colestrol =
+                colestrol
+            })
+        }
+
 
       })
   },
 
   methods: {
+    apagar: function (value){
 
+      this.$axios.$delete('/api/prescricoes/'+value)
+        .then(() => {
+          const indice = this.colestrol.findIndex(pesagem => pesagem.id === value)
+          if (~indice)
+            this.colestrol.splice(indice, 1)
+        })
+    },
     historico: function (row){
 
       var hoje = (row.dataFim).split("/",3)

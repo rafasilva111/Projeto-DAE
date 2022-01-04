@@ -58,4 +58,14 @@ public class Doutor extends Utilizador implements Serializable {
     public void addPatientsRegister(UtilizadorNormal utente){
         this.patients.add(utente);
     }
+
+    public void remove(Prescricao prescricao) {
+
+        if (this.prescricoes.contains(prescricao)){
+            List<Prescricao> colestrols = this.getPrescricoes();
+            colestrols.remove(prescricao);
+            this.prescricoes = colestrols;
+        }
+
+    }
 }
