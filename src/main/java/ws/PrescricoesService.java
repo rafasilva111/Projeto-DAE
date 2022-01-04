@@ -19,6 +19,7 @@ import javax.management.relation.Role;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -61,7 +62,7 @@ public class PrescricoesService {
     @RolesAllowed({"Administrador","Doutor"})
     public List<PrescricaoDTO> getAllPrescricoesRegisters() {
 
-        return toDTOsPrescricoes(prescricaoBean.getAllPrescricoes());
+        return toDTOsPrescricoes(prescricaoBean.getPrescricoes());
     }
     @GET // means: to call this endpoint, we need to use the HTTP GET method
     @Path("/{id}/graph")
@@ -115,6 +116,13 @@ public class PrescricoesService {
     public Response getPrescricaoByDoctor(@PathParam("id") String idUtilizador){
         Doutor utilizadorNormal = doutorBean.find(idUtilizador);
         List<Prescricao> pes = prescricaoBean.getUserByUsername(idUtilizador);
+        List<Prescricao> helper = new LinkedList<>();
+        for (Prescricao help:pes
+             ) {
+            if (!help.isDeleted()){
+               helper.add(help);
+            }
+        }
         if(pes.isEmpty()){
             return Response.status(Response.Status.OK)
                 .entity("")
@@ -123,7 +131,7 @@ public class PrescricoesService {
 
         if (utilizadorNormal != null) {
             return Response.status(Response.Status.OK)
-                    .entity(toDTOsPrescricoes(pes))
+                    .entity(toDTOsPrescricoes(helper))
                     .build();
 
         }
@@ -139,8 +147,24 @@ public class PrescricoesService {
     @Path("/{id}/create")
     @RolesAllowed({"Administrador","Doutor"})
     public Response createPrescricao (@PathParam("id") String idUtilizador,  PrescricaoDTO prescricaoDTO) throws MyEntityNotFoundException{
+        String[]  helper= null;
+        if(prescricaoDTO.getDataFim().contains(" ")){
+             helper=prescricaoDTO.getDataFim().split(" ");
+        }
+        if(prescricaoDTO.getDataFim().contains("/")){
+            helper=prescricaoDTO.getDataFim().split("/");
+        }
 
-        prescricaoBean.create(new Date(prescricaoDTO.getDataFim()),prescricaoDTO.getTipo(),prescricaoDTO.getDescricao(), prescricaoDTO.getUtilizadorNormalId(),prescricaoDTO.getDoutorId());
+        SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd");
+        Date date = null;
+
+        try{
+            date = ft.parse(helper[2]+"-"+helper[1]+"-"+helper[0]);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        prescricaoBean.create(date,prescricaoDTO.getTipo(),prescricaoDTO.getDescricao(), prescricaoDTO.getUtilizadorNormalId(),prescricaoDTO.getDoutorId());
         return Response.status(Response.Status.CREATED).build();
     }
 

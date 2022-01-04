@@ -60,6 +60,8 @@ public class OutroBean {
     }
 
     public void update(String idOutro, SinalBiomedicoDTO sinalBiomedicoDTO) {
+
+
         Outro outro = em.find(Outro.class, idOutro);
 
         if(outro!=null){

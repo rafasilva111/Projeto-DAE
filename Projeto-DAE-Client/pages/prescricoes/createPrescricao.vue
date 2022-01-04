@@ -14,20 +14,19 @@
       >
         <b-input id="altura" v-model.trim="data" :state="isDataValid" trim></b-input>
       </b-form-group>
-      <b-form-group
-        id="peso"
-        description="Este valor é obrigatório"
-        label="Inserir Peso medido:"
-        label-for="peso"
-        :invalid-feedback="invalidPesoFeedback"
-        :state="isPesoValid"
-      >
-        <b-input id="peso" v-model.trim="peso" :state="isPesoValid" trim></b-input>
-      </b-form-group>
-      <b-form-select v-model="tipo" label="Inserir Peso medido:" :options="presType" >
-        <b-input id="peso" v-model.trim="peso" :state="isPesoValid" trim></b-input>
-      </b-form-select>
 
+      <div class="pt-1 pb-1">
+        <p>Escolher tipo de prescricao</p>
+        <b-form-select v-model="tipo" label="Inserir Peso medido:" :options="presType" >
+          <b-input id="peso" v-model.trim="peso" :state="isPesoValid" trim></b-input>
+        </b-form-select>
+      </div>
+      <div class="pt-1 pb-3">
+        <p>Escolher utilizador:</p>
+        <b-form-select v-model="utilizador"  label="Inserir Peso medido:" :options="userList" >
+          <b-input id="peso" v-model.trim="peso" :state="isPesoValid" trim></b-input>
+        </b-form-select>
+      </div>
 
       <b-form-group
         id="descricao"
@@ -63,6 +62,7 @@ export default {
       utilizador: null,
       valores: [],
       errorMsg: false,
+      loaded: false,
       user: null,
       presType: [
         { value: null, text: 'Selecionar opção' },
@@ -76,6 +76,7 @@ export default {
     this.$axios.$get('/api/user/'+this.$auth.user.sub+'/registers')
       .then((user) => {
         this.user = user
+        this.loaded = true
       })
   },
   computed: {
@@ -84,7 +85,7 @@ export default {
         return null
       }
 
-      if (!isNaN(new Date(this.data)) ){
+      if (isNaN(new Date(this.data)) ){
         return "Inserir um valor válido"
       }
 
@@ -97,37 +98,33 @@ export default {
       return this.invalidDataFeedback === ''
     },
 
-    invalidPesoFeedback () {
-      if (!this.peso) {
-        return null
-      }
-
-      let value = parseFloat(this.peso);
-      if (isNaN(parseFloat(this.peso)) && isFinite(this.peso)){
-        return "Inserir um valor válido"
-      }
-      if (value>=50000){
-        return "É texugo!!!!"
-      }
-      if (!(value >0 && value<=300)){
-        return "Inserir um valor entre [1,300]"
-      }
-
-      return ''
-    },
-    isPesoValid () {
-      if (this.invalidPesoFeedback === null) {
-        return null
-      }
-      return this.invalidPesoFeedback === ''
-    },
     isFormValid () {
       if (! this.isDataValid) {
         return false
-      }if (! this.isAlturaValid) {
+      }if ( this.tipo== null) {
+        return false
+      }if ( this.utilizador == null) {
         return false
       }
       return true
+    },
+    userList(){
+
+      if (this.user!= null){
+
+
+          let reformattedArray = this.user.utilizadorDTOList.map(obj => {
+          let rObj = {"value":obj.id,"text":obj.username}
+
+          return rObj
+        })
+
+        reformattedArray.unshift({ value: null, text: 'Selecionar opção' })
+
+        return reformattedArray;
+
+      }
+
     }
   },
   methods: {
@@ -138,16 +135,18 @@ export default {
       this.$router.push('/biosinais/colestrol/my')
     },
     create() {
+      console.log(this.utilizador.value + " here " +this.utilizador)
 
-
-      this.$axios.$post('/api/biosinais/pesagem/'+this.user.id+'/create', {
-        value: [this.altura,this.peso],
-
-        descricao: this.descricao
+      this.$axios.$post('/api/prescricoes/'+this.user.id+'/create', {
+        dataFim: this.data+"",
+        descricao: this.descricao,
+        utilizadorNormalId: this.utilizador,
+        doutorId: this.user.id
       })
         .then(() => {
 
-          this.$router.push('/biosinais/pesagem/my')
+          this.$router.push('/prescricoes/all' +
+            '')
         })
         .catch(error => {
           this.errorMsg = error.response.data

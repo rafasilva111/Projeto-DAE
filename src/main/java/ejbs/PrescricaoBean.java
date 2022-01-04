@@ -14,6 +14,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.LockModeType;
 import javax.persistence.OptimisticLockException;
 import javax.persistence.PersistenceContext;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -59,61 +61,66 @@ public class PrescricaoBean {
     public List<Prescricao> getAllPrescricoes(){
         return (List<Prescricao>) em.createNamedQuery("getAllPrescricoesRegisters").getResultList();
     }
+    public List<Prescricao> getPrescricoes(){
+        return (List<Prescricao>) em.createNamedQuery("getPrescricoesRegisters").getResultList();
+    }
     public Prescricao find(String id){
 
         return em.find(Prescricao.class,id);
     }
 
-    public void update(String idColestrol, PrescricaoDTO prescricao) {
-        Colestrol colestrol = em.find(Colestrol.class, idColestrol);
+    public void update(String idPrescricoes, PrescricaoDTO prescricao) {
+        Prescricao colestrol = em.find(Prescricao.class, idPrescricoes);
 
 
         if(colestrol!=null){
 
             em.lock(colestrol, LockModeType.PESSIMISTIC_WRITE);
-            if (prescricao.getUtilizadorNormalId() != null){
-                UtilizadorNormal utilizadorNormal = em.find(UtilizadorNormal.class, prescricao.getUtilizadorNormalId());
-                if (utilizadorNormal== null){
-                    throw new MyEntityNotFoundException("Utilizador nao foi encontrado id:"+ prescricao.getUtilizadorNormalId());
-                }
-                colestrol.setUtilizadorNormal(utilizadorNormal);
-            }
-            if (prescricao.getDoutorId() != null){
-                UtilizadorNormal utilizadorNormal = em.find(UtilizadorNormal.class, prescricao.getDoutorId());
-                if (utilizadorNormal== null){
-                    throw new MyEntityNotFoundException("Utilizador nao foi encontrado id:"+ prescricao.getDoutorId());
-                }
-                colestrol.setUtilizadorNormal(utilizadorNormal);
-            }
 
-            //TODO validações
             if (prescricao.getDescricao()!=null){
                 colestrol.setDescricao(prescricao.getDescricao());
+            }
+            if (prescricao.getDataFim()!=null){
+                String[]  helper= null;
+                if(prescricao.getDataFim().contains(" ")){
+                    helper=prescricao.getDataFim().split(" ");
+                }
+                if(prescricao.getDataFim().contains("/")){
+                    helper=prescricao.getDataFim().split("/");
+                }
+
+                SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd");
+                Date date = null;
+
+                try{
+                    date = ft.parse(helper[2]+"-"+helper[1]+"-"+helper[0]);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                colestrol.setDataFim(date);
             }
 
 
         }else
-            throw new MyEntityNotFoundException("Registo de colestrol nao foi encontrado id:"+idColestrol);
+            throw new MyEntityNotFoundException("Registo de colestrol nao foi encontrado id:"+idPrescricoes);
 
     }
 
     public void delete(String idColestrol) {
-        Colestrol colestrol = em.find(Colestrol.class, idColestrol);
-        UtilizadorNormal utilizador = em.find(UtilizadorNormal.class,colestrol.getUtilizadorNormal().getId());
-        utilizador.remove(colestrol);
+        Prescricao prescricao = em.find(Prescricao.class, idColestrol);
+        prescricao.delete();
+        Doutor doutor = em.find(Doutor.class,prescricao.getDoutor().getId());
+        doutor.remove(prescricao);
+        em.persist(doutor);
+        UtilizadorNormal utilizadorNormal = em.find(UtilizadorNormal.class,prescricao.getUtilizadorNormal().getId());
+        utilizadorNormal.remove(prescricao);
+        em.persist(utilizadorNormal);
 
-        if(colestrol!=null){
-            em.detach(colestrol);
+        if(prescricao!=null){
+            em.persist(prescricao);
 
         }else
-            throw new MyEntityNotFoundException("Registo de colestrol nao foi encontrado");
-
-        int isSuccessful = em.createQuery("delete from SinalBiomedico p where p.id = :id ")
-                .setParameter("id", idColestrol)
-                .executeUpdate();
-        if (isSuccessful == 0) {
-            throw new OptimisticLockException(" product modified concurrently");
-        }
+            throw new MyEntityNotFoundException("Registo de prescricao nao foi encontrado");
 
     }
 
