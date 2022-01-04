@@ -26,7 +26,7 @@
     <div class="pt-4">
       <b-container class="modal-content rounded-6 shadow" >
         <h1 CLASS=" p-3" style="text-align:center">Utentes Associados</h1>
-        <b-table striped  :items="colestrol" :fields="fields" style="float:left;">
+        <b-table striped  :items="utente" :fields="fields" style="float:left;">
         </b-table>
 
       </b-container>
@@ -42,11 +42,8 @@ export default {
       user: null,
       id: this.$route.params.id,
       colestrol:[],
+      utente:[],
       fields:[
-        {
-          key: 'data',
-          label: 'Data Registo',
-        },
         {
           key: 'username',
           label: 'Nome',
@@ -55,16 +52,11 @@ export default {
           key: 'email',
           label: 'Email',
         },
-        {
-          key: 'actions',
-          label: 'Actions',
-
-        }
       ]
     }
   },
   created () {
-    this.$axios.$get('/api/user/'+this.id+'/registers')
+    this.$axios.$get('/api/user/doc/'+this.id)
       .then((user) => {
         this.user = user
         console.log(user)
@@ -72,8 +64,10 @@ export default {
           .then((colestrol) => {
 
             this.colestrol = colestrol
+            this.utente = this.user.utilizadorDTOList
             console.log(colestrol)
           })
+
 
       })
 
