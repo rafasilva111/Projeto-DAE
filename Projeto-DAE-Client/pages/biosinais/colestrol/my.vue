@@ -110,10 +110,12 @@ export default {
     }
   },
   created () {
-    console.log(this.user)
+    console.log(this.$auth.user.sub)
     this.$axios.$get('/api/user/'+this.$auth.user.sub+'/registers')
       .then((user) => {
         this.user = user
+        console.log(this.user)
+        console.log(this.$auth.user.id)
         this.$axios.$get('/api/biosinais/colestrol/'+this.user.id)
           .then((colestrol) => {
             this.colestrol = colestrol

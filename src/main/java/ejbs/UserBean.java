@@ -25,4 +25,6 @@ public class UserBean {
     public Utilizador getUserByUsername(String name){
         return (Utilizador) em.createQuery("SELECT c FROM Utilizador c WHERE c.userName LIKE ?1").setParameter(1, name).getSingleResult();
     }
+
+
 }

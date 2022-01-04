@@ -76,7 +76,7 @@ public class UtilizadorDTO implements Serializable {
         this.documents = documents;
     }
 
-    public UtilizadorDTO() {
+    public UtilizadorDTO(String id, String password, String email, Date data, String userName, UserType utilizadorNormal, List<SinalBiomedicoDTO> preencher) {
     }
 
     public String getId() {

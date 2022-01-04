@@ -63,6 +63,9 @@ public class ColestrolBean {
     }
     public Colestrol find(String id){
         Colestrol colestrol = em.find(Colestrol.class,id);
+        if(colestrol == null){
+            throw new MyEntityNotFoundException("Registo de colestrol nao foi encontrado id: "+id);
+        }
         if (colestrol.isDeleted()){
             throw new MyEntityNotFoundException("Registo de colestrol nao foi encontrado id: "+id);
         }

@@ -1,25 +1,30 @@
 <template>
   <b-container>
-    <h3>Login into Academics Management</h3>
-    <b-form @submit.prevent="onSubmit" @reset="onReset">
-      <b-form-group label="Username" description="Enter your username">
-        <b-input
-          name="username"
-          placeholder="Your username"
-          v-model.trim="username"
-          required />
-      </b-form-group>
-      <b-form-group label="Password" description="Enter your password">
-        <b-input
-          name="password"
-          type="password"
-          placeholder="Your password"
-          v-model="password"
-          required />
-      </b-form-group>
-      <b-button type="reset" class="btn-warning">Reset</b-button>
-      <b-button type="submit" class="btn-success">Submit</b-button>
-    </b-form>
+    <h3 style="text-align: center">Login into Academics Management</h3>
+      <b-form @submit.prevent="onSubmit" @reset="onReset">
+        <b-form-group label="Username" description="Enter your username">
+          <b-input
+            name="username"
+            placeholder="Your username"
+            v-model.trim="username"
+            required />
+        </b-form-group>
+        <b-form-group label="Password" description="Enter your password">
+          <b-input
+            name="password"
+            type="password"
+            placeholder="Your password"
+            v-model="password"
+            required />
+        </b-form-group>
+        <b-button type="reset" class="btn-warning">Reset</b-button>
+        <b-button type="submit" class="btn-success">Submit</b-button>
+      </b-form>
+
+    <div lg="6" class="pb-4 p-12">
+    </div>
+    <nuxt-link class="btn btn-dark btn-sm pd-4 p-4" to="/auth/register/"  >Criar Conta</nuxt-link>
+
   </b-container>
 </template>
 <script>
@@ -45,12 +50,12 @@ export default {
         console.log(this.$auth.user)
         // TODO redirect based on the user role
         // eg:
-        if (this.$auth.user.groups.includes('UtilizadorNormal') || this.$auth.user.groups.includes('Administrador')) {
+        if (this.$auth.user.groups.includes('UtilizadorNormal') || this.$auth.user.groups.includes('Administrador')|| this.$auth.user.groups.includes('Doutor')) {
           this.$router.push('/')
         }
       })
       promise.catch(() => {
-        this.$toast.error('Sorry, you cant login. Ensure your credentials arecorrect').goAway(3000)
+        this.$toast.error('Sorry, you cant login. Ensure your credentials are correct').goAway(3000)
       })
     },
     onReset() {

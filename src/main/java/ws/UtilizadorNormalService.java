@@ -121,6 +121,7 @@ public class UtilizadorNormalService {
 
 
     private List<SinalBiomedicoDTO> preencher(UtilizadorNormal utilizadorNormal) {
+
         List<SinalBiomedicoDTO> list = new LinkedList<>();
         helper = new SinaisBiomedicosService();
         if (!utilizadorNormal.getColestrolList().isEmpty()) {
