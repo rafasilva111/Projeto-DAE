@@ -31,19 +31,19 @@ public class ColestrolBean {
         }catch (MyEntityNotFoundException e){
             System.err.print(e.getMessage());
         }
-        int count = getColestrol().size();
+
 
         Colestrol colestrol = null;
         if (nivelColestrol<200) {
-             colestrol = new Colestrol(count + 10, nivelColestrol, utilizadorNormal, Classification.baixo, descricao);
+             colestrol = new Colestrol( nivelColestrol, utilizadorNormal, Classification.baixo, descricao);
 
         }
         if (nivelColestrol>=200 && nivelColestrol<=239){
-             colestrol = new Colestrol(count + 10, nivelColestrol, utilizadorNormal, Classification.medio, descricao);
+             colestrol = new Colestrol( nivelColestrol, utilizadorNormal, Classification.medio, descricao);
 
         }
         if (nivelColestrol>240){
-            colestrol = new Colestrol(count + 10, nivelColestrol, utilizadorNormal, Classification.alto, descricao);
+            colestrol = new Colestrol( nivelColestrol, utilizadorNormal, Classification.alto, descricao);
 
         }
 

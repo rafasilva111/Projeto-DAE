@@ -22,7 +22,7 @@
                 <b-col lg="6" class="pb-4">
                   <nuxt-link class="btn btn-dark btn-sm" v-if="doctor" :to="`/biosinais/outros/${outro.id}/create/`">Inserir Registo
                   </nuxt-link>
-                  <button  class="btn btn-danger btn-sm" to="/biosinais/pesagem/createPesagem">Eliminar Tipo
+                  <button  class="btn btn-danger btn-sm" v-if="!doctor" to="/biosinais/pesagem/createPesagem">Eliminar Tipo
                   </button>
                 </b-col>
               </b-row>
@@ -35,7 +35,7 @@
       <div class="p-3">
         <b-container>
           <div >
-            <b-button class="btn btn-dark btn-sm" float @click.prevent="adicionarTipo">Adicionar novo tipo de dado Biomedico</b-button>
+            <b-button class="btn btn-dark btn-sm" v-if="!doctor" float @click.prevent="adicionarTipo">Adicionar novo tipo de dado Biomedico</b-button>
           </div>
         </b-container>
       </div>
