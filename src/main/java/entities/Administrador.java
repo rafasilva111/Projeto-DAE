@@ -12,6 +12,10 @@ import static javax.persistence.CascadeType.ALL;
                 name = "getAllAdmins",
                 query = "SELECT s FROM Administrador s ORDER BY s.id" // JPQL
         ),
+        @NamedQuery(
+                name = "getAdmins",
+                query = "SELECT s FROM Administrador s WHERE S.deleted = FALSE ORDER BY s.id" // JPQL
+        ),
 })
 @Entity
 public class Administrador extends Utilizador implements Serializable {
@@ -27,5 +31,9 @@ public class Administrador extends Utilizador implements Serializable {
 
     public boolean isSuperUser() {
         return superUser;
+    }
+
+    public void setSuperUser(boolean superUser) {
+        this.superUser = superUser;
     }
 }

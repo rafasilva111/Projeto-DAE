@@ -1,9 +1,6 @@
 package ejbs;
 
-import entities.Doutor;
-import entities.Pesagem;
-import entities.Utilizador;
-import entities.UtilizadorNormal;
+import entities.*;
 import entities.enums.Classification;
 import exceptions.MyEntityNotFoundException;
 
@@ -42,10 +39,69 @@ public class UtilizadorNormalBean {
         return (List<UtilizadorNormal>) em.createNamedQuery("getAllNormUsers").getResultList();
 
     }
+    public List<UtilizadorNormal> getNormalUsers() {
+
+        return (List<UtilizadorNormal>) em.createNamedQuery("getNormUsers").getResultList();
+
+    }
 
     public UtilizadorNormal getUserByUsername(String name){
 
         return (UtilizadorNormal) em.createQuery("SELECT c FROM UtilizadorNormal c WHERE c.userName LIKE ?1").setParameter(1, name).getSingleResult();
+    }
+
+    public void delete(String id) {
+        UtilizadorNormal utilizador = em.find(UtilizadorNormal.class, id);
+
+        if (utilizador.getColestrolList().size()!=0){
+            for (Colestrol colestrol: utilizador.getColestrolList()
+                 ) {
+                Colestrol prescricao = em.find(Colestrol.class,colestrol.getId());
+                prescricao.delete();
+                em.persist(prescricao);
+            }
+        }
+        if (utilizador.getPesagemList().size()!=0){
+            for (Pesagem colestrol: utilizador.getPesagemList()
+                 ) {
+                Pesagem prescricao = em.find(Pesagem.class,colestrol.getId());
+                prescricao.delete();
+                em.persist(prescricao);
+            }
+        }if (utilizador.getBpmList().size()!=0){
+            for (BPM colestrol: utilizador.getBpmList()
+                 ) {
+                BPM prescricao = em.find(BPM.class,colestrol.getId());
+                prescricao.delete();
+                em.persist(prescricao);
+            }
+        }if (utilizador.getOutrosList().size()!=0){
+            for (Outro colestrol: utilizador.getOutrosList()
+                 ) {
+                Outro prescricao = em.find(Outro.class,colestrol.getId());
+                prescricao.delete();
+                em.persist(prescricao);
+            }
+        }
+        if (utilizador.getPrescricoesList().size()!=0){
+            for (Prescricao colestrol: utilizador.getPrescricoesList()
+                 ) {
+                Prescricao prescricao = em.find(Prescricao.class,colestrol.getId());
+                prescricao.delete();
+                em.persist(prescricao);
+            }
+        }
+
+        Doutor doutor = em.find(Doutor.class,utilizador.getDoctor().getId());
+        doutor.remove(utilizador);
+        em.persist(doutor);
+        utilizador.delete();
+        if(utilizador!=null){
+            em.persist(utilizador);
+
+        }else
+            throw new MyEntityNotFoundException("Registo de colestrol nao foi encontrado");
+
     }
 
 

@@ -38,7 +38,7 @@
         </div>
       </b-container>
     </div>
-    <div class="pt-4">
+    <div class="p-4">
       <b-container class="modal-content rounded-6 shadow" >
         <h1 CLASS=" p-3" style="text-align:center">Informações</h1>
         <b-table striped  :items="admins" :fields="fields" style="float:left;">
@@ -51,7 +51,7 @@
               @click="apagar(row.item.id)">Apagar</button>
           </template>
         </b-table>
-
+        <p class="text-danger" v-show="errorMsg">Utilizador é o super, não pode ser apagado</p>
       </b-container>
     </div>
   </div>
@@ -63,9 +63,7 @@
 export default {
   data () {
     return {
-      graphData: [],
       ready: false,
-      labels: [],
       data: [],
       fields: [ 'dataCriação','nome','email','estado','actions'],
       colestrol: [],
@@ -74,6 +72,7 @@ export default {
       courses: [],
       username: null,
       selected: null,
+      errorMsg: null,
       admins:[],
 
 
@@ -119,6 +118,21 @@ export default {
   },
 
   methods: {
+    apagar: function (value){
+
+      this.$axios.$delete('/api/user/admin/'+value)
+        .then(() => {
+          const indice = this.admins.findIndex(pesagem => pesagem.id === value)
+          if (~indice)
+            this.admins.splice(indice, 1)
+
+          const indice2 = this.courses.findIndex(pesagem => pesagem.id === value)
+          if (~indice2)
+            this.courses.splice(indice2, 1)
+        }).catch(error => {
+        this.errorMsg = error.response.data
+      })
+    },
 
     find : function (value){
       //console.log(value)

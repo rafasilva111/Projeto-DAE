@@ -143,7 +143,18 @@ export default {
   },
 
   methods: {
+    apagar: function (value){
 
+      this.$axios.$delete('/api/user/user/'+value)
+        .then(() => {
+          const indice = this.utentes.findIndex(pesagem => pesagem.id === value)
+          if (~indice)
+            this.utentes.splice(indice, 1)
+          const indice2 = this.courses.findIndex(pesagem => pesagem.id === value)
+          if (~indice2)
+            this.courses.splice(indice2, 1)
+        })
+    },
     find : function (value){
           //console.log(value)
           this.$axios.$get('/api/user/' + value.username + '/utente')

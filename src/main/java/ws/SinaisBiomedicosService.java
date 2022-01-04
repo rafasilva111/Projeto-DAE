@@ -111,7 +111,7 @@ public class SinaisBiomedicosService {
     @Path("/colestrol/graph")
     @RolesAllowed({"Administrador","Doutor"})
     public Response getDataForGraph() {
-        List<UtilizadorNormal> all = utilizadorBean.getAllNormalUsers();
+        List<UtilizadorNormal> all = utilizadorBean.getNormalUsers();
         List<Float> data = new LinkedList<>();
         List<String> label = new LinkedList<>();
         for (UtilizadorNormal u: all
@@ -278,7 +278,7 @@ public class SinaisBiomedicosService {
     @RolesAllowed({"Administrador","Doutor"})
     public Response getDataForGraphPesagem() {
 
-        List<UtilizadorNormal> all2 = utilizadorBean.getAllNormalUsers();
+        List<UtilizadorNormal> all2 = utilizadorBean.getNormalUsers();
 
         List<Float> data = new LinkedList<>();
         List<String> label = new LinkedList<>();
@@ -390,7 +390,7 @@ public class SinaisBiomedicosService {
     @RolesAllowed({"Administrador","Doutor"})
     public Response getDataForGraphBPM() {
 
-        List<UtilizadorNormal> all3 = utilizadorBean.getAllNormalUsers();
+        List<UtilizadorNormal> all3 = utilizadorBean.getNormalUsers();
 
         List<Float> data = new LinkedList<>();
         List<String> label = new LinkedList<>();

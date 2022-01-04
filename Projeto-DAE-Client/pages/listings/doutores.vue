@@ -170,6 +170,19 @@ export default {
   },
 
   methods: {
+    apagar: function (value){
+
+      this.$axios.$delete('/api/user/doctor/'+value)
+        .then(() => {
+          const indice = this.doutores.findIndex(pesagem => pesagem.id === value)
+          if (~indice)
+            this.doutores.splice(indice, 1)
+
+          const indice2 = this.courses.findIndex(pesagem => pesagem.id === value)
+          if (~indice2)
+            this.courses.splice(indice2, 1)
+        })
+    },
     find : function (value){
       //console.log(value)
       this.$axios.$get('/api/user/' + value.username + '/doutor')

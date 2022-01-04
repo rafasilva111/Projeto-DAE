@@ -12,6 +12,10 @@ import static javax.persistence.CascadeType.ALL;
                 name = "getAllDoctors",
                 query = "SELECT s FROM Doutor s ORDER BY s.id" // JPQL
         ),
+        @NamedQuery(
+                name = "getDoctors",
+                query = "SELECT s FROM Doutor s WHERE S.deleted = FALSE ORDER BY s.id" // JPQL
+        ),
 })
 @Entity
 public class Doutor extends Utilizador implements Serializable {
@@ -65,6 +69,16 @@ public class Doutor extends Utilizador implements Serializable {
             List<Prescricao> colestrols = this.getPrescricoes();
             colestrols.remove(prescricao);
             this.prescricoes = colestrols;
+        }
+
+    }
+
+    public void remove(UtilizadorNormal utilizadorNormal) {
+
+        if (this.prescricoes.contains(utilizadorNormal)){
+            List<UtilizadorNormal> colestrols = this.getPatients();
+            colestrols.remove(utilizadorNormal);
+            this.patients = colestrols;
         }
 
     }

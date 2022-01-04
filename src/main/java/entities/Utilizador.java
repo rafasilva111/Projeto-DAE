@@ -24,6 +24,7 @@ public class Utilizador implements Serializable {
     private String password;
     private String email;
     private Date data;
+    private boolean deleted;
 
 
     public Utilizador(String password,String email,String userName) {
@@ -31,12 +32,21 @@ public class Utilizador implements Serializable {
         this.email = email;
         this.userName = userName;
         this.data = new Date(System.currentTimeMillis());
+        this.deleted = false;
     }
 
     public Utilizador() {
     }
 
 
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
 
     public Date getData() {
         return data;
@@ -93,4 +103,9 @@ public class Utilizador implements Serializable {
     public String getUserName() {
         return userName;
     }
+
+    public void delete() {
+        this.deleted = true;
+    }
+
 }

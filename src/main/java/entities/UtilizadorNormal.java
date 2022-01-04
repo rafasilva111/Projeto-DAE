@@ -18,6 +18,10 @@ import static javax.persistence.CascadeType.ALL;
                 name = "getAllNormUsers",
                 query = "SELECT s FROM UtilizadorNormal s ORDER BY s.id" // JPQL
         ),
+        @NamedQuery(
+                name = "getNormUsers",
+                query = "SELECT s FROM UtilizadorNormal s WHERE S.deleted = FALSE  ORDER BY s.id" // JPQL
+        ),
 })
 @Entity
 public class UtilizadorNormal extends Utilizador implements Serializable {

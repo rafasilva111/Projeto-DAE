@@ -1,5 +1,6 @@
 package ws;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -102,20 +103,23 @@ public class UtilizadorNormalService {
     }
     @GET // means: to call this endpoint, we need to use the HTTP GET method
     @Path("/alladmins/")
+    @RolesAllowed({"Administrador","Doutor"})
     public List<AdministradorDTO> getAllAdmins() {
-        return toDTOsAdmins(adminBean.getAllAdmins());
+        return toDTOsAdmins(adminBean.getAdmins());
     }
 
     @GET // means: to call this endpoint, we need to use the HTTP GET method
     @Path("/alldocs/")
+    @RolesAllowed({"Administrador","Doutor"})
     public List<DoutorDTO> getAllDocs() {
-        return toDTOsDoctors(doutorBean.getAllDoctors());
+        return toDTOsDoctors(doutorBean.getDoctors());
     }
 
     @GET // means: to call this endpoint, we need to use the HTTP GET method
     @Path("/allusers/")
+    @RolesAllowed({"Administrador","Doutor"})
     public List<UtilizadorDTO> getAllUsers() {
-        return toDTOsUtilizadores(utilizadorNormalBean.getAllNormalUsers());
+        return toDTOsUtilizadores(utilizadorNormalBean.getNormalUsers());
     }
 
 
@@ -242,6 +246,7 @@ public class UtilizadorNormalService {
 
     @POST
     @Path("/new/create")
+
     public Response createUser (UtilizadorDTO utilizadorDTO) throws MyEntityNotFoundException{
 
         utilizadorNormalBean.create(utilizadorDTO.getUsername(),utilizadorDTO.getPassword(),utilizadorDTO.getEmail(),utilizadorDTO.getDoutorId());
@@ -249,6 +254,7 @@ public class UtilizadorNormalService {
     }
     @POST
     @Path("/new/doctor/create")
+    @RolesAllowed({"Administrador"})
     public Response createDoctor (DoutorDTO doutorDTO) throws MyEntityNotFoundException{
 
         doutorBean.create(doutorDTO.getPassword(),doutorDTO.getEmail(),doutorDTO.getUsername());
@@ -256,10 +262,36 @@ public class UtilizadorNormalService {
     }
     @POST
     @Path("/new/admin/create")
+    @RolesAllowed({"Administrador"})
     public Response createAdmin (AdministradorDTO administradorDTO) throws MyEntityNotFoundException{
-        System.out.println(administradorDTO.getUsername());
-        System.out.println("here");
+
         adminBean.create(administradorDTO.getPassword(),administradorDTO.getEmail(),administradorDTO.getUsername());
         return Response.status(Response.Status.CREATED).build();
     }
+
+    @DELETE
+    @Path("/user/{idColestrol}")
+    @RolesAllowed({"Administrador"})
+    public Response deleteUser (@PathParam("idColestrol") String idColestrol) throws MyEntityNotFoundException {
+        utilizadorNormalBean.delete(idColestrol);
+
+        return Response.status(Response.Status.ACCEPTED).build();
+    }
+    @DELETE
+    @Path("/doctor/{idColestrol}")
+    @RolesAllowed({"Administrador"})
+    public Response deleteDoctor (@PathParam("idColestrol") String idColestrol) throws MyEntityNotFoundException {
+        doutorBean.delete(idColestrol);
+
+        return Response.status(Response.Status.ACCEPTED).build();
+    }
+    @DELETE
+    @Path("/admin/{idColestrol}")
+    @RolesAllowed({"Administrador"})
+    public Response deleteAdmin (@PathParam("idColestrol") String idColestrol) throws MyEntityNotFoundException {
+        adminBean.delete(idColestrol);
+
+        return Response.status(Response.Status.ACCEPTED).build();
+    }
+
 }

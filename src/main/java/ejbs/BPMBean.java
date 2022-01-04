@@ -98,10 +98,10 @@ public class BPMBean {
         UtilizadorNormal utilizadorNormal = em.find(UtilizadorNormal.class,colestrol.getUtilizadorNormal().getId());
         utilizadorNormal.remove(colestrol);
         em.persist(utilizadorNormal);
-
+        colestrol.delete();
         if(colestrol!=null){
             em.persist(colestrol);
-            colestrol.delete();
+
         }else
             throw new MyEntityNotFoundException("Registo de colestrol nao foi encontrado");
 

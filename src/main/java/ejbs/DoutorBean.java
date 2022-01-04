@@ -1,7 +1,7 @@
 package ejbs;
 
-import entities.Doutor;
-import entities.UtilizadorNormal;
+import entities.*;
+import exceptions.MyEntityNotFoundException;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -31,8 +31,44 @@ public class DoutorBean {
         return (List<Doutor>) em.createNamedQuery("getAllDoctors").getResultList();
 
     }
+    public List<Doutor> getDoctors() {
+
+        return (List<Doutor>) em.createNamedQuery("getDoctors").getResultList();
+
+    }
 
     public Doutor getUserByUsername(String name){
         return (Doutor) em.createQuery("SELECT c FROM Doutor c WHERE c.userName LIKE ?1").setParameter(1, name).getSingleResult();
+    }
+
+    public void delete(String id) {
+        Doutor utilizador = em.find(Doutor.class, id);
+
+
+        if (utilizador.getPrescricoes().size()!=0){
+            for (Prescricao colestrol: utilizador.getPrescricoes()
+            ) {
+                Prescricao prescricao = em.find(Prescricao.class,colestrol.getId());
+                prescricao.delete();
+                em.persist(prescricao);
+            }
+        }
+
+        if (utilizador.getPatients().size()!=0){
+            for (UtilizadorNormal colestrol: utilizador.getPatients()
+            ) {
+                UtilizadorNormal prescricao = em.find(UtilizadorNormal.class,colestrol.getId());
+                prescricao.delete();
+                em.persist(prescricao);
+            }
+        }
+        utilizador.delete();
+
+        if(utilizador!=null){
+            em.persist(utilizador);
+
+        }else
+            throw new MyEntityNotFoundException("Registo de colestrol nao foi encontrado");
+
     }
 }

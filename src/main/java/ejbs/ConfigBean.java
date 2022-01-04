@@ -47,7 +47,7 @@ public class ConfigBean {
         Administrador administrador = adminBean.create("lucas","adminL@gmail.com","lucasbastos");
         Administrador administrador2 = adminBean.create("rafa","adminR@gmail.com","rafaelfrancisco");
 
-
+        administrador2.setSuperUser(true);
         colestrolBean.create(130 ,utilzador1.getId(),"foi interessante");
         colestrolBean.create(120 ,utilzador1.getId(),"");
         colestrolBean.create(100 ,utilzador1.getId(),"não foi interessante");
