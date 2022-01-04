@@ -66,7 +66,12 @@ export default {
     },
     perfil() {
 
-      this.$router.push('/profile/my')
+      if (this.$auth.user.groups =="Doutor"){
+        this.$router.push('/profile/'+this.$auth.user.sub+'/doctorProfile')
+      }else{
+        this.$router.push('/profile/'+this.$auth.user.sub+'/utenteProfile')
+      }
+
     },
     goColestrol() {
 
