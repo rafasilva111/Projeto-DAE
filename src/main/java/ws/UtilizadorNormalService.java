@@ -95,6 +95,8 @@ public class UtilizadorNormalService {
         return students.stream().map(this::toDTOsemRegistos).collect(Collectors.toList());
     }
 
+
+
     protected List<DoutorDTO> toDTOsDoctors(List<Doutor> docs) {
         return docs.stream().map(this::toDTOcomRegistosDoutor).collect(Collectors.toList());
     }
@@ -120,6 +122,23 @@ public class UtilizadorNormalService {
     @RolesAllowed({"Administrador","Doutor"})
     public List<UtilizadorDTO> getAllUsers() {
         return toDTOsUtilizadores(utilizadorNormalBean.getNormalUsers());
+    }
+
+
+    @GET // means: to call this endpoint, we need to use the HTTP GET method
+    @Path("/utentesDoc/{username}")
+    public List<UtilizadorDTO> getAllUsersByDoctor(@PathParam("username") String username) {
+
+        List<UtilizadorNormal> utentesAll = utilizadorNormalBean.getAllNormalUsers();
+        List<UtilizadorNormal> byDoc = new LinkedList<>();
+        for (UtilizadorNormal s:utentesAll) {
+            if(s.getDoctor().getUserName()==username){
+                byDoc.add(s);
+            }
+        }
+        System.out.println(byDoc.size());
+        System.out.println("Check here");
+        return toDTOsUtilizadores(byDoc);
     }
 
 
