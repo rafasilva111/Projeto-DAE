@@ -17,7 +17,7 @@ import static javax.persistence.CascadeType.ALL;
 public class Administrador extends Utilizador implements Serializable {
     private boolean superUser= false;
 
-    public Administrador(String password, @Email String email, String userName) {
+    public Administrador(String password, String email, String userName) {
         super(password, email, userName);
 
     }

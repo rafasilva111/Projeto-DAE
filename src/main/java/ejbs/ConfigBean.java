@@ -38,11 +38,14 @@ public class ConfigBean {
     @PostConstruct
     public void populateDB() {
 
-        Doutor doutor = doutorBean.create("rafa","doctor@gmail.com","rafaelferreira");
-        UtilizadorNormal utilzador1 = utilizadorNormalBean.create("rafa","rafa@gmail.com","rafael",doutor.getId());
-        UtilizadorNormal utilzador2 = utilizadorNormalBean.create("rafa","rafa2@gmail.com","rafaelsilva",doutor.getId());
-
-        Administrador administrador = adminBean.create("rafa","doctor@gmail.com","rafaelfrancisco");
+        Doutor doutor = doutorBean.create("rafa","doctorR@gmail.com","rafaelferreira");
+        Doutor doutor2 = doutorBean.create("lucas","doctorL@gmail.com","lucassantos");
+        UtilizadorNormal utilzador1 = utilizadorNormalBean.create("rafael","rafa","rafa@gmail.com",doutor.getId());
+        UtilizadorNormal utilzador2 = utilizadorNormalBean.create("rafaelsilva","rafa","rafa2@gmail.com",doutor.getId());
+        UtilizadorNormal utilzador3 = utilizadorNormalBean.create("lucas","lucas","lucas@gmail.com",doutor.getId());
+        UtilizadorNormal utilzador4 = utilizadorNormalBean.create("lucas2","lucas","lucas2@gmail.com",doutor.getId());
+        Administrador administrador = adminBean.create("lucas","adminL@gmail.com","lucasbastos");
+        Administrador administrador2 = adminBean.create("rafa","adminR@gmail.com","rafaelfrancisco");
 
 
         colestrolBean.create(130 ,utilzador1.getId(),"foi interessante");

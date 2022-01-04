@@ -21,7 +21,7 @@ public class Doutor extends Utilizador implements Serializable {
     @OneToMany(cascade=ALL,mappedBy = "Doutor")
     private List<Prescricao> prescricoes;
 
-    public Doutor(String password, @Email String email, String userName) {
+    public Doutor(String password, String email, String userName) {
         super(password, email, userName);
         this.patients = new LinkedList<>();
         this.prescricoes = new LinkedList<>();

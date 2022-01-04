@@ -14,7 +14,7 @@ public class DoutorBean {
     @PersistenceContext
     private EntityManager em;
 
-    public Doutor create(String password, @Email String email, String username){
+    public Doutor create(String password, String email, String username){
         System.out.println("here here");
         Doutor doutor = new Doutor(password,email,username);
         em.persist(doutor);

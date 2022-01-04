@@ -244,10 +244,22 @@ public class UtilizadorNormalService {
     @Path("/new/create")
     public Response createUser (UtilizadorDTO utilizadorDTO) throws MyEntityNotFoundException{
 
-        System.out.println(utilizadorDTO.getUsername());
-        System.out.println(utilizadorDTO.getDoutorId());
-        System.out.println("Here Bro");
         utilizadorNormalBean.create(utilizadorDTO.getUsername(),utilizadorDTO.getPassword(),utilizadorDTO.getEmail(),utilizadorDTO.getDoutorId());
+        return Response.status(Response.Status.CREATED).build();
+    }
+    @POST
+    @Path("/new/doctor/create")
+    public Response createDoctor (DoutorDTO doutorDTO) throws MyEntityNotFoundException{
+
+        doutorBean.create(doutorDTO.getPassword(),doutorDTO.getEmail(),doutorDTO.getUsername());
+        return Response.status(Response.Status.CREATED).build();
+    }
+    @POST
+    @Path("/new/admin/create")
+    public Response createAdmin (AdministradorDTO administradorDTO) throws MyEntityNotFoundException{
+        System.out.println(administradorDTO.getUsername());
+        System.out.println("here");
+        adminBean.create(administradorDTO.getPassword(),administradorDTO.getEmail(),administradorDTO.getUsername());
         return Response.status(Response.Status.CREATED).build();
     }
 }

@@ -16,7 +16,7 @@ public class AdminBean {
     private EntityManager em;
     private boolean superUser;
 
-    public Administrador create(String password, @Email String email, String username){
+    public Administrador create(String password, String email, String username){
 
         Administrador administrador = new Administrador(password,email,username);
         em.persist(administrador);

@@ -6,7 +6,7 @@
         <h3 CLASS=" p-3" style="text-align:center">Lista Completa de Administradores</h3>
         <select v-model="selected" style="text-align:center">
           <option v-for="item in courses" :value="item" :key="item.id">
-            {{"Utente: "+ item.username +" /  Email: "+ item.email }}
+            {{"Admin: "+ item.username +" /  Email: "+ item.email }}
           </option>
         </select>
         <div class="pb-4"></div>
@@ -30,6 +30,12 @@
           class="btn btn-dark btn-sm" cli
           @click="nameSearch()">Procurar</button>
 
+      </b-container>
+      <b-container class="modal-content rounded-6 shadow p-4" >
+        <h4 class="p-1" style="text-align: center">Criar Admin</h4>
+        <div class="btn btn-dark btn-sm" v-if="superUser">
+          <nuxt-link class="nav-link" to="/auth/admin/registerAdmin" >Criar</nuxt-link>
+        </div>
       </b-container>
     </div>
     <div class="pt-4">
@@ -128,6 +134,21 @@ export default {
           console.log(this.$refs)
           this.$refs.table.$forceUpdate();
         })
+    }, superUser() {
+      if (this.$auth.user.groups =="Administrador"){
+        return true;
+      }
+      else {
+        return false;
+      }
+    },
+    doctor() {
+      if (this.$auth.user.groups =="Doutor"){
+        return true;
+      }
+      else {
+        return false;
+      }
     }
 
 
