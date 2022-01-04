@@ -20,10 +20,9 @@ public class UtilizadorNormalBean {
 
     public UtilizadorNormal create( String username,String password,String email, String doutorId){
 
-        System.out.println(doutorId);
+
         Doutor doc = em.find(Doutor.class,doutorId);
-        System.out.println(doc);
-        System.out.println("Dude");
+
         UtilizadorNormal utilizadorNormal = new UtilizadorNormal(password,email,username,doc);
         em.persist(utilizadorNormal);
 
@@ -45,7 +44,7 @@ public class UtilizadorNormalBean {
     }
 
     public UtilizadorNormal getUserByUsername(String name){
-        System.out.println("aqui"+ name);
+
         return (UtilizadorNormal) em.createQuery("SELECT c FROM UtilizadorNormal c WHERE c.userName LIKE ?1").setParameter(1, name).getSingleResult();
     }
 

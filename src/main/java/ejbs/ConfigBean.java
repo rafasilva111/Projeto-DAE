@@ -85,7 +85,7 @@ public class ConfigBean {
         outroBean.create((float) 21,"não curti",utilzador1.getId(),outroCat2.getId());
         outroBean.create((float) 12,"curti",utilzador1.getId(),outroCat.getId());
 
-        System.out.println();
+
     }
 }
 
