@@ -110,6 +110,9 @@ public class PesagemBean {
     public void delete(String idPesagem) {
         Pesagem colestrol = em.find(Pesagem.class, idPesagem);
         colestrol.delete();
+        UtilizadorNormal utilizadorNormal = em.find(UtilizadorNormal.class,colestrol.getUtilizadorNormal().getId());
+        utilizadorNormal.remove(colestrol);
+        em.persist(utilizadorNormal);
 
         if (colestrol != null) {
             em.persist(colestrol);

@@ -5,7 +5,7 @@
         <div class="p-3" style="width: 600px; display: table-cell; ">
           <b-container class="modal-content rounded-4 shadow p-4" fluid="sm">
             <h1 class="pb-4" style="text-align:center">{{outro.name}}</h1>
-            <b-table striped :items="pesagem" :fields="fields" style="float:left;">
+            <b-table striped :items="qualquer(outro.name)" :fields="fields" style="float:left;">
               <template v-slot:cell(actions)="row">
                 <nuxt-link
                   class="btn btn-dark btn-sm"
@@ -95,6 +95,12 @@ export default {
             this.pesagem.splice(indice, 1)
         })
   },
+    qualquer(value){
+      return this.pesagem.filter(function (el){
+
+        return el.name ==value;
+      });
+    }
   },
   computed: {
     // a computed getter

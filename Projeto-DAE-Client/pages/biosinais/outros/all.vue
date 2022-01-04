@@ -109,8 +109,8 @@ export default {
       this.$router.push('/admin/biosinais/create')
     },
     qualquer(value){
-
       return this.data.filter(function (el){
+
         return el.name ==value;
       });
     }
