@@ -10,6 +10,7 @@ import javax.ejb.EJB;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.StreamingOutput;
 import java.text.ParseException;
 import java.util.logging.Logger;
 @Path("/auth")
@@ -26,7 +27,7 @@ public class LoginService {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response authenticateUser(AuthDTO authDTO) {
 
-
+        System.out.println();
         try {
             Utilizador user = userBean.authenticate(authDTO.getUsername(), authDTO.getPassword());
             if (user != null) {

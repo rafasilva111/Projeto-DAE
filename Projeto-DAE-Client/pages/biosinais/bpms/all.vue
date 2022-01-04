@@ -27,13 +27,7 @@
         <chartjs-line v-if="ready" v-bind:labels = "labels" v-bind:data="data"></chartjs-line>
       </b-container>
     </div>
-
-
-
   </div>
-
-
-
 </template>
 
 <script>

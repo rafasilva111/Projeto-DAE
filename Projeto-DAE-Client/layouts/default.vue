@@ -26,9 +26,6 @@
             <nuxt-link class="nav-link" to="/listings/utentes" >Utilizadores</nuxt-link>
           </li>
           <li class="nav-item" v-if="superUser">
-            <nuxt-link class="nav-link" to="/" >Medicos</nuxt-link>
-          </li>
-          <li class="nav-item" v-if="superUser">
             <nuxt-link class="nav-link" to="/admin/biosinais/all" >Biosinais</nuxt-link>
           </li>
           <li class="nav-item" v-if="superUser || doctor">
@@ -46,7 +43,8 @@
             <template #button-content>
               <em>{{ $auth.user.sub }}</em>
             </template>
-            <b-dropdown-item @click.prevent="signOut">Sign Out</b-dropdown-item>
+            <b-dropdown-item @click.prevent="perfil">Perfil</b-dropdown-item>
+            <b-dropdown-item @click.prevent="signOut">Sair</b-dropdown-item>
           </b-nav-item-dropdown>
           <li class="nav-item" v-else>
             <nuxt-link class="nav-link" to="/auth/login">Sign In</nuxt-link>
@@ -65,6 +63,10 @@ export default {
     signOut() {
       this.$auth.logout()
       this.$router.push('/')
+    },
+    perfil() {
+
+      this.$router.push('/profile/my')
     },
     goColestrol() {
 
