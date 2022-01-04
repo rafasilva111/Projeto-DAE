@@ -17,7 +17,7 @@ public class PrescricaoDTO implements Serializable {
     private String dataFim;
     private String dataInicio;
     private String descricao;
-    private Prescricao.TypePrescricoes tipo;
+    private String tipo;
     private boolean enabled;
 
     public PrescricaoDTO(String id,String doutorName, String doutorId, String utilizadorNormalId, Date dataFim, Date dataInicio, String descricao, Prescricao.TypePrescricoes tipo) {
@@ -28,7 +28,7 @@ public class PrescricaoDTO implements Serializable {
         this.dataFim = new SimpleDateFormat("dd/MM/yyyy kk:mm").format(dataFim);
         this.dataInicio = new SimpleDateFormat("dd/MM/yyyy kk:mm").format(dataInicio);
         this.descricao = descricao;
-        this.tipo = tipo;
+        this.tipo = tipo.toString();
         this.enabled = true;
     }
 
@@ -99,11 +99,11 @@ public class PrescricaoDTO implements Serializable {
         this.descricao = descricao;
     }
 
-    public Prescricao.TypePrescricoes getTipo() {
-        return tipo;
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
     }
 
-    public void setTipo(Prescricao.TypePrescricoes tipo) {
-        this.tipo = tipo;
+    public String getTipo() {
+        return tipo;
     }
 }
