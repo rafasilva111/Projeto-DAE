@@ -47,7 +47,7 @@
     <div class="pt-4">
       <b-container class="modal-content rounded-6 shadow" >
         <h1 CLASS=" p-3" style="text-align:center">Informações</h1>
-        <b-table striped  :items="doutores"  :fields="fields" style="float:left;">
+        <b-table striped  :items="doutores"  :fields="fields2" style="float:left;">
           <template v-slot:cell(actions)="row">
             <nuxt-link
               class="btn btn-dark btn-sm"
@@ -60,14 +60,7 @@
 
       </b-container>
     </div>
-    <div class="pt-4">
-      <b-container class="modal-content rounded-6 shadow" >
-        <h1 CLASS=" p-3" style="text-align:center">Utentes Associados</h1>
-        <b-table striped  :items="colestrol" :fields="fields" style="float:left;">
-        </b-table>
 
-      </b-container>
-    </div>
   </div>
 
 </template>
@@ -89,6 +82,29 @@ export default {
       username: null,
       doutores:[],
       selected:null,
+      fields2: [
+        {
+          key: 'data',
+          label: 'Data Registo',
+        },
+        {
+          key: 'username',
+          label: 'Nome',
+        },
+        {
+          key: 'email',
+          label: 'Email',
+        },
+        {
+          key: '',
+          label: 'totalDePrescrições',
+        },
+        {
+          key: 'actions',
+          label: 'Actions',
+
+        }
+      ]
 
 
 
