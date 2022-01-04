@@ -48,6 +48,14 @@
       <b-container class="modal-content rounded-6 shadow" >
         <h1 CLASS=" p-3" style="text-align:center">Informações</h1>
         <b-table striped  :items="doutores"  :fields="fields" style="float:left;">
+          <template v-slot:cell(actions)="row">
+            <nuxt-link
+              class="btn btn-dark btn-sm"
+              :to="``">Ver Perfil</nuxt-link>
+            <button
+              class="btn btn-danger btn-sm" cli
+              @click="apagar(row.item.id)">Apagar</button>
+          </template>
         </b-table>
 
       </b-container>
@@ -73,7 +81,7 @@ export default {
       ready: false,
       labels: [],
       data: [],
-      fields: [ 'nome','email','regCategoria1','regCategoria2','regCategoria3','totalDePrescrições'],
+      fields: [ 'nome','email','regCategoria1','regCategoria2','regCategoria3','totalDePrescrições','actions'],
       colestrol: [],
       user: null,
       criteria: "hey",

@@ -26,9 +26,6 @@
             <nuxt-link class="nav-link" to="/listings/utentes" >Utilizadores</nuxt-link>
           </li>
           <li class="nav-item" v-if="superUser">
-            <nuxt-link class="nav-link" to="/" >Medicos</nuxt-link>
-          </li>
-          <li class="nav-item" v-if="superUser">
             <nuxt-link class="nav-link" to="/admin/biosinais/all" >Biosinais</nuxt-link>
           </li>
           <li class="nav-item" v-if="superUser || doctor">

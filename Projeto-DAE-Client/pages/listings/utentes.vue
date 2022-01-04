@@ -39,6 +39,14 @@
       <b-container  class="modal-content rounded-6 shadow" >
         <h1 CLASS=" p-3" style="text-align:center">Informações</h1>
         <b-table  ref="table" striped over :items="utentes" :fields="fields2" style="float:left;">
+          <template v-slot:cell(actions)="row">
+            <nuxt-link
+              class="btn btn-dark btn-sm"
+              :to="``">Ver Perfil</nuxt-link>
+            <button
+              class="btn btn-danger btn-sm" cli
+              @click="apagar(row.item.id)">Apagar</button>
+          </template>
         </b-table>
 
       </b-container>
@@ -82,8 +90,8 @@ export default {
           label: 'Email',
         },
         {
-          key: 'descricao',
-          label: 'Descrição',
+          key: 'doutorUsername',
+          label: 'Medico',
         },
         {
           key: 'actions',
