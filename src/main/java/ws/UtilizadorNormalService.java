@@ -77,7 +77,35 @@ public class UtilizadorNormalService {
                 toDTOsUtilizadores(utilizadorNormal.getPatients() ));
 
     }
+    @GET
+    @Path("doc/{id}")
+    public Response getUserDoc(@PathParam("id") String id){
 
+        Doutor utilizadorNormal = doutorBean.getUserByUsername(id);
+        if (utilizadorNormal != null) {
+            return Response.status(Response.Status.OK)
+                    .entity(toDTOcomRegistosDoutor(utilizadorNormal))
+                    .build();
+        }
+        return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                .entity("ERROR_FINDING_USER_RECORD")
+                .build();
+    }
+
+    @GET
+    @Path("/{id}")
+    public Response getUser(@PathParam("id") String id){
+
+        UtilizadorNormal utilizadorNormal = utilizadorNormalBean.getUserByUsername(id);
+        if (utilizadorNormal != null) {
+            return Response.status(Response.Status.OK)
+                    .entity(toDTOsemRegistos(utilizadorNormal))
+                    .build();
+        }
+        return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                .entity("ERROR_FINDING_USER_RECORD")
+                .build();
+    }
     private AdministradorDTO toDTOcomRegistosAdministrador(Administrador administrador) {
 
         return new AdministradorDTO(
@@ -129,7 +157,8 @@ public class UtilizadorNormalService {
     @Path("/utentesDoc/{username}")
     public List<UtilizadorDTO> getAllUsersByDoctor(@PathParam("username") String username) {
 
-        List<UtilizadorNormal> utentesAll = utilizadorNormalBean.getAllNormalUsers();
+        List<UtilizadorNormal> utentesAll = utilizadorNormalBean.getNormalUsers();
+        System.out.println(utentesAll.size());
         List<UtilizadorNormal> byDoc = new LinkedList<>();
         for (UtilizadorNormal s:utentesAll) {
             if(s.getDoctor().getUserName()==username){

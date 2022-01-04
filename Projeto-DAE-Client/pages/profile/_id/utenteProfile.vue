@@ -23,13 +23,6 @@
 
       </b-container>
 
-      <b-container  v-if="superUser || doctor " class="modal-content rounded-6 shadow p-4" >
-        <h4 class="p-1" style="text-align: center">Utentes Associados</h4>
-        <div class="btn btn-dark btn-sm">
-          <nuxt-link class="nav-link" to="/auth/admin/registerDoctor" >Criar</nuxt-link>
-        </div>
-      </b-container>
-
     </div>
   </div>
 </template>
@@ -44,7 +37,7 @@ export default {
     }
   },
   created () {
-    this.$axios.$get('/api/user/'+this.id+'/registers')
+    this.$axios.$get('/api/user/'+this.id)
       .then((user) => {
         this.user = user
       })

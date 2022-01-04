@@ -18,18 +18,22 @@ public class PrescricaoDTO implements Serializable {
     private String dataInicio;
     private String descricao;
     private String tipo;
+    private String utilizadorNormalUsername;
+    private String getUtilizadorNormalEmail;
     private boolean enabled;
 
-    public PrescricaoDTO(String id,String doutorName, String doutorId, String utilizadorNormalId, Date dataFim, Date dataInicio, String descricao, Prescricao.TypePrescricoes tipo) {
+    public PrescricaoDTO(String id,String doutorName, String doutorId, String utilizadorNormalId, Date dataFim, Date dataInicio, String descricao, Prescricao.TypePrescricoes tipo, String utilizadorNormalUsername,String getUtilizadorNormalEmail) {
         this.id = id;
         this.doutorName = doutorName;
         this.doutorId = doutorId;
         this.utilizadorNormalId = utilizadorNormalId;
+        this.utilizadorNormalUsername = utilizadorNormalUsername;
         this.dataFim = new SimpleDateFormat("dd/MM/yyyy kk:mm").format(dataFim);
         this.dataInicio = new SimpleDateFormat("dd/MM/yyyy kk:mm").format(dataInicio);
         this.descricao = descricao;
         this.tipo = tipo.toString();
         this.enabled = true;
+        this.getUtilizadorNormalEmail = getUtilizadorNormalEmail;
     }
 
     public PrescricaoDTO() {

@@ -51,7 +51,7 @@
           <template v-slot:cell(actions)="row">
             <nuxt-link
               class="btn btn-dark btn-sm"
-              :to="``">Ver Perfil</nuxt-link>
+              :to="`/profile/${row.item.username}/doctorProfile`">Ver Perfil</nuxt-link>
             <button
               class="btn btn-danger btn-sm" cli
               @click="apagar(row.item.id)">Apagar</button>

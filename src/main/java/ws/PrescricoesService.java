@@ -47,7 +47,9 @@ public class PrescricoesService {
                 prescricao.getDataFim(),
                 prescricao.getDataInicio(),
                 prescricao.getDescricao(),
-                prescricao.getTipo()
+                prescricao.getTipo(),
+                prescricao.getUtilizadorNormal().getUserName(),
+                prescricao.getUtilizadorNormal().getEmail()
 
         );
     }
