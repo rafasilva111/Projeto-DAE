@@ -35,6 +35,19 @@ export default {
       username: null,
       password: null
     }
+  },created () {
+    if(this.$auth.user!=null){
+      this.$axios.$get('/api/user/'+this.$auth.user.sub+'/registers')
+        .then((user) => {
+          this.user = user
+          if(user!=null){
+            this.$router.push('/')
+            console.log("Im here"+ this.user)
+          }
+          console.log(user)
+        })
+    }
+
   },
   methods: {
     onSubmit() {

@@ -52,7 +52,8 @@ public class BPMBean {
 
     public List<BPM> getBpmRegisters(){
         return (List<BPM>) em.createNamedQuery("getBpmRegisters").getResultList();
-    } public BPM find(String id){
+    }
+    public BPM find(String id){
         BPM colestrol = em.find(BPM.class,id);
         if (colestrol.isDeleted()){
             throw new MyEntityNotFoundException("Registo de colestrol nao foi encontrado id: "+id);

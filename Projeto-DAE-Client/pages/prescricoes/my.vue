@@ -8,13 +8,13 @@
                             <nuxt-link
                               class="btn btn-dark btn-sm"
                               :to="`/prescricoes/${row.item.id}/updatePrescricao`">Atualizar</nuxt-link>
-                            <button
+                            <button v-if="isUser"
                               class="btn btn-danger btn-sm" cli
                               @click="apagar(row.item.id)">Apagar</button>
                           </template>
                         </b-table>
-                        <b-row >
-                          <b-col lg="6" class="pb-4"><nuxt-link   class="btn btn-dark btn-sm" to="/biosinais/colestrol/createColestrol"  >Inserir Registo</nuxt-link></b-col>
+                        <b-row v-if="isUser" >
+                          <b-col lg="6" class="pb-4"><nuxt-link   class="btn btn-dark btn-sm" to="/prescricoes/createPrescricao"  >Inserir Registo</nuxt-link></b-col>
                         </b-row>
       </b-container>
     </div>
@@ -89,6 +89,15 @@ export default {
       return true;
     },
 
-  }
+  },computed:
+    {isUser() {
+        if (this.$auth.user.groups =="UtilizadorNormal"){
+          return false;
+        }
+        else {
+          return true;
+        }
+      }
+    }
 }
 </script>

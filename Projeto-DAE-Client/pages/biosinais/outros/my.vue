@@ -11,7 +11,7 @@
                   class="btn btn-dark btn-sm"
                   :to="`/biosinais/outros/${row.item.id}/update`">Atualizar
                 </nuxt-link>
-                <button
+                <button v-if="isUser"
                   class="btn btn-danger btn-sm"
                   @click="apagar(row.item.id)">Apagar
                 </button>
@@ -104,7 +104,14 @@ export default {
   },
   computed: {
     // a computed getter
-
+    isUser() {
+      if (this.$auth.user.groups =="UtilizadorNormal"){
+        return false;
+      }
+      else {
+        return true;
+      }
+    }
   }
 }
 </script>

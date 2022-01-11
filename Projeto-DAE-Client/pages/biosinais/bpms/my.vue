@@ -8,7 +8,7 @@
           <nuxt-link
             class="btn btn-dark btn-sm"
             :to="`/biosinais/bpms/${row.item.id}/updateBPM`">Atualizar</nuxt-link>
-          <button
+          <button v-if="isUser"
             class="btn btn-danger btn-sm" cli
             @click="apagar(row.item.id)">Apagar</button>
 
@@ -25,41 +25,6 @@
       <b-container class="modal-content rounded-6 shadow" >
         <caption style="text-align:center">Gráfico</caption>
         <chartjs-line v-if="ready" v-bind:labels = "labels" v-bind:data="data"></chartjs-line>
-      </b-container>
-    </div>
-    <div class="pt-4 pb-4">
-      <b-container class="modal-content rounded-6 shadow" >
-        <caption style="text-align:center">Estatísticas</caption>
-        <table class="table">
-          <thead>
-          <tr>
-            <th scope="col"></th>
-            <th scope="col">Geral</th>
-            <th scope="col">Estatisticas classificações</th>
-            <th scope="col">Handle</th>
-
-          </tr>
-          </thead>
-          <tbody>
-          <tr>
-            <th scope="col"></th>
-            <th>Nº de registos:</th>
-            <th></th>
-            <th>@mdo</th>
-          </tr>
-          <tr>
-            <th scope="col"></th>
-            <th>Nº de Altos:</th>
-            <th>Nº de Medios:</th>
-            <th>Nº de baixos:</th>
-          </tr>
-          <tr>
-            <th scope="row"></th>
-            <td colspan="2">Larry the Bird</td>
-            <td>@twitter</td>
-          </tr>
-          </tbody>
-        </table>
       </b-container>
     </div>
 
@@ -140,6 +105,15 @@ export default {
         })
     },
 
+  },computed:{
+    isUser() {
+      if (this.$auth.user.groups =="UtilizadorNormal"){
+        return false;
+      }
+      else {
+        return true;
+      }
+    }
   }
 }
 </script>

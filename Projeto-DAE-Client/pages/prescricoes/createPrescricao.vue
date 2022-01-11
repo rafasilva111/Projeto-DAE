@@ -110,7 +110,7 @@ export default {
     },
     userList(){
 
-      if (this.user!= null){
+      if (this.user!= null && this.user.utilizadorDTOList!=null){
 
 
           let reformattedArray = this.user.utilizadorDTOList.map(obj => {

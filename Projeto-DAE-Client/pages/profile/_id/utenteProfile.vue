@@ -18,7 +18,7 @@
             </div>
           </div>
 
-          <nuxt-link  style="text-align: center" class="btn btn-dark btn-sm" to="/biosinais"  >Alterar Perfil</nuxt-link>
+          <nuxt-link  style="text-align: center" class="btn btn-dark btn-sm" to="/"  >Alterar Perfil</nuxt-link>
           </b-container>
 
       </b-container>

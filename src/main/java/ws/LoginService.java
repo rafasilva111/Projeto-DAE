@@ -30,8 +30,8 @@ public class LoginService {
         System.out.println();
         try {
             Utilizador user = userBean.authenticate(authDTO.getUsername(), authDTO.getPassword());
-            if (user != null) {
-                if (user.getUserName() != null) {
+            if (user != null && !user.isDeleted()) {
+                if (user.getUserName() != null ) {
                     log.info("Generating JWT for user " + user.getUserName());
                 }
                 String token = jwtBean.createJwt(user.getUserName(), new

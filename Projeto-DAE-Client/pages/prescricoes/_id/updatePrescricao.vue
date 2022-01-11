@@ -4,7 +4,7 @@
       <caption class = "pb-4" style="text-align:center">Atualizar Registo: Prescricao</caption>
 
       <form  :disabled="!isFormValid">
-        <b-form-group
+        <b-form-group v-if="isUser"
           id="Data"
           description="Este valor é obrigatório, utilizar formato dd/mm/yyyy"
           label="Data de fim da prescrição:"
@@ -104,6 +104,15 @@ export default {
       }
       return true
     },
+    isUser() {
+        if (this.$auth.user.groups =="UtilizadorNormal"){
+          return false;
+        }
+        else {
+          return true;
+        }
+      }
+
   }
 }
 </script>

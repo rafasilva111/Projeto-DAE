@@ -52,7 +52,7 @@
             <nuxt-link
               class="btn btn-dark btn-sm"
               :to="`/profile/${row.item.username}/doctorProfile`">Ver Perfil</nuxt-link>
-            <button
+            <button v-if="isDoctor"
               class="btn btn-danger btn-sm" cli
               @click="apagar(row.item.id)">Apagar</button>
           </template>
@@ -166,7 +166,14 @@ export default {
         return false
       }
       return true
-    }
+    },isDoctor() {
+        if (this.$auth.user.groups =="Doutor"){
+          return false;
+        }
+        else {
+          return true;
+        }
+      }
   },
 
   methods: {
