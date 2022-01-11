@@ -39,7 +39,6 @@ public class UtilizadorNormalService {
     private SinaisBiomedicosService helper;
 
     private UtilizadorDTO toDTOsemRegistos(UtilizadorNormal utilizadorNormal) {
-        System.out.println(utilizadorNormal.toString());
         return new UtilizadorDTO(
                 utilizadorNormal.getId(),
                 utilizadorNormal.getPassword(),
@@ -158,15 +157,12 @@ public class UtilizadorNormalService {
     public List<UtilizadorDTO> getAllUsersByDoctor(@PathParam("username") String username) {
 
         List<UtilizadorNormal> utentesAll = utilizadorNormalBean.getNormalUsers();
-        System.out.println(utentesAll.size());
         List<UtilizadorNormal> byDoc = new LinkedList<>();
         for (UtilizadorNormal s:utentesAll) {
             if(s.getDoctor().getUserName()==username){
                 byDoc.add(s);
             }
         }
-        System.out.println(byDoc.size());
-        System.out.println("Check here");
         return toDTOsUtilizadores(byDoc);
     }
 
@@ -212,7 +208,6 @@ public class UtilizadorNormalService {
 
         //check 
         Principal principal = securityContext.getUserPrincipal();
-        System.out.println();
         if(!(securityContext.isUserInRole("Administrador") ||  securityContext.isUserInRole("Doutor")||
         securityContext.isUserInRole("UtilizadorNormal")  &&
                         principal.getName().equals(username))) {

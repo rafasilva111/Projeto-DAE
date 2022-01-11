@@ -26,8 +26,7 @@ public class LoginService {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response authenticateUser(AuthDTO authDTO) {
-
-        System.out.println();
+        
         try {
             Utilizador user = userBean.authenticate(authDTO.getUsername(), authDTO.getPassword());
             if (user != null && !user.isDeleted()) {
